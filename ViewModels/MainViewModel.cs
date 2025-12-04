@@ -27,13 +27,13 @@ namespace APKToolUI.ViewModels
         [RelayCommand]
         private void NavigateToBuild()
         {
-            // CurrentView = new BuildViewModel();
+            CurrentView = new BuildViewModel();
         }
 
         [RelayCommand]
         private void NavigateToSettings()
         {
-            // CurrentView = new SettingsViewModel();
+            CurrentView = new SettingsViewModel();
         }
     }
 }
