@@ -1,0 +1,58 @@
+﻿<Window x:Class="APKToolUI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:APKToolUI"
+        xmlns:vm="clr-namespace:APKToolUI.ViewModels"
+        xmlns:views="clr-namespace:APKToolUI.Views"
+        mc:Ignorable="d"
+        Title="{Binding WindowTitle}" Height="650" Width="1000"
+        WindowStyle="None" ResizeMode="CanResizeWithGrip" AllowsTransparency="True"
+        Background="Transparent"
+        WindowStartupLocation="CenterScreen">
+
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type vm:DecompileViewModel}">
+            <views:DecompileView/>
+        </DataTemplate>
+    </Window.Resources>
+
+    <Border Background="{StaticResource Brush.Background}" CornerRadius="15" BorderBrush="{StaticResource Brush.BorderGlow}" BorderThickness="1">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="250"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Sidebar -->
+            <Border Grid.Column="0" BorderBrush="{StaticResource Brush.BorderGlow}" BorderThickness="0,0,1,0">
+                <StackPanel Margin="20">
+                    <TextBlock Text="APKTool UI" Foreground="{StaticResource Brush.TextPrimary}" FontSize="24" FontWeight="Bold" Margin="0,0,0,40"/>
+
+                    <Button Content="Dashboard" Command="{Binding NavigateToDecompileCommand}" Style="{StaticResource CyberButtonStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Margin="0,5"/>
+                    <Button Content="Decompile" Command="{Binding NavigateToDecompileCommand}" Style="{StaticResource CyberButtonStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Margin="0,5"/>
+                    <Button Content="Build" Command="{Binding NavigateToBuildCommand}" Style="{StaticResource CyberButtonStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Margin="0,5"/>
+                    <Button Content="Settings" Command="{Binding NavigateToSettingsCommand}" Style="{StaticResource CyberButtonStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Margin="0,5"/>
+                    <Button Content="Task History" Style="{StaticResource CyberButtonStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Margin="0,5"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Main Content -->
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/> <!-- Custom Title Bar Area -->
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!-- Window Controls Placeholder (Close/Min/Max) -->
+                <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,5,10,0">
+                    <Button Content="_" Width="30" Height="20" Style="{StaticResource CyberButtonStyle}" Padding="0"/>
+                    <Button Content="X" Width="30" Height="20" Style="{StaticResource CyberButtonStyle}" Padding="0" Margin="5,0,0,0" Click="CloseButton_Click"/>
+                </StackPanel>
+
+                <ContentControl Grid.Row="1" Content="{Binding CurrentView}"/>
+            </Grid>
+        </Grid>
+    </Border>
+</Window>

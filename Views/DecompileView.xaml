@@ -1,0 +1,83 @@
+<UserControl x:Class="APKToolUI.Views.DecompileView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:APKToolUI.Views"
+             xmlns:vm="clr-namespace:APKToolUI.ViewModels"
+             mc:Ignorable="d" 
+             d:DesignHeight="600" d:DesignWidth="800">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/> <!-- Title -->
+            <RowDefinition Height="Auto"/> <!-- Drag Drop -->
+            <RowDefinition Height="Auto"/> <!-- Options -->
+            <RowDefinition Height="*"/>    <!-- Console -->
+        </Grid.RowDefinitions>
+
+        <!-- Title -->
+        <TextBlock Text="Select APK" Foreground="{StaticResource Brush.TextPrimary}" FontSize="18" Margin="0,0,0,10"/>
+
+        <!-- Drag Drop Zone -->
+        <Border Grid.Row="1" Style="{StaticResource CyberPanelStyle}" Height="150" Margin="0,0,0,20" AllowDrop="True" DragEnter="Border_DragEnter" Drop="Border_Drop">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                
+                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="20">
+                    <TextBlock Text="{Binding ApkPath, TargetNullValue='Select APK'}" Foreground="{StaticResource Brush.TextPrimary}" FontSize="24" HorizontalAlignment="Center" TextTrimming="CharacterEllipsis" MaxWidth="500"/>
+                    <TextBlock Text="Drag and drop a file" Foreground="{StaticResource Brush.TextSecondary}" FontSize="14" HorizontalAlignment="Center" Margin="0,5,0,0"/>
+                </StackPanel>
+
+                <Button Grid.Column="1" Content="Run" Style="{StaticResource CyberButtonStyle}" Command="{Binding RunDecompileCommand}" 
+                        Width="100" Height="100" Margin="20" VerticalAlignment="Center"/>
+            </Grid>
+        </Border>
+
+        <!-- Options -->
+        <Grid Grid.Row="2" Margin="0,0,0,20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="0" Margin="0,0,40,0">
+                <CheckBox Content="Decode resources" IsChecked="{Binding DecodeResources}" Foreground="{StaticResource Brush.TextPrimary}" Margin="0,5"/>
+                <CheckBox Content="Decode sources" IsChecked="{Binding DecodeSources}" Foreground="{StaticResource Brush.TextPrimary}" Margin="0,5"/>
+                <CheckBox Content="Keep original manifest" Foreground="{StaticResource Brush.TextPrimary}" Margin="0,5"/>
+                <CheckBox Content="Keep unknown files" Foreground="{StaticResource Brush.TextPrimary}" Margin="0,5"/>
+            </StackPanel>
+
+            <StackPanel Grid.Column="1">
+                <TextBlock Text="API level" Foreground="{StaticResource Brush.TextSecondary}" Margin="0,0,0,5"/>
+                <!-- Placeholder for API level dropdown -->
+                <ComboBox Margin="0,0,0,10" Width="150" HorizontalAlignment="Left"/>
+                
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox Text="Output folder" Style="{StaticResource CyberTextBox}" Height="30" VerticalContentAlignment="Center" Background="{StaticResource Brush.Panel}" Foreground="{StaticResource Brush.TextPrimary}" BorderBrush="{StaticResource Brush.BorderGlow}"/>
+                    <Button Grid.Column="1" Content="Browse >" Style="{StaticResource CyberButtonStyle}" Margin="10,0,0,0" Height="30" Padding="10,0"/>
+                </Grid>
+            </StackPanel>
+        </Grid>
+
+        <!-- Console Log -->
+        <Border Grid.Row="3" Style="{StaticResource CyberPanelStyle}">
+            <Grid Margin="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <TextBlock Text="Console log" Foreground="{StaticResource Brush.TextPrimary}" Margin="0,0,0,10"/>
+                <ScrollViewer Grid.Row="1">
+                    <TextBlock Text="Waiting for command..." Foreground="{StaticResource Brush.TextSecondary}" FontFamily="Consolas"/>
+                </ScrollViewer>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>
