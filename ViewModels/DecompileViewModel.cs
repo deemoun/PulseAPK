@@ -1,5 +1,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using System.Threading.Tasks;
 
 namespace APKToolUI.ViewModels
 {
@@ -15,10 +16,14 @@ namespace APKToolUI.ViewModels
         private bool _decodeSources = true;
 
         private readonly Services.IFilePickerService _filePickerService;
+        private readonly Services.ISettingsService _settingsService;
+        private readonly Services.ApktoolRunner _apktoolRunner;
 
         public DecompileViewModel()
         {
             _filePickerService = new Services.FilePickerService();
+            _settingsService = new Services.SettingsService();
+            _apktoolRunner = new Services.ApktoolRunner(_settingsService);
         }
 
         [RelayCommand]
@@ -38,9 +43,8 @@ namespace APKToolUI.ViewModels
 
             // TODO: Get output folder from UI or default to APK folder
             var outputDir = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(ApkPath)!, System.IO.Path.GetFileNameWithoutExtension(ApkPath));
-            
-            var runner = new Services.ApktoolRunner();
-            await runner.RunDecompileAsync(ApkPath, outputDir, DecodeResources, DecodeSources);
+
+            await _apktoolRunner.RunDecompileAsync(ApkPath, outputDir, DecodeResources, DecodeSources);
         }
     }
 }
