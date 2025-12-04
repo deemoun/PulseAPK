@@ -16,6 +16,12 @@
         <DataTemplate DataType="{x:Type vm:DecompileViewModel}">
             <views:DecompileView/>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:BuildViewModel}">
+            <views:BuildView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:SettingsViewModel}">
+            <views:SettingsView/>
+        </DataTemplate>
     </Window.Resources>
 
     <Border Background="{StaticResource Brush.Background}" CornerRadius="15" BorderBrush="{StaticResource Brush.BorderGlow}" BorderThickness="1">
