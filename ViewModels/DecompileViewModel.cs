@@ -1,6 +1,10 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using System;
+using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace APKToolUI.ViewModels
 {
@@ -52,13 +56,118 @@ namespace APKToolUI.ViewModels
         [RelayCommand]
         private async Task RunDecompile()
         {
-            if (string.IsNullOrEmpty(ApkPath)) return;
+            if (string.IsNullOrWhiteSpace(ApkPath))
+            {
+                MessageBox.Show("Please select an APK file to decompile.", "Missing APK", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
 
             var outputDir = !string.IsNullOrWhiteSpace(OutputFolder)
                 ? OutputFolder
-                : System.IO.Path.Combine(System.IO.Path.GetDirectoryName(ApkPath)!, System.IO.Path.GetFileNameWithoutExtension(ApkPath));
+                : Path.Combine(Path.GetDirectoryName(ApkPath)!, Path.GetFileNameWithoutExtension(ApkPath));
 
-            await _apktoolRunner.RunDecompileAsync(ApkPath, outputDir, DecodeResources, DecodeSources);
+            var normalizedOutputDir = Path.GetFullPath(outputDir);
+
+            if (IsHighRiskOutputDirectory(normalizedOutputDir))
+            {
+                MessageBox.Show($"The selected output folder '{normalizedOutputDir}' is unsafe. Choose a different location.", "Invalid output folder", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            var forceOverwrite = false;
+
+            if (Directory.Exists(normalizedOutputDir))
+            {
+                var isEmpty = !Directory.EnumerateFileSystemEntries(normalizedOutputDir).Any();
+                if (!isEmpty)
+                {
+                    var result = MessageBox.Show($"The output directory '{normalizedOutputDir}' already exists and is not empty. Overwrite its contents?", "Confirm overwrite", MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No);
+
+                    if (result != MessageBoxResult.Yes)
+                    {
+                        return;
+                    }
+
+                    forceOverwrite = true;
+                }
+            }
+
+            await _apktoolRunner.RunDecompileAsync(ApkPath, normalizedOutputDir, DecodeResources, DecodeSources, forceOverwrite);
+        }
+
+        private static bool IsHighRiskOutputDirectory(string outputDir)
+        {
+            var normalizedOutput = NormalizePath(outputDir);
+            var outputRoot = Path.GetPathRoot(normalizedOutput);
+
+            var riskyPaths = new[]
+            {
+                Environment.GetFolderPath(Environment.SpecialFolder.Windows),
+                Environment.GetFolderPath(Environment.SpecialFolder.System),
+                Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles),
+                Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86),
+                Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
+                Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
+                outputRoot,
+                Path.GetFullPath(Path.GetTempPath())
+            };
+
+            if (!string.IsNullOrWhiteSpace(outputRoot) && string.Equals(normalizedOutput, NormalizePath(outputRoot), StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+
+            return riskyPaths
+                .Where(path => !string.IsNullOrWhiteSpace(path))
+                .Select(NormalizePath)
+                .Any(riskyPath => IsSameOrSubPath(riskyPath, normalizedOutput));
+        }
+
+        private static bool IsSameOrSubPath(string basePath, string candidatePath)
+        {
+            if (string.IsNullOrWhiteSpace(basePath) || string.IsNullOrWhiteSpace(candidatePath))
+            {
+                return false;
+            }
+
+            var comparison = OperatingSystem.IsWindows() ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal;
+
+            if (string.Equals(basePath, candidatePath, comparison))
+            {
+                return true;
+            }
+
+            if (basePath.Length == 1 && (basePath[0] == Path.DirectorySeparatorChar || basePath[0] == Path.AltDirectorySeparatorChar))
+            {
+                return false;
+            }
+
+            var basePathWithSeparator = basePath.EndsWith(Path.DirectorySeparatorChar)
+                ? basePath
+                : basePath + Path.DirectorySeparatorChar;
+
+            return candidatePath.StartsWith(basePathWithSeparator, comparison);
+        }
+
+        private static string NormalizePath(string path)
+        {
+            if (string.IsNullOrWhiteSpace(path))
+            {
+                return string.Empty;
+            }
+
+            var fullPath = Path.GetFullPath(path);
+            var comparison = OperatingSystem.IsWindows() ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal;
+            var root = Path.GetPathRoot(fullPath);
+
+            if (!string.IsNullOrWhiteSpace(root) && string.Equals(fullPath, root, comparison))
+            {
+                return root.Length > 1
+                    ? root.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
+                    : root;
+            }
+
+            return fullPath.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
         }
     }
 }
