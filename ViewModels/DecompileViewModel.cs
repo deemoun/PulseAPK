@@ -15,6 +15,9 @@ namespace APKToolUI.ViewModels
         [ObservableProperty]
         private bool _decodeSources = true;
 
+        [ObservableProperty]
+        private string? _outputFolder;
+
         private readonly Services.IFilePickerService _filePickerService;
         private readonly Services.ISettingsService _settingsService;
         private readonly Services.ApktoolRunner _apktoolRunner;
@@ -37,12 +40,23 @@ namespace APKToolUI.ViewModels
         }
 
         [RelayCommand]
+        private void BrowseOutputFolder()
+        {
+            var folder = _filePickerService.OpenFolder();
+            if (folder != null)
+            {
+                OutputFolder = folder;
+            }
+        }
+
+        [RelayCommand]
         private async Task RunDecompile()
         {
             if (string.IsNullOrEmpty(ApkPath)) return;
 
-            // TODO: Get output folder from UI or default to APK folder
-            var outputDir = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(ApkPath)!, System.IO.Path.GetFileNameWithoutExtension(ApkPath));
+            var outputDir = !string.IsNullOrWhiteSpace(OutputFolder)
+                ? OutputFolder
+                : System.IO.Path.Combine(System.IO.Path.GetDirectoryName(ApkPath)!, System.IO.Path.GetFileNameWithoutExtension(ApkPath));
 
             await _apktoolRunner.RunDecompileAsync(ApkPath, outputDir, DecodeResources, DecodeSources);
         }
