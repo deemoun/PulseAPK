@@ -19,7 +19,7 @@ namespace APKToolUI.Services
             _settingsService = settingsService;
         }
 
-        public async Task RunDecompileAsync(string apkPath, string outputDir, bool decodeResources, bool decodeSources)
+        public async Task RunDecompileAsync(string apkPath, string outputDir, bool decodeResources, bool decodeSources, bool forceOverwrite = false)
         {
             var args = new StringBuilder("d");
             args.Append($" \"{apkPath}\"");
@@ -28,7 +28,10 @@ namespace APKToolUI.Services
             if (!decodeResources) args.Append(" -r");
             if (!decodeSources) args.Append(" -s");
 
-            args.Append(" -f"); // Force overwrite
+            if (forceOverwrite)
+            {
+                args.Append(" -f"); // Force overwrite
+            }
 
             await RunProcessAsync(args.ToString());
         }
