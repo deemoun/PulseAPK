@@ -89,6 +89,7 @@ namespace APKToolUI.ViewModels
             if (Directory.Exists(normalizedOutputDir))
             {
                 var isEmpty = !Directory.EnumerateFileSystemEntries(normalizedOutputDir).Any();
+
                 if (!isEmpty)
                 {
                     var result = MessageBox.Show($"The output directory '{normalizedOutputDir}' already exists and is not empty. Overwrite its contents?", "Confirm overwrite", MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No);
@@ -97,9 +98,9 @@ namespace APKToolUI.ViewModels
                     {
                         return;
                     }
-
-                    forceOverwrite = true;
                 }
+
+                forceOverwrite = true;
             }
 
             try
