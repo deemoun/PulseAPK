@@ -89,8 +89,10 @@
 
                 <!-- Window Controls Placeholder (Close/Min/Max) -->
                 <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,5,10,0">
-                    <Button Content="_" Width="30" Height="20" Style="{StaticResource CyberButtonStyle}" Padding="0" Click="MinimizeButton_Click"/>
-                    <Button Content="X" Width="30" Height="20" Style="{StaticResource CyberButtonStyle}" Padding="0" Margin="5,0,0,0" Click="CloseButton_Click"/>
+                    <Button Style="{StaticResource TitleBarButtonStyle}" Click="MinimizeButton_Click">
+                        <Rectangle Width="12" Height="2" RadiusX="1" RadiusY="1" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" VerticalAlignment="Center"/>
+                    </Button>
+                    <Button Content="X" Style="{StaticResource TitleBarButtonStyle}" Margin="5,0,0,0" Click="CloseButton_Click"/>
                 </StackPanel>
 
                 <ContentControl Grid.Row="1" Content="{Binding CurrentView}"/>
