@@ -19,6 +19,12 @@
     <SolidColorBrush x:Key="Brush.TextSecondary" Color="{StaticResource Color.TextSecondary}"/>
     <SolidColorBrush x:Key="Brush.BorderGlow" Color="{StaticResource Color.BorderGlow}"/>
 
+    <!-- Gradients -->
+    <LinearGradientBrush x:Key="Gradient.AccentPulse" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop x:Name="DefaultAccentStart" Color="#182B36" Offset="0"/>
+        <GradientStop x:Name="DefaultAccentEnd" Color="#0A1A22" Offset="1"/>
+    </LinearGradientBrush>
+
     <!-- Base Button Style -->
     <Style x:Key="CyberButtonStyle" TargetType="Button">
         <Setter Property="Background" Value="Transparent"/>
@@ -52,6 +58,120 @@
                             <Setter Property="Background" Value="#3300F0FF"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Hero Action Button Style -->
+    <Style x:Key="RunButtonStyle" TargetType="Button">
+        <Setter Property="Foreground" Value="{StaticResource Brush.TextPrimary}"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Padding" Value="18,12"/>
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Grid>
+                        <Border x:Name="OuterShell"
+                                CornerRadius="16"
+                                Background="#081018"
+                                BorderThickness="1"
+                                BorderBrush="#33FFFFFF">
+                            <Border.Effect>
+                                <DropShadowEffect Color="{StaticResource Color.NeonCyan}" BlurRadius="26" ShadowDepth="0" Opacity="0.55"/>
+                            </Border.Effect>
+                        </Border>
+                        <Border x:Name="InnerShell" Margin="1" CornerRadius="14">
+                            <Border.Background>
+                                <LinearGradientBrush x:Name="RunGradient" StartPoint="0,0" EndPoint="1,1">
+                                    <GradientStop x:Name="RunGradientStart" Color="#0D2C38" Offset="0"/>
+                                    <GradientStop x:Name="RunGradientMid" Color="#0A1F29" Offset="0.55"/>
+                                    <GradientStop x:Name="RunGradientEnd" Color="#06202A" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Border.Background>
+                            <Border.BorderBrush>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                    <GradientStop Color="#66FFFFFF" Offset="0"/>
+                                    <GradientStop Color="#3300F0FF" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Border.BorderBrush>
+                            <Border.BorderThickness>1</Border.BorderThickness>
+                            <Border.RenderTransform>
+                                <ScaleTransform x:Name="ShellScale" ScaleX="1" ScaleY="1" CenterX="0.5" CenterY="0.5"/>
+                            </Border.RenderTransform>
+                            <Border.Effect>
+                                <DropShadowEffect Color="#000000" BlurRadius="18" ShadowDepth="4" Opacity="0.45"/>
+                            </Border.Effect>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Path x:Name="PlayIcon"
+                                      Grid.Column="0"
+                                      Data="M4,0 L14,8 L4,16 z"
+                                      Fill="{StaticResource Brush.AccentCyan}"
+                                      Stretch="Uniform"
+                                      Width="16" Height="16"
+                                      Margin="0,0,10,0"
+                                      RenderTransformOrigin="0.5,0.5">
+                                    <Path.RenderTransform>
+                                        <ScaleTransform x:Name="IconScale" ScaleX="1" ScaleY="1"/>
+                                    </Path.RenderTransform>
+                                </Path>
+                                <ContentPresenter Grid.Column="1"
+                                                  HorizontalAlignment="Center"
+                                                  VerticalAlignment="Center"
+                                                  RecognizesAccessKey="True"/>
+                            </Grid>
+                        </Border>
+
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal"/>
+                                <VisualState x:Name="MouseOver">
+                                    <Storyboard>
+                                        <ColorAnimation Storyboard.TargetName="RunGradientStart" Storyboard.TargetProperty="Color" To="#123F52" Duration="0:0:0.15"/>
+                                        <ColorAnimation Storyboard.TargetName="RunGradientMid" Storyboard.TargetProperty="Color" To="#104259" Duration="0:0:0.15"/>
+                                        <ColorAnimation Storyboard.TargetName="RunGradientEnd" Storyboard.TargetProperty="Color" To="#0B2F3D" Duration="0:0:0.15"/>
+                                        <DoubleAnimation Storyboard.TargetName="ShellScale" Storyboard.TargetProperty="ScaleX" To="1.03" Duration="0:0:0.12"/>
+                                        <DoubleAnimation Storyboard.TargetName="ShellScale" Storyboard.TargetProperty="ScaleY" To="1.03" Duration="0:0:0.12"/>
+                                        <DoubleAnimation Storyboard.TargetName="PlayIcon" Storyboard.TargetProperty="Opacity" To="1" Duration="0:0:0.12"/>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Pressed">
+                                    <Storyboard>
+                                        <ColorAnimation Storyboard.TargetName="RunGradientStart" Storyboard.TargetProperty="Color" To="#0A202A" Duration="0:0:0.1"/>
+                                        <ColorAnimation Storyboard.TargetName="RunGradientMid" Storyboard.TargetProperty="Color" To="#081821" Duration="0:0:0.1"/>
+                                        <ColorAnimation Storyboard.TargetName="RunGradientEnd" Storyboard.TargetProperty="Color" To="#05131B" Duration="0:0:0.1"/>
+                                        <DoubleAnimation Storyboard.TargetName="ShellScale" Storyboard.TargetProperty="ScaleX" To="0.97" Duration="0:0:0.08"/>
+                                        <DoubleAnimation Storyboard.TargetName="ShellScale" Storyboard.TargetProperty="ScaleY" To="0.97" Duration="0:0:0.08"/>
+                                        <DoubleAnimation Storyboard.TargetName="IconScale" Storyboard.TargetProperty="ScaleX" To="0.95" Duration="0:0:0.08"/>
+                                        <DoubleAnimation Storyboard.TargetName="IconScale" Storyboard.TargetProperty="ScaleY" To="0.95" Duration="0:0:0.08"/>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Disabled">
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="InnerShell" Storyboard.TargetProperty="Opacity" To="0.45" Duration="0:0:0.1"/>
+                                        <DoubleAnimation Storyboard.TargetName="PlayIcon" Storyboard.TargetProperty="Opacity" To="0.3" Duration="0:0:0.1"/>
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                            <VisualStateGroup x:Name="FocusStates">
+                                <VisualState x:Name="Unfocused"/>
+                                <VisualState x:Name="Focused">
+                                    <Storyboard>
+                                        <ColorAnimation Storyboard.TargetName="RunGradientMid" Storyboard.TargetProperty="Color" To="#13506A" Duration="0:0:0.15"/>
+                                        <DoubleAnimation Storyboard.TargetName="OuterShell" Storyboard.TargetProperty="Opacity" To="1" Duration="0:0:0.12"/>
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                    </Grid>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
