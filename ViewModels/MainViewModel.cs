@@ -12,6 +12,9 @@ namespace APKToolUI.ViewModels
         [ObservableProperty]
         private string _windowTitle = "APKTool UI";
 
+        [ObservableProperty]
+        private string _selectedMenu = "Decompile";
+
         public MainViewModel()
         {
             // Default view
@@ -22,18 +25,14 @@ namespace APKToolUI.ViewModels
         private void NavigateToDecompile()
         {
             CurrentView = new DecompileViewModel();
-        }
-
-        [RelayCommand]
-        private void NavigateToBuild()
-        {
-            CurrentView = new BuildViewModel();
+            SelectedMenu = "Decompile";
         }
 
         [RelayCommand]
         private void NavigateToSettings()
         {
             CurrentView = new SettingsViewModel();
+            SelectedMenu = "Settings";
         }
     }
 }
