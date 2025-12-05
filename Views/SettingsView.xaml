@@ -12,7 +12,7 @@
             <TextBlock Text="Apktool Path" Foreground="{StaticResource Brush.TextSecondary}" Margin="0,0,0,5"/>
             <DockPanel>
                 <TextBox Text="{Binding ApktoolPath, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource CyberTextBox}" Width="400"/>
-                <Button Content="Browse" Command="{Binding BrowseApktoolCommand}" Style="{StaticResource CyberButtonStyle}" Margin="10,0,0,0"/>
+                <Button Content="Browse" Command="{Binding BrowseApktoolCommand}" Style="{StaticResource CyberButtonStyle}" Margin="10,0,0,0" Padding="16,0" MinWidth="90"/>
             </DockPanel>
         </StackPanel>
     </Grid>
