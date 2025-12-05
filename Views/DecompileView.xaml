@@ -44,17 +44,13 @@
             </Grid.ColumnDefinitions>
 
             <StackPanel Grid.Column="0" Margin="0,0,40,0">
-                <CheckBox Content="Decode resources" IsChecked="{Binding DecodeResources}" Foreground="{StaticResource Brush.TextPrimary}" Margin="0,5"/>
-                <CheckBox Content="Decode sources" IsChecked="{Binding DecodeSources}" Foreground="{StaticResource Brush.TextPrimary}" Margin="0,5"/>
-                <CheckBox Content="Keep original manifest" Foreground="{StaticResource Brush.TextPrimary}" Margin="0,5"/>
-                <CheckBox Content="Keep unknown files" Foreground="{StaticResource Brush.TextPrimary}" Margin="0,5"/>
+                <CheckBox Content="Decode resources" IsChecked="{Binding DecodeResources}" Foreground="{StaticResource Brush.TextPrimary}" Margin="0,5" ToolTip="When unchecked, resources.arsc will be left intact (-r)."/>
+                <CheckBox Content="Decode sources" IsChecked="{Binding DecodeSources}" Foreground="{StaticResource Brush.TextPrimary}" Margin="0,5" ToolTip="When unchecked, smali code will be skipped (-s)."/>
+                <CheckBox Content="Keep original manifest" IsChecked="{Binding KeepOriginalManifest}" Foreground="{StaticResource Brush.TextPrimary}" Margin="0,5" ToolTip="Preserve the original AndroidManifest.xml when decoding (-m)."/>
+                <CheckBox Content="Keep unknown files" IsChecked="{Binding KeepUnknownFiles}" Foreground="{StaticResource Brush.TextPrimary}" Margin="0,5" ToolTip="Retain unknown files and directories during decode (-u)."/>
             </StackPanel>
 
             <StackPanel Grid.Column="1">
-                <TextBlock Text="API level" Foreground="{StaticResource Brush.TextSecondary}" Margin="0,0,0,5"/>
-                <!-- Placeholder for API level dropdown -->
-                <ComboBox Margin="0,0,0,10" Width="150" HorizontalAlignment="Left"/>
-                
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -75,7 +71,7 @@
                 </Grid.RowDefinitions>
                 <TextBlock Text="Console log" Foreground="{StaticResource Brush.TextPrimary}" Margin="0,0,0,10"/>
                 <ScrollViewer Grid.Row="1">
-                    <TextBlock Text="Waiting for command..." Foreground="{StaticResource Brush.TextSecondary}" FontFamily="Consolas"/>
+                    <TextBox Text="{Binding ConsoleLog}" Foreground="{StaticResource Brush.TextSecondary}" FontFamily="Consolas" IsReadOnly="True" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" Background="Transparent" BorderThickness="0"/>
                 </ScrollViewer>
             </Grid>
         </Border>
