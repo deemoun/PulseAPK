@@ -31,8 +31,12 @@
                     <TextBlock Text="Drag and drop a file" Foreground="{StaticResource Brush.TextSecondary}" FontSize="14" HorizontalAlignment="Center" Margin="0,5,0,0"/>
                 </StackPanel>
 
-                <Button Grid.Column="1" Content="Run" Style="{StaticResource CyberButtonStyle}" Command="{Binding RunDecompileCommand}" 
-                        Width="100" Height="100" Margin="20" VerticalAlignment="Center"/>
+                <Button Grid.Column="1"
+                        Content="Run"
+                        Style="{StaticResource RunButtonStyle}"
+                        Command="{Binding RunDecompileCommand}"
+                        Width="140" Height="110" Margin="20"
+                        VerticalAlignment="Center"/>
             </Grid>
         </Border>
 
