@@ -13,6 +13,7 @@ namespace APKToolUI.ViewModels
     public partial class DecompileViewModel : ObservableObject
     {
         [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(IsHintVisible))]
         private string _apkPath;
 
         [ObservableProperty]
@@ -35,6 +36,8 @@ namespace APKToolUI.ViewModels
         private readonly Services.IFilePickerService _filePickerService;
         private readonly Services.ISettingsService _settingsService;
         private readonly Services.ApktoolRunner _apktoolRunner;
+
+        public bool IsHintVisible => string.IsNullOrEmpty(ApkPath);
 
         public DecompileViewModel()
         {

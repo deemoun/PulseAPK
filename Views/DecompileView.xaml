@@ -7,6 +7,9 @@
              xmlns:vm="clr-namespace:APKToolUI.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="800">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    </UserControl.Resources>
     <Grid Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/> <!-- Title -->
@@ -28,7 +31,7 @@
                 
                 <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="20">
                     <TextBlock Text="{Binding ApkPath, TargetNullValue='Select APK'}" Foreground="{StaticResource Brush.TextPrimary}" FontSize="24" HorizontalAlignment="Center" TextTrimming="CharacterEllipsis" MaxWidth="500"/>
-                    <TextBlock Text="Drag and drop a file" Foreground="{StaticResource Brush.TextSecondary}" FontSize="14" HorizontalAlignment="Center" Margin="0,5,0,0"/>
+                    <TextBlock Text="Drag and drop a file" Foreground="{StaticResource Brush.TextSecondary}" FontSize="14" HorizontalAlignment="Center" Margin="0,5,0,0" Visibility="{Binding IsHintVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                 </StackPanel>
 
                 <Button Grid.Column="1"
