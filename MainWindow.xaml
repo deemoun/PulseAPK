@@ -36,11 +36,8 @@
                 <StackPanel Margin="20">
                     <TextBlock Text="APKTool UI" Foreground="{StaticResource Brush.TextPrimary}" FontSize="24" FontWeight="Bold" Margin="0,0,0,40"/>
 
-                    <Button Content="Dashboard" Command="{Binding NavigateToDecompileCommand}" Style="{StaticResource CyberButtonStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Margin="0,5"/>
                     <Button Content="Decompile" Command="{Binding NavigateToDecompileCommand}" Style="{StaticResource CyberButtonStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Margin="0,5"/>
-                    <Button Content="Build" Command="{Binding NavigateToBuildCommand}" Style="{StaticResource CyberButtonStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Margin="0,5"/>
                     <Button Content="Settings" Command="{Binding NavigateToSettingsCommand}" Style="{StaticResource CyberButtonStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Margin="0,5"/>
-                    <Button Content="Task History" Style="{StaticResource CyberButtonStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Margin="0,5"/>
                 </StackPanel>
             </Border>
 
