@@ -16,7 +16,7 @@
         </Grid.RowDefinitions>
 
         <!-- Title -->
-        <TextBlock Text="Select APK" Foreground="{StaticResource Brush.TextPrimary}" FontSize="18" Margin="0,0,0,10"/>
+        <TextBlock Text="Decompilation" Foreground="{StaticResource Brush.TextPrimary}" FontSize="18" Margin="0,0,0,10"/>
 
         <!-- Drag Drop Zone -->
         <Border Grid.Row="1" Style="{StaticResource CyberPanelStyle}" Height="150" Margin="0,0,0,20" AllowDrop="True" DragEnter="Border_DragEnter" Drop="Border_Drop">

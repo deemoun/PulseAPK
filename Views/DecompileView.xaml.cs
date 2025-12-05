@@ -27,11 +27,21 @@ namespace APKToolUI.Views
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
             {
                 string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-                if (files != null && files.Length > 0 && files[0].EndsWith(".apk", System.StringComparison.OrdinalIgnoreCase))
+                if (files != null && files.Length > 0)
                 {
-                    if (DataContext is ViewModels.DecompileViewModel vm)
+                    var file = files[0];
+                    var (isValid, message) = Utils.FileSanitizer.ValidateApk(file);
+                    
+                    if (isValid)
                     {
-                        vm.ApkPath = files[0];
+                        if (DataContext is ViewModels.DecompileViewModel vm)
+                        {
+                            vm.ApkPath = file;
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show(message, "Invalid APK File", MessageBoxButton.OK, MessageBoxImage.Error);
                     }
                 }
             }

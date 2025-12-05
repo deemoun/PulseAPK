@@ -62,6 +62,12 @@ namespace APKToolUI.ViewModels
             var file = _filePickerService.OpenFile("APK Files (*.apk)|*.apk|All Files (*.*)|*.*");
             if (file != null)
             {
+                var (isValid, message) = Utils.FileSanitizer.ValidateApk(file);
+                if (!isValid)
+                {
+                    MessageBox.Show(message, "Invalid APK File", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
                 ApkPath = file;
             }
         }
