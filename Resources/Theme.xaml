@@ -57,6 +57,42 @@
         </Setter>
     </Style>
 
+    <!-- Window Title Bar Button Style -->
+    <Style x:Key="TitleBarButtonStyle" TargetType="Button" BasedOn="{StaticResource CyberButtonStyle}">
+        <Setter Property="Width" Value="36"/>
+        <Setter Property="Height" Value="24"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="12">
+                        <Border.Effect>
+                            <DropShadowEffect Color="{StaticResource Color.NeonCyan}" BlurRadius="10" ShadowDepth="0" Opacity="0.3"/>
+                        </Border.Effect>
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="#1A00F0FF"/>
+                            <Setter Property="Effect">
+                                <Setter.Value>
+                                    <DropShadowEffect Color="{StaticResource Color.NeonCyan}" BlurRadius="20" ShadowDepth="0" Opacity="0.6"/>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Background" Value="#3300F0FF"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <!-- Panel Style -->
     <Style x:Key="CyberPanelStyle" TargetType="Border">
         <Setter Property="Background" Value="{StaticResource Brush.Panel}"/>
