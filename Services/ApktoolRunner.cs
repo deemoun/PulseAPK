@@ -1,13 +1,17 @@
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace APKToolUI.Services
 {
     public class ApktoolRunner
     {
         private readonly ISettingsService _settingsService;
+
+        public event Action<string>? OutputDataReceived;
 
         public ApktoolRunner()
             : this(new SettingsService())
@@ -19,7 +23,7 @@ namespace APKToolUI.Services
             _settingsService = settingsService;
         }
 
-        public async Task RunDecompileAsync(string apkPath, string outputDir, bool decodeResources, bool decodeSources, bool forceOverwrite = false)
+        public async Task RunDecompileAsync(string apkPath, string outputDir, bool decodeResources, bool decodeSources, bool keepOriginalManifest, bool keepUnknownFiles, bool forceOverwrite = false, CancellationToken cancellationToken = default)
         {
             var args = new StringBuilder("d");
             args.Append($" \"{apkPath}\"");
@@ -27,16 +31,18 @@ namespace APKToolUI.Services
 
             if (!decodeResources) args.Append(" -r");
             if (!decodeSources) args.Append(" -s");
+            if (keepOriginalManifest) args.Append(" -m");
+            if (keepUnknownFiles) args.Append(" -u");
 
             if (forceOverwrite)
             {
                 args.Append(" -f"); // Force overwrite
             }
 
-            await RunProcessAsync(args.ToString());
+            await RunProcessAsync(args.ToString(), cancellationToken);
         }
 
-        private async Task RunProcessAsync(string arguments)
+        private async Task RunProcessAsync(string arguments, CancellationToken cancellationToken)
         {
             var apktoolPath = _settingsService.Settings.ApktoolPath;
 
@@ -64,18 +70,18 @@ namespace APKToolUI.Services
 
             process.OutputDataReceived += (sender, e) =>
             {
-                if (e.Data != null)
+                if (!string.IsNullOrEmpty(e.Data))
                 {
-                    // TODO: Log to console
+                    OutputDataReceived?.Invoke(e.Data);
                     Debug.WriteLine($"[INFO] {e.Data}");
                 }
             };
 
             process.ErrorDataReceived += (sender, e) =>
             {
-                if (e.Data != null)
+                if (!string.IsNullOrEmpty(e.Data))
                 {
-                    // TODO: Log to console
+                    OutputDataReceived?.Invoke(e.Data);
                     Debug.WriteLine($"[ERROR] {e.Data}");
                 }
             };
@@ -84,7 +90,7 @@ namespace APKToolUI.Services
             process.BeginOutputReadLine();
             process.BeginErrorReadLine();
 
-            await process.WaitForExitAsync();
+            await process.WaitForExitAsync(cancellationToken);
         }
     }
 }

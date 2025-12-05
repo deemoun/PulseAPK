@@ -20,7 +20,16 @@ namespace APKToolUI.ViewModels
         private bool _decodeSources = true;
 
         [ObservableProperty]
+        private bool _keepOriginalManifest;
+
+        [ObservableProperty]
+        private bool _keepUnknownFiles;
+
+        [ObservableProperty]
         private string? _outputFolder;
+
+        [ObservableProperty]
+        private string _consoleLog = "Waiting for command...";
 
         private readonly Services.IFilePickerService _filePickerService;
         private readonly Services.ISettingsService _settingsService;
@@ -31,6 +40,8 @@ namespace APKToolUI.ViewModels
             _filePickerService = new Services.FilePickerService();
             _settingsService = new Services.SettingsService();
             _apktoolRunner = new Services.ApktoolRunner(_settingsService);
+
+            _apktoolRunner.OutputDataReceived += OnOutputDataReceived;
         }
 
         [RelayCommand]
@@ -62,6 +73,8 @@ namespace APKToolUI.ViewModels
                 return;
             }
 
+            ConsoleLog = "Starting apktool...";
+
             var outputDir = !string.IsNullOrWhiteSpace(OutputFolder)
                 ? OutputFolder
                 : Path.Combine(Path.GetDirectoryName(ApkPath)!, Path.GetFileNameWithoutExtension(ApkPath));
@@ -92,7 +105,32 @@ namespace APKToolUI.ViewModels
                 }
             }
 
-            await _apktoolRunner.RunDecompileAsync(ApkPath, normalizedOutputDir, DecodeResources, DecodeSources, forceOverwrite);
+            await _apktoolRunner.RunDecompileAsync(ApkPath, normalizedOutputDir, DecodeResources, DecodeSources, KeepOriginalManifest, KeepUnknownFiles, forceOverwrite);
+            AppendLog("Decompile finished.");
+        }
+
+        private void OnOutputDataReceived(string message)
+        {
+            if (Application.Current != null && !Application.Current.Dispatcher.CheckAccess())
+            {
+                Application.Current.Dispatcher.Invoke(() => AppendLog(message));
+            }
+            else
+            {
+                AppendLog(message);
+            }
+        }
+
+        private void AppendLog(string message)
+        {
+            if (string.IsNullOrWhiteSpace(ConsoleLog) || ConsoleLog == "Waiting for command...")
+            {
+                ConsoleLog = message;
+            }
+            else
+            {
+                ConsoleLog += $"{Environment.NewLine}{message}";
+            }
         }
 
         private static bool IsHighRiskOutputDirectory(string outputDir)
