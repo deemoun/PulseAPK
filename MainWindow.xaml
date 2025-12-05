@@ -8,6 +8,7 @@
         xmlns:views="clr-namespace:APKToolUI.Views"
         mc:Ignorable="d"
         Title="{Binding WindowTitle}" Height="650" Width="1000"
+        Icon="Resources/CyberUnpack.png"
         WindowStyle="None" ResizeMode="CanResizeWithGrip" AllowsTransparency="True"
         Background="Transparent"
         WindowStartupLocation="CenterScreen">
@@ -31,7 +32,14 @@
             <!-- Sidebar -->
             <Border Grid.Column="0" BorderBrush="{StaticResource Brush.BorderGlow}" BorderThickness="0,0,1,0">
                 <StackPanel Margin="20">
-                    <TextBlock Text="PulseAPK" Foreground="{StaticResource Brush.TextPrimary}" FontSize="24" FontWeight="Bold" Margin="0,0,0,40"/>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,40">
+                        <Image Source="/Resources/CyberUnpack.png" Width="30" Height="30" Margin="0,0,15,0" RenderOptions.BitmapScalingMode="HighQuality">
+                            <Image.Effect>
+                                <DropShadowEffect Color="{StaticResource Color.NeonCyan}" BlurRadius="10" ShadowDepth="0" Opacity="0.8"/>
+                            </Image.Effect>
+                        </Image>
+                        <TextBlock Text="PulseAPK" Foreground="{StaticResource Brush.TextPrimary}" FontSize="24" FontWeight="Bold" VerticalAlignment="Center"/>
+                    </StackPanel>
 
                     <Button Content="Decompile" Command="{Binding NavigateToDecompileCommand}">
                         <Button.Style>
