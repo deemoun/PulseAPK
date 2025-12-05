@@ -4,6 +4,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Text;
 using System.Windows;
 
 namespace APKToolUI.ViewModels
@@ -28,6 +29,8 @@ namespace APKToolUI.ViewModels
         [ObservableProperty]
         private string _consoleLog = "Waiting for command...";
 
+        private bool _isConsolePreviewActive = true;
+
         private readonly Services.IFilePickerService _filePickerService;
         private readonly Services.ISettingsService _settingsService;
         private readonly Services.ApktoolRunner _apktoolRunner;
@@ -39,7 +42,19 @@ namespace APKToolUI.ViewModels
             _apktoolRunner = new Services.ApktoolRunner(_settingsService);
 
             _apktoolRunner.OutputDataReceived += OnOutputDataReceived;
+
+            UpdateCommandPreview();
         }
+
+        partial void OnApkPathChanged(string value) => UpdateCommandPreview();
+
+        partial void OnDecodeResourcesChanged(bool value) => UpdateCommandPreview();
+
+        partial void OnDecodeSourcesChanged(bool value) => UpdateCommandPreview();
+
+        partial void OnKeepOriginalManifestChanged(bool value) => UpdateCommandPreview();
+
+        partial void OnOutputFolderChanged(string? value) => UpdateCommandPreview();
 
         [RelayCommand]
         private void BrowseApk()
@@ -70,7 +85,7 @@ namespace APKToolUI.ViewModels
                 return;
             }
 
-            ConsoleLog = "Starting apktool...";
+            SetConsoleLog("Starting apktool...");
 
             var outputDir = !string.IsNullOrWhiteSpace(OutputFolder)
                 ? OutputFolder
@@ -138,6 +153,8 @@ namespace APKToolUI.ViewModels
 
         private void AppendLog(string message)
         {
+            _isConsolePreviewActive = false;
+
             if (string.IsNullOrWhiteSpace(ConsoleLog) || ConsoleLog == "Waiting for command...")
             {
                 ConsoleLog = message;
@@ -146,6 +163,49 @@ namespace APKToolUI.ViewModels
             {
                 ConsoleLog += $"{Environment.NewLine}{message}";
             }
+        }
+
+        private void SetConsoleLog(string message)
+        {
+            _isConsolePreviewActive = false;
+            ConsoleLog = message;
+        }
+
+        private void UpdateCommandPreview()
+        {
+            if (!_isConsolePreviewActive)
+            {
+                return;
+            }
+
+            ConsoleLog = BuildCommandPreview();
+        }
+
+        private string BuildCommandPreview()
+        {
+            var apktoolPath = _settingsService.Settings.ApktoolPath;
+            var apktool = string.IsNullOrWhiteSpace(apktoolPath)
+                ? "<set apktool path>"
+                : $"\"{apktoolPath}\"";
+
+            var apkInput = string.IsNullOrWhiteSpace(ApkPath)
+                ? "<select apk>"
+                : $"\"{ApkPath}\"";
+
+            var outputDir = !string.IsNullOrWhiteSpace(OutputFolder)
+                ? OutputFolder
+                : !string.IsNullOrWhiteSpace(ApkPath)
+                    ? Path.Combine(Path.GetDirectoryName(ApkPath)!, Path.GetFileNameWithoutExtension(ApkPath))
+                    : "<output folder>";
+
+            var builder = new StringBuilder();
+            builder.Append($"java -jar {apktool} d {apkInput} -o \"{outputDir}\"");
+
+            if (!DecodeResources) builder.Append(" -r");
+            if (!DecodeSources) builder.Append(" -s");
+            if (KeepOriginalManifest) builder.Append(" -m");
+
+            return $"Command preview: {builder}";
         }
 
         private static bool IsHighRiskOutputDirectory(string outputDir)
