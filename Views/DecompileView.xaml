@@ -60,7 +60,10 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
                     <TextBox Text="{Binding OutputFolder, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, TargetNullValue='Output folder'}" Style="{StaticResource CyberTextBox}" Height="30" VerticalContentAlignment="Center" Background="{StaticResource Brush.Panel}" Foreground="{StaticResource Brush.TextPrimary}" BorderBrush="{StaticResource Brush.BorderGlow}"/>
-                    <Button Grid.Column="1" Content="Browse" Style="{StaticResource CyberButtonStyle}" Margin="10,0,0,0" Height="30" Padding="16,0" MinWidth="90" Command="{Binding BrowseOutputFolderCommand}"/>
+                    <StackPanel Grid.Column="1" Orientation="Vertical" Margin="10,0,0,0">
+                        <Button Content="Browse" Style="{StaticResource CyberButtonStyle}" Height="30" Padding="16,0" MinWidth="90" Command="{Binding BrowseOutputFolderCommand}" Margin="0,0,0,4"/>
+                        <Button Content="Open" Style="{StaticResource CyberButtonStyle}" Height="30" Padding="16,0" MinWidth="90" Command="{Binding OpenOutputFolderCommand}" Margin="0,4,0,0"/>
+                    </StackPanel>
                 </Grid>
             </StackPanel>
         </Grid>

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Text;
 using System.Windows;
+using System.Diagnostics;
 
 namespace APKToolUI.ViewModels
 {
@@ -81,6 +82,31 @@ namespace APKToolUI.ViewModels
             if (folder != null)
             {
                 OutputFolder = folder;
+            }
+        }
+
+        [RelayCommand]
+        private void OpenOutputFolder()
+        {
+            if (string.IsNullOrWhiteSpace(OutputFolder))
+            {
+                MessageBox.Show("Output folder is not set.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            if (!Directory.Exists(OutputFolder))
+            {
+                MessageBox.Show($"The folder '{OutputFolder}' does not exist.", "Folder Not Found", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            try
+            {
+                Process.Start("explorer.exe", OutputFolder);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Could not open folder: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
