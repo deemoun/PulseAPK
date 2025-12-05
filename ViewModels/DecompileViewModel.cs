@@ -43,6 +43,8 @@ namespace APKToolUI.ViewModels
 
             _apktoolRunner.OutputDataReceived += OnOutputDataReceived;
 
+            OutputFolder = Utils.PathUtils.GetDefaultDecompilePath();
+
             UpdateCommandPreview();
         }
 
