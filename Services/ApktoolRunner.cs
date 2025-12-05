@@ -23,7 +23,7 @@ namespace APKToolUI.Services
             _settingsService = settingsService;
         }
 
-        public async Task RunDecompileAsync(string apkPath, string outputDir, bool decodeResources, bool decodeSources, bool keepOriginalManifest, bool keepUnknownFiles, bool forceOverwrite = false, CancellationToken cancellationToken = default)
+        public async Task<int> RunDecompileAsync(string apkPath, string outputDir, bool decodeResources, bool decodeSources, bool keepOriginalManifest, bool keepUnknownFiles, bool forceOverwrite = false, CancellationToken cancellationToken = default)
         {
             var args = new StringBuilder("d");
             args.Append($" \"{apkPath}\"");
@@ -39,10 +39,10 @@ namespace APKToolUI.Services
                 args.Append(" -f"); // Force overwrite
             }
 
-            await RunProcessAsync(args.ToString(), cancellationToken);
+            return await RunProcessAsync(args.ToString(), cancellationToken);
         }
 
-        private async Task RunProcessAsync(string arguments, CancellationToken cancellationToken)
+        private async Task<int> RunProcessAsync(string arguments, CancellationToken cancellationToken)
         {
             var apktoolPath = _settingsService.Settings.ApktoolPath;
 
@@ -91,6 +91,8 @@ namespace APKToolUI.Services
             process.BeginErrorReadLine();
 
             await process.WaitForExitAsync(cancellationToken);
+
+            return process.ExitCode;
         }
     }
 }
