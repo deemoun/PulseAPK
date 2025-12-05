@@ -106,10 +106,10 @@
                             <Border.Effect>
                                 <DropShadowEffect Color="#000000" BlurRadius="18" ShadowDepth="4" Opacity="0.45"/>
                             </Border.Effect>
-                            <Grid>
+                            <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
                                 <Path x:Name="PlayIcon"
                                       Grid.Column="0"
@@ -117,7 +117,8 @@
                                       Fill="{StaticResource Brush.AccentCyan}"
                                       Stretch="Uniform"
                                       Width="16" Height="16"
-                                      Margin="0,0,10,0"
+                                      Margin="0,0,8,0"
+                                      VerticalAlignment="Center"
                                       RenderTransformOrigin="0.5,0.5">
                                     <Path.RenderTransform>
                                         <ScaleTransform x:Name="IconScale" ScaleX="1" ScaleY="1"/>
