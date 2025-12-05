@@ -78,14 +78,28 @@
                     <Grid>
                         <Border x:Name="OuterShell"
                                 CornerRadius="16"
-                                Background="#081018"
-                                BorderThickness="1"
-                                BorderBrush="#33FFFFFF">
+                                Background="#081018">
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                    <GradientStop Color="#0E2430" Offset="0"/>
+                                    <GradientStop Color="#081018" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Border.Background>
+                            <Border.BorderBrush>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                    <GradientStop Color="#55FFFFFF" Offset="0"/>
+                                    <GradientStop Color="#3300F0FF" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Border.BorderBrush>
+                            <Border.BorderThickness>1</Border.BorderThickness>
                             <Border.Effect>
                                 <DropShadowEffect Color="{StaticResource Color.NeonCyan}" BlurRadius="26" ShadowDepth="0" Opacity="0.55"/>
                             </Border.Effect>
                         </Border>
-                        <Border x:Name="InnerShell" Margin="1" CornerRadius="14">
+                        <Border x:Name="InnerShell"
+                                Margin="1"
+                                CornerRadius="14"
+                                RenderTransformOrigin="0.5,0.5">
                             <Border.Background>
                                 <LinearGradientBrush x:Name="RunGradient" StartPoint="0,0" EndPoint="1,1">
                                     <GradientStop x:Name="RunGradientStart" Color="#0D2C38" Offset="0"/>
@@ -139,8 +153,8 @@
                                         <ColorAnimation Storyboard.TargetName="RunGradientStart" Storyboard.TargetProperty="Color" To="#123F52" Duration="0:0:0.15"/>
                                         <ColorAnimation Storyboard.TargetName="RunGradientMid" Storyboard.TargetProperty="Color" To="#104259" Duration="0:0:0.15"/>
                                         <ColorAnimation Storyboard.TargetName="RunGradientEnd" Storyboard.TargetProperty="Color" To="#0B2F3D" Duration="0:0:0.15"/>
-                                        <DoubleAnimation Storyboard.TargetName="ShellScale" Storyboard.TargetProperty="ScaleX" To="1.03" Duration="0:0:0.12"/>
-                                        <DoubleAnimation Storyboard.TargetName="ShellScale" Storyboard.TargetProperty="ScaleY" To="1.03" Duration="0:0:0.12"/>
+                                        <DoubleAnimation Storyboard.TargetName="ShellScale" Storyboard.TargetProperty="ScaleX" To="1.01" Duration="0:0:0.12"/>
+                                        <DoubleAnimation Storyboard.TargetName="ShellScale" Storyboard.TargetProperty="ScaleY" To="1.01" Duration="0:0:0.12"/>
                                         <DoubleAnimation Storyboard.TargetName="PlayIcon" Storyboard.TargetProperty="Opacity" To="1" Duration="0:0:0.12"/>
                                     </Storyboard>
                                 </VisualState>
