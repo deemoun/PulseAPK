@@ -31,6 +31,10 @@ namespace APKToolUI.ViewModels
         [ObservableProperty]
         private string _consoleLog = "Waiting for command...";
 
+        [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(RunDecompileCommand))]
+        private bool _isRunning;
+
         private bool _isConsolePreviewActive = true;
 
         private readonly Services.IFilePickerService _filePickerService;
@@ -50,9 +54,15 @@ namespace APKToolUI.ViewModels
             OutputFolder = Utils.PathUtils.GetDefaultDecompilePath();
 
             UpdateCommandPreview();
+
+            RunDecompileCommand.NotifyCanExecuteChanged();
         }
 
-        partial void OnApkPathChanged(string value) => UpdateCommandPreview();
+        partial void OnApkPathChanged(string value)
+        {
+            UpdateCommandPreview();
+            RunDecompileCommand.NotifyCanExecuteChanged();
+        }
 
         partial void OnDecodeResourcesChanged(bool value) => UpdateCommandPreview();
 
@@ -113,12 +123,26 @@ namespace APKToolUI.ViewModels
             }
         }
 
-        [RelayCommand]
+        [RelayCommand(CanExecute = nameof(CanRunDecompile))]
         private async Task RunDecompile()
         {
             if (string.IsNullOrWhiteSpace(ApkPath))
             {
                 MessageBox.Show("Please select an APK file to decompile.", "Missing APK", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            var apktoolPath = _settingsService.Settings.ApktoolPath?.Trim();
+            if (string.IsNullOrWhiteSpace(apktoolPath))
+            {
+                MessageBox.Show("Please configure the apktool path in Settings before running a decompile.", "Missing apktool", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            if (!File.Exists(apktoolPath))
+            {
+                MessageBox.Show($"The apktool path '{apktoolPath}' does not exist. Please update it in Settings.", "Invalid apktool path", MessageBoxButton.OK, MessageBoxImage.Error);
+                RunDecompileCommand.NotifyCanExecuteChanged();
                 return;
             }
 
@@ -155,6 +179,8 @@ namespace APKToolUI.ViewModels
                 forceOverwrite = true;
             }
 
+            IsRunning = true;
+
             try
             {
                 var exitCode = await _apktoolRunner.RunDecompileAsync(ApkPath, normalizedOutputDir, DecodeResources, DecodeSources, KeepOriginalManifest, forceOverwrite);
@@ -173,6 +199,11 @@ namespace APKToolUI.ViewModels
             {
                 AppendLog($"Decompile failed: {ex.Message}");
                 MessageBox.Show(ex.Message, "Decompile failed", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                IsRunning = false;
+                RunDecompileCommand.NotifyCanExecuteChanged();
             }
         }
 
@@ -218,9 +249,16 @@ namespace APKToolUI.ViewModels
             ConsoleLog = BuildCommandPreview();
         }
 
+        private bool CanRunDecompile()
+        {
+            return !IsRunning
+                && !string.IsNullOrWhiteSpace(ApkPath)
+                && !string.IsNullOrWhiteSpace(_settingsService.Settings.ApktoolPath);
+        }
+
         private string BuildCommandPreview()
         {
-            var apktoolPath = _settingsService.Settings.ApktoolPath;
+            var apktoolPath = _settingsService.Settings.ApktoolPath?.Trim();
             var apktool = string.IsNullOrWhiteSpace(apktoolPath)
                 ? "<set apktool path>"
                 : $"\"{apktoolPath}\"";
