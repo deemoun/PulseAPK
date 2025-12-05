@@ -47,7 +47,6 @@
                 <CheckBox Content="Decode resources" IsChecked="{Binding DecodeResources}" Foreground="{StaticResource Brush.TextPrimary}" Margin="0,5" ToolTip="When unchecked, resources.arsc will be left intact (-r)."/>
                 <CheckBox Content="Decode sources" IsChecked="{Binding DecodeSources}" Foreground="{StaticResource Brush.TextPrimary}" Margin="0,5" ToolTip="When unchecked, smali code will be skipped (-s)."/>
                 <CheckBox Content="Keep original manifest" IsChecked="{Binding KeepOriginalManifest}" Foreground="{StaticResource Brush.TextPrimary}" Margin="0,5" ToolTip="Preserve the original AndroidManifest.xml when decoding (-m)."/>
-                <CheckBox Content="Keep unknown files" IsChecked="{Binding KeepUnknownFiles}" Foreground="{StaticResource Brush.TextPrimary}" Margin="0,5" ToolTip="Retain unknown files and directories during decode (-u)."/>
             </StackPanel>
 
             <StackPanel Grid.Column="1">
