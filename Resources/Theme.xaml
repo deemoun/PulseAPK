@@ -77,7 +77,7 @@
                 <ControlTemplate TargetType="Button">
                     <Grid>
                         <Border x:Name="OuterShell"
-                                CornerRadius="16">
+                                CornerRadius="0">
                             <Border.Background>
                                 <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                                     <GradientStop Color="#0E2430" Offset="0"/>
@@ -97,7 +97,7 @@
                         </Border>
                         <Border x:Name="InnerShell"
                                 Margin="1"
-                                CornerRadius="14"
+                                CornerRadius="0"
                                 RenderTransformOrigin="0.5,0.5">
                             <Border.Background>
                                 <LinearGradientBrush x:Name="RunGradient" StartPoint="0,0" EndPoint="1,1">
