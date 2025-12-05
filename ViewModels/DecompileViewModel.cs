@@ -105,8 +105,25 @@ namespace APKToolUI.ViewModels
                 }
             }
 
-            await _apktoolRunner.RunDecompileAsync(ApkPath, normalizedOutputDir, DecodeResources, DecodeSources, KeepOriginalManifest, KeepUnknownFiles, forceOverwrite);
-            AppendLog("Decompile finished.");
+            try
+            {
+                var exitCode = await _apktoolRunner.RunDecompileAsync(ApkPath, normalizedOutputDir, DecodeResources, DecodeSources, KeepOriginalManifest, KeepUnknownFiles, forceOverwrite);
+
+                if (exitCode == 0)
+                {
+                    AppendLog("Decompile finished.");
+                }
+                else
+                {
+                    AppendLog($"Decompile failed with exit code {exitCode}. Check the log above for details.");
+                    MessageBox.Show("Apktool reported an error while decompiling. Please review the console log for details.", "Decompile failed", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                AppendLog($"Decompile failed: {ex.Message}");
+                MessageBox.Show(ex.Message, "Decompile failed", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void OnOutputDataReceived(string message)
