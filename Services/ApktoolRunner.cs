@@ -23,7 +23,7 @@ namespace APKToolUI.Services
             _settingsService = settingsService;
         }
 
-        public async Task<int> RunDecompileAsync(string apkPath, string outputDir, bool decodeResources, bool decodeSources, bool keepOriginalManifest, bool keepUnknownFiles, bool forceOverwrite = false, CancellationToken cancellationToken = default)
+        public async Task<int> RunDecompileAsync(string apkPath, string outputDir, bool decodeResources, bool decodeSources, bool keepOriginalManifest, bool forceOverwrite = false, CancellationToken cancellationToken = default)
         {
             var args = new StringBuilder("d");
             args.Append($" \"{apkPath}\"");
@@ -32,7 +32,6 @@ namespace APKToolUI.Services
             if (!decodeResources) args.Append(" -r");
             if (!decodeSources) args.Append(" -s");
             if (keepOriginalManifest) args.Append(" -m");
-            if (keepUnknownFiles) args.Append(" -u");
 
             if (forceOverwrite)
             {

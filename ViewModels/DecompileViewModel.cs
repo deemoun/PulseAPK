@@ -23,9 +23,6 @@ namespace APKToolUI.ViewModels
         private bool _keepOriginalManifest;
 
         [ObservableProperty]
-        private bool _keepUnknownFiles;
-
-        [ObservableProperty]
         private string? _outputFolder;
 
         [ObservableProperty]
@@ -107,7 +104,7 @@ namespace APKToolUI.ViewModels
 
             try
             {
-                var exitCode = await _apktoolRunner.RunDecompileAsync(ApkPath, normalizedOutputDir, DecodeResources, DecodeSources, KeepOriginalManifest, KeepUnknownFiles, forceOverwrite);
+                var exitCode = await _apktoolRunner.RunDecompileAsync(ApkPath, normalizedOutputDir, DecodeResources, DecodeSources, KeepOriginalManifest, forceOverwrite);
 
                 if (exitCode == 0)
                 {
