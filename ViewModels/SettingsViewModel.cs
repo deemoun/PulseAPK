@@ -7,6 +7,7 @@ namespace APKToolUI.ViewModels
     {
         private readonly Services.ISettingsService _settingsService;
         private readonly Services.IFilePickerService _filePickerService;
+        private readonly bool _isInitialized;
 
         [ObservableProperty]
         private string _apktoolPath;
@@ -22,6 +23,8 @@ namespace APKToolUI.ViewModels
             _filePickerService = filePickerService;
 
             ApktoolPath = _settingsService.Settings.ApktoolPath;
+
+            _isInitialized = true;
         }
 
         [RelayCommand]
@@ -34,10 +37,14 @@ namespace APKToolUI.ViewModels
             }
         }
 
-        [RelayCommand]
-        private void SaveSettings()
+        partial void OnApktoolPathChanged(string value)
         {
-            _settingsService.Settings.ApktoolPath = ApktoolPath?.Trim() ?? string.Empty;
+            if (!_isInitialized)
+            {
+                return;
+            }
+
+            _settingsService.Settings.ApktoolPath = value?.Trim() ?? string.Empty;
             _settingsService.Save();
         }
     }
