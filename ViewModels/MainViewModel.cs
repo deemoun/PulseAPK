@@ -2,7 +2,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 
-namespace APKToolUI.ViewModels
+namespace PulseAPK.ViewModels
 {
     public partial class MainViewModel : ObservableObject
     {

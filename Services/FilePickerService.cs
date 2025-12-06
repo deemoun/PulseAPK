@@ -1,7 +1,7 @@
 using Microsoft.Win32;
 using System.Windows;
 
-namespace APKToolUI.Services
+namespace PulseAPK.Services
 {
     public class FilePickerService : IFilePickerService
     {

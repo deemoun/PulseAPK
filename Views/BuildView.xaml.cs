@@ -1,6 +1,6 @@
 using System.Windows.Controls;
 
-namespace APKToolUI.Views
+namespace PulseAPK.Views
 {
     public partial class BuildView : UserControl
     {

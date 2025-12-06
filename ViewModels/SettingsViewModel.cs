@@ -4,7 +4,7 @@ using System;
 using System.IO;
 using System.Linq;
 
-namespace APKToolUI.ViewModels
+namespace PulseAPK.ViewModels
 {
     public partial class SettingsViewModel : ObservableObject
     {

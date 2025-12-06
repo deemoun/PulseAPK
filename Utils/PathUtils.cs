@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 
-namespace APKToolUI.Utils
+namespace PulseAPK.Utils
 {
     public static class PathUtils
     {

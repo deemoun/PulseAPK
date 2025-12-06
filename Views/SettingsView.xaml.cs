@@ -2,7 +2,7 @@ using System.Diagnostics;
 using System.Windows.Controls;
 using System.Windows.Navigation;
 
-namespace APKToolUI.Views
+namespace PulseAPK.Views
 {
     public partial class SettingsView : UserControl
     {

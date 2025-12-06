@@ -1,7 +1,7 @@
 using System.Windows;
 using System.Windows.Controls;
 
-namespace APKToolUI.Views
+namespace PulseAPK.Views
 {
     public partial class DecompileView : UserControl
     {

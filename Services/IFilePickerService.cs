@@ -1,4 +1,4 @@
-namespace APKToolUI.Services
+namespace PulseAPK.Services
 {
     public interface IFilePickerService
     {

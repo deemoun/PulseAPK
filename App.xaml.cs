@@ -2,7 +2,7 @@
 using System.Data;
 using System.Windows;
 
-namespace APKToolUI;
+namespace PulseAPK;
 
 /// <summary>
 /// Interaction logic for App.xaml

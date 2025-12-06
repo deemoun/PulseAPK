@@ -8,7 +8,7 @@ using System.Text;
 using System.Windows;
 using System.Diagnostics;
 
-namespace APKToolUI.ViewModels
+namespace PulseAPK.ViewModels
 {
     public partial class DecompileViewModel : ObservableObject
     {
@@ -98,30 +98,30 @@ namespace APKToolUI.ViewModels
             }
         }
 
-    [RelayCommand]
-    private void OpenOutputFolder()
-    {
-        if (string.IsNullOrWhiteSpace(OutputFolder))
+        [RelayCommand]
+        private void OpenOutputFolder()
         {
-            MessageBox.Show(Properties.Resources.Error_OutputFolderNotSet, Properties.Resources.AppTitle, MessageBoxButton.OK, MessageBoxImage.Warning);
-            return;
-        }
+            if (string.IsNullOrWhiteSpace(OutputFolder))
+            {
+                MessageBox.Show(Properties.Resources.Error_OutputFolderNotSet, Properties.Resources.AppTitle, MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
 
-        if (!Directory.Exists(OutputFolder))
-        {
-            MessageBox.Show(string.Format(Properties.Resources.Error_FolderNotFound, OutputFolder), Properties.Resources.Error_OutputFolderNotSet, MessageBoxButton.OK, MessageBoxImage.Warning);
-            return;
-        }
+            if (!Directory.Exists(OutputFolder))
+            {
+                MessageBox.Show(string.Format(Properties.Resources.Error_FolderNotFound, OutputFolder), Properties.Resources.Error_OutputFolderNotSet, MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
 
-        try
-        {
-            Process.Start("explorer.exe", OutputFolder);
+            try
+            {
+                Process.Start("explorer.exe", OutputFolder);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(string.Format(Properties.Resources.Error_CouldNotOpenFolder, ex.Message), Properties.Resources.AppTitle, MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
-        catch (Exception ex)
-        {
-            MessageBox.Show(string.Format(Properties.Resources.Error_CouldNotOpenFolder, ex.Message), Properties.Resources.AppTitle, MessageBoxButton.OK, MessageBoxImage.Error);
-        }
-    }
 
         [RelayCommand(CanExecute = nameof(CanRunDecompile))]
         private async Task RunDecompile()

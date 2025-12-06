@@ -3,7 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using System.Diagnostics;
 using System.Reflection;
 
-namespace APKToolUI.ViewModels
+namespace PulseAPK.ViewModels
 {
     public partial class AboutViewModel : ObservableObject
     {

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
 
-namespace APKToolUI.Services
+namespace PulseAPK.Services
 {
     public class ApktoolRunner
     {
