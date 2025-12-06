@@ -1,0 +1,73 @@
+name: Build Desktop Release
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Bump patch version
+        shell: pwsh
+        run: |
+          $csprojPath = "PulseAPK.csproj"
+          $content = Get-Content $csprojPath -Raw
+
+          if ($content -notmatch '<Version>(?<version>[^<]+)</Version>') {
+            Write-Error "Version element not found in $csprojPath"
+            exit 1
+          }
+
+          $current = $Matches.version
+          try {
+            $version = [System.Version]::Parse($current)
+          }
+          catch {
+            Write-Error "Version '$current' is not a valid version string"
+            exit 1
+          }
+
+          if ($version.Build -lt 0) {
+            Write-Error "Version '$current' must contain at least three segments (e.g. 1.0.0)"
+            exit 1
+          }
+
+          $newPatch = $version.Build + 1
+          $newVersion = "{0}.{1}.{2}" -f $version.Major, $version.Minor, $newPatch
+
+          $updated = $content -replace "<Version>$current</Version>", "<Version>$newVersion</Version>"
+          Set-Content -Path $csprojPath -Value $updated
+
+          Write-Output "Bumped version from $current to $newVersion"
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
+
+      - name: Publish
+        run: >-
+          dotnet publish PulseAPK.csproj
+          --configuration Release
+          --runtime win-x64
+          --self-contained false
+          -p:PublishSingleFile=true
+          -p:IncludeNativeLibrariesForSelfExtract=true
+          --output "${{ github.workspace }}\\publish"
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: PulseAPK-windows-x64
+          path: publish
+          if-no-files-found: error
