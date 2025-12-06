@@ -6,7 +6,7 @@ PulseAPK is a Windows Presentation Foundation (WPF) desktop client that wraps th
 - **Guided decompilation:** Choose the APK, toggle resource/source decoding, and preserve the original manifest when needed.
 - **Safe output handling:** Warns about risky output folders and prompts before overwriting existing directories.
 - **Live console log:** Streams apktool output and errors directly into the UI.
-- **Configurable settings:** Persist the apktool JAR path in a user-level settings file under the application data folder.
+- **Configurable settings:** Persist the apktool JAR path in a settings file stored alongside the application.
 
 ## Requirements
 - Windows with .NET 8.0 SDK (for building and running the project).
@@ -26,7 +26,7 @@ PulseAPK is a Windows Presentation Foundation (WPF) desktop client that wraps th
    dotnet run
    ```
 4. **Set the apktool path**
-   - Open the **Settings** view and browse to the `apktool.jar` location. The path is persisted to `%AppData%/APKToolUI/settings.json`.
+   - Open the **Settings** view and browse to the `apktool.jar` location. The path is persisted to `settings.json` within the application folder.
 
 ## How it works
 - The UI is defined in `MainWindow.xaml` with views for **Decompile** and **Settings** hosted via view models.

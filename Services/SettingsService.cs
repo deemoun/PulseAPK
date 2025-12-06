@@ -24,11 +24,7 @@ namespace APKToolUI.Services
 
         public SettingsService()
         {
-            var appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            // Stores settings under %AppData%/APKToolUI (Windows) or ~/.config/APKToolUI (Linux/macOS)
-            var settingsFolder = Path.Combine(appData, "APKToolUI");
-            Directory.CreateDirectory(settingsFolder);
-
+            var settingsFolder = AppContext.BaseDirectory;
             _settingsFilePath = Path.Combine(settingsFolder, SettingsFileName);
             Settings = LoadSettings();
         }
