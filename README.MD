@@ -43,7 +43,7 @@ Before running **PulseAPK**, ensure you have the following:
 
 ## Technical Details
 
-**PulseAPK** (formerly `APKToolUI`) follows the MVVM (Model-View-ViewModel) architectural pattern for clean code separation and testability.
+**PulseAPK** follows the MVVM (Model-View-ViewModel) architectural pattern for clean code separation and testability.
 
 ### Project Structure
 
