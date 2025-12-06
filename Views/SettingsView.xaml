@@ -3,25 +3,26 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:properties="clr-namespace:APKToolUI.Properties"
              mc:Ignorable="d"
              d:DesignHeight="600" d:DesignWidth="800">
     <Grid Margin="20">
         <StackPanel>
-            <TextBlock Text="Settings" Foreground="{StaticResource Brush.TextPrimary}" FontSize="24" FontWeight="Bold" Margin="0,0,0,20"/>
+            <TextBlock Text="{x:Static properties:Resources.SettingsHeader}" Foreground="{StaticResource Brush.TextPrimary}" FontSize="24" FontWeight="Bold" Margin="0,0,0,20"/>
 
-            <TextBlock Text="Apktool Path" Foreground="{StaticResource Brush.TextSecondary}" Margin="0,0,0,5"/>
+            <TextBlock Text="{x:Static properties:Resources.ApktoolPath}" Foreground="{StaticResource Brush.TextSecondary}" Margin="0,0,0,5"/>
             <DockPanel>
-                <TextBox Text="{Binding ApktoolPath, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource CyberTextBox}" Width="400"/>
-                <Button Content="Browse" Command="{Binding BrowseApktoolCommand}" Style="{StaticResource CyberButtonStyle}" Margin="10,0,0,0" Padding="16,0" MinWidth="90"/>
+                <TextBox Text="{Binding ApktoolPath, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource CyberTextBoxStyle}" Width="400"/>
+                <Button Content="{x:Static properties:Resources.Browse}" Command="{Binding BrowseApktoolCommand}" Style="{StaticResource CyberButtonStyle}" Margin="10,0,0,0" Padding="16,0" MinWidth="90"/>
             </DockPanel>
             <TextBlock Text="{Binding JavaPathDisplay}" Foreground="{StaticResource Brush.TextSecondary}" Margin="0,5,0,0" TextWrapping="Wrap"/>
             <StackPanel Margin="0,5,0,0">
                 <TextBlock Foreground="{StaticResource Brush.TextSecondary}" TextWrapping="Wrap">
-                    <Run Text="Download Apktool: "/>
+                    <Run Text="{x:Static properties:Resources.DownloadApktool}"/>
                     <Hyperlink NavigateUri="https://bitbucket.org/iBotPeaches/apktool/downloads/" RequestNavigate="Hyperlink_RequestNavigate">https://bitbucket.org/iBotPeaches/apktool/downloads/</Hyperlink>
                 </TextBlock>
                 <TextBlock Foreground="{StaticResource Brush.TextSecondary}" TextWrapping="Wrap" Margin="0,3,0,0">
-                    <Run Text="Download JAVA: "/>
+                    <Run Text="{x:Static properties:Resources.DownloadJava}"/>
                     <Hyperlink NavigateUri="https://www.azul.com/downloads/?package=jdk#zulu" RequestNavigate="Hyperlink_RequestNavigate">https://www.azul.com/downloads/?package=jdk#zulu</Hyperlink>
                 </TextBlock>
             </StackPanel>

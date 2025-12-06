@@ -6,12 +6,16 @@
         xmlns:local="clr-namespace:APKToolUI"
         xmlns:vm="clr-namespace:APKToolUI.ViewModels"
         xmlns:views="clr-namespace:APKToolUI.Views"
+        xmlns:properties="clr-namespace:APKToolUI.Properties"
         mc:Ignorable="d"
         Title="{Binding WindowTitle}" Height="650" Width="1000"
         Icon="Resources/CyberUnpack.png"
-        WindowStyle="None" ResizeMode="CanResizeWithGrip" AllowsTransparency="True"
-        Background="Transparent"
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen"
+        Background="{StaticResource Brush.Background}">
+
+    <Window.DataContext>
+        <vm:MainViewModel/>
+    </Window.DataContext>
 
     <Window.Resources>
         <DataTemplate DataType="{x:Type vm:DecompileViewModel}">
@@ -25,111 +29,70 @@
         </DataTemplate>
     </Window.Resources>
 
-    <Border Background="{StaticResource Brush.Background}" CornerRadius="15" BorderBrush="{StaticResource Brush.BorderGlow}" BorderThickness="1">
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="250"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="250"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
 
-            <!-- Sidebar -->
-            <Border Grid.Column="0" BorderBrush="{StaticResource Brush.BorderGlow}" BorderThickness="0,0,1,0">
-                <StackPanel Margin="20">
-                    <StackPanel Orientation="Horizontal" Margin="0,0,0,40">
-                        <Image Source="/Resources/CyberUnpack.png" Width="30" Height="30" Margin="0,0,15,0" RenderOptions.BitmapScalingMode="HighQuality">
+        <!-- Sidebar -->
+        <Border Background="{StaticResource Brush.Panel}" BorderThickness="0,0,1,0" BorderBrush="{StaticResource Brush.BorderGlow}">
+            <StackPanel Margin="20">
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,40">
+                        <Image Source="/Resources/CyberUnpack.png" Width="30" Height="30" Margin="0,0,15,0">
                             <Image.Effect>
                                 <DropShadowEffect Color="{StaticResource Color.NeonCyan}" BlurRadius="10" ShadowDepth="0" Opacity="0.8"/>
                             </Image.Effect>
                         </Image>
-                        <TextBlock Text="PulseAPK" Foreground="{StaticResource Brush.TextPrimary}" FontSize="24" FontWeight="Bold" VerticalAlignment="Center"/>
+                        <TextBlock Text="{x:Static properties:Resources.AppTitle}" Foreground="{StaticResource Brush.TextPrimary}" FontSize="24" FontWeight="Bold" VerticalAlignment="Center"/>
                     </StackPanel>
 
-                    <Button Content="Decompile" Command="{Binding NavigateToDecompileCommand}">
+                    <Button Content="{x:Static properties:Resources.MenuDecompile}" Command="{Binding NavigateToDecompileCommand}">
                         <Button.Style>
                             <Style TargetType="Button" BasedOn="{StaticResource CyberButtonStyle}">
                                 <Setter Property="HorizontalAlignment" Value="Stretch"/>
-                                <Setter Property="HorizontalContentAlignment" Value="Left"/>
-                                <Setter Property="Margin" Value="0,5"/>
+                                <Setter Property="Margin" Value="0,0,0,10"/>
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding SelectedMenu}" Value="Decompile">
-                                        <Setter Property="Background" Value="#3300F0FF"/>
-                                        <Setter Property="Foreground" Value="{StaticResource Brush.TextPrimary}"/>
-                                        <Setter Property="BorderBrush" Value="{StaticResource Brush.AccentCyan}"/>
-                                        <Setter Property="FontWeight" Value="Bold"/>
-                                        <Setter Property="Effect">
-                                            <Setter.Value>
-                                                <DropShadowEffect Color="{StaticResource Color.NeonCyan}" BlurRadius="20" ShadowDepth="0" Opacity="0.6"/>
-                                            </Setter.Value>
-                                        </Setter>
+                                        <Setter Property="Background" Value="{StaticResource Brush.AccentCyan}"/>
+                                        <Setter Property="Foreground" Value="Black"/>
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
                         </Button.Style>
                     </Button>
-                    <Button Content="Settings" Command="{Binding NavigateToSettingsCommand}">
+                    <Button Content="{x:Static properties:Resources.MenuSettings}" Command="{Binding NavigateToSettingsCommand}">
                         <Button.Style>
                             <Style TargetType="Button" BasedOn="{StaticResource CyberButtonStyle}">
                                 <Setter Property="HorizontalAlignment" Value="Stretch"/>
-                                <Setter Property="HorizontalContentAlignment" Value="Left"/>
-                                <Setter Property="Margin" Value="0,5"/>
+                                <Setter Property="Margin" Value="0,0,0,10"/>
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding SelectedMenu}" Value="Settings">
-                                        <Setter Property="Background" Value="#3300F0FF"/>
-                                        <Setter Property="Foreground" Value="{StaticResource Brush.TextPrimary}"/>
-                                        <Setter Property="BorderBrush" Value="{StaticResource Brush.AccentCyan}"/>
-                                        <Setter Property="FontWeight" Value="Bold"/>
-                                        <Setter Property="Effect">
-                                            <Setter.Value>
-                                                <DropShadowEffect Color="{StaticResource Color.NeonCyan}" BlurRadius="20" ShadowDepth="0" Opacity="0.6"/>
-                                            </Setter.Value>
-                                        </Setter>
+                                        <Setter Property="Background" Value="{StaticResource Brush.AccentCyan}"/>
+                                        <Setter Property="Foreground" Value="Black"/>
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
                         </Button.Style>
                     </Button>
-                    <Button Content="About" Command="{Binding NavigateToAboutCommand}">
+                    <Button Content="{x:Static properties:Resources.MenuAbout}" Command="{Binding NavigateToAboutCommand}">
                         <Button.Style>
                             <Style TargetType="Button" BasedOn="{StaticResource CyberButtonStyle}">
                                 <Setter Property="HorizontalAlignment" Value="Stretch"/>
-                                <Setter Property="HorizontalContentAlignment" Value="Left"/>
-                                <Setter Property="Margin" Value="0,5"/>
+                                <Setter Property="Margin" Value="0,0,0,10"/>
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding SelectedMenu}" Value="About">
-                                        <Setter Property="Background" Value="#3300F0FF"/>
-                                        <Setter Property="Foreground" Value="{StaticResource Brush.TextPrimary}"/>
-                                        <Setter Property="BorderBrush" Value="{StaticResource Brush.AccentCyan}"/>
-                                        <Setter Property="FontWeight" Value="Bold"/>
-                                        <Setter Property="Effect">
-                                            <Setter.Value>
-                                                <DropShadowEffect Color="{StaticResource Color.NeonCyan}" BlurRadius="20" ShadowDepth="0" Opacity="0.6"/>
-                                            </Setter.Value>
-                                        </Setter>
+                                        <Setter Property="Background" Value="{StaticResource Brush.AccentCyan}"/>
+                                        <Setter Property="Foreground" Value="Black"/>
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
                         </Button.Style>
                     </Button>
-                </StackPanel>
-            </Border>
+            </StackPanel>
+        </Border>
 
-            <!-- Main Content -->
-            <Grid Grid.Column="1">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="30"/> <!-- Custom Title Bar Area -->
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-
-                <!-- Window Controls Placeholder (Close/Min/Max) -->
-                <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,5,10,0">
-                    <Button Style="{StaticResource TitleBarButtonStyle}" Click="MinimizeButton_Click">
-                        <Rectangle Width="12" Height="2" RadiusX="1" RadiusY="1" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" VerticalAlignment="Center"/>
-                    </Button>
-                    <Button Content="X" Style="{StaticResource TitleBarButtonStyle}" Margin="5,0,0,0" Click="CloseButton_Click"/>
-                </StackPanel>
-
-                <ContentControl Grid.Row="1" Content="{Binding CurrentView}"/>
-            </Grid>
-        </Grid>
-    </Border>
+        <!-- Main Content -->
+        <ContentControl Grid.Column="1" Content="{Binding CurrentView}" Margin="20"/>
+    </Grid>
 </Window>

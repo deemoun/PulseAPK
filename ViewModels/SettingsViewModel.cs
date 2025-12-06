@@ -37,7 +37,7 @@ namespace APKToolUI.ViewModels
         [RelayCommand]
         private void BrowseApktool()
         {
-            var file = _filePickerService.OpenFile("Jar Files (*.jar)|*.jar");
+            var file = _filePickerService.OpenFile(Properties.Resources.FileFilter_Jar);
             if (string.IsNullOrWhiteSpace(file))
             {
                 return;
@@ -46,7 +46,7 @@ namespace APKToolUI.ViewModels
             var (isValid, message) = Utils.FileSanitizer.ValidateJar(file);
             if (!isValid)
             {
-                System.Windows.MessageBox.Show(message, "Invalid Jar File", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+                System.Windows.MessageBox.Show(message, Properties.Resources.Error_InvalidJarFile, System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
                 return;
             }
 
@@ -69,10 +69,10 @@ namespace APKToolUI.ViewModels
             var javaPath = FindJavaExecutable();
             if (string.IsNullOrWhiteSpace(javaPath))
             {
-                return "JAVA Path: Not Found";
+                return Properties.Resources.JavaPathNotFound;
             }
 
-            return $"JAVA Path: {javaPath}";
+            return string.Format(Properties.Resources.JavaPathFound, javaPath);
         }
 
         private static string FindJavaExecutable()

@@ -4,29 +4,30 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:APKToolUI.Views"
+             xmlns:properties="clr-namespace:APKToolUI.Properties"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="800">
     <Grid Margin="20">
         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
             <!-- App Name and Version -->
-            <TextBlock Text="PulseAPK" Foreground="{StaticResource Brush.TextPrimary}" FontSize="40" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,10">
+            <TextBlock Text="{x:Static properties:Resources.AppTitle}" Foreground="{StaticResource Brush.TextPrimary}" FontSize="40" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,10">
                 <TextBlock.Effect>
                     <DropShadowEffect Color="{StaticResource Color.NeonCyan}" BlurRadius="20" ShadowDepth="0" Opacity="0.8"/>
                 </TextBlock.Effect>
             </TextBlock>
-            <TextBlock Text="{Binding AppVersion, StringFormat='Version: {0}'}" Foreground="{StaticResource Brush.TextSecondary}" FontSize="18" HorizontalAlignment="Center" Margin="0,0,0,30"/>
+            <TextBlock Text="{Binding AppVersion}" Foreground="{StaticResource Brush.TextSecondary}" FontSize="18" HorizontalAlignment="Center" Margin="0,0,0,30"/>
 
             <!-- Developer Info -->
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,5">
-                <TextBlock Text="Developed by " Foreground="{StaticResource Brush.TextSecondary}" FontSize="16"/>
+                <TextBlock Text="{x:Static properties:Resources.About_DevelopedBy}" Foreground="{StaticResource Brush.TextSecondary}" FontSize="16"/>
                 <TextBlock Text="{Binding DeveloperName}" Foreground="{StaticResource Brush.AccentCyan}" FontSize="16" FontWeight="SemiBold"/>
             </StackPanel>
             
             <TextBlock Text="{Binding Year}" Foreground="{StaticResource Brush.TextSecondary}" FontSize="16" HorizontalAlignment="Center" Margin="0,0,0,40"/>
 
             <!-- Links -->
-            <Button Content="Project Page" Command="{Binding OpenProjectPageCommand}" Style="{StaticResource CyberButtonStyle}" Width="200" Height="40" Margin="0,0,0,15"/>
-            <Button Content="Developer Page" Command="{Binding OpenDeveloperPageCommand}" Style="{StaticResource CyberButtonStyle}" Width="200" Height="40"/>
+            <Button Content="{x:Static properties:Resources.About_ProjectPage}" Command="{Binding OpenProjectPageCommand}" Style="{StaticResource CyberButtonStyle}" Width="200" Height="40" Margin="0,0,0,15"/>
+            <Button Content="{x:Static properties:Resources.About_DeveloperPage}" Command="{Binding OpenDeveloperPageCommand}" Style="{StaticResource CyberButtonStyle}" Width="200" Height="40"/>
         </StackPanel>
     </Grid>
 </UserControl>

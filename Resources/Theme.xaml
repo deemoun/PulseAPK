@@ -241,7 +241,7 @@
     </Style>
 
     <!-- TextBox Style -->
-    <Style x:Key="CyberTextBox" TargetType="TextBox">
+    <Style x:Key="CyberTextBoxStyle" TargetType="TextBox">
         <Setter Property="Background" Value="{StaticResource Brush.Panel}"/>
         <Setter Property="Foreground" Value="{StaticResource Brush.TextPrimary}"/>
         <Setter Property="BorderBrush" Value="{StaticResource Brush.BorderGlow}"/>
@@ -256,6 +256,62 @@
                             CornerRadius="5">
                         <ScrollViewer x:Name="PART_ContentHost"/>
                     </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- CheckBox Style -->
+    <Style x:Key="CyberCheckBoxStyle" TargetType="CheckBox">
+        <Setter Property="Foreground" Value="{StaticResource Brush.TextPrimary}"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderBrush" Value="{StaticResource Brush.AccentCyan}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="CheckBox">
+                    <Grid Background="Transparent">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Border x:Name="Border"
+                                Grid.Column="0"
+                                Width="18" Height="18"
+                                CornerRadius="3"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}">
+                            <Path x:Name="CheckMark"
+                                  Data="M3,9 L7,13 L15,5"
+                                  Stroke="{StaticResource Brush.AccentCyan}"
+                                  StrokeThickness="2"
+                                  Stretch="Uniform"
+                                  Width="12" Height="12"
+                                  Margin="1"
+                                  Opacity="0"/>
+                        </Border>
+                        <ContentPresenter Grid.Column="1"
+                                          HorizontalAlignment="Left"
+                                          VerticalAlignment="Center"
+                                          Margin="10,0,0,0"
+                                          RecognizesAccessKey="True"/>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="CheckMark" Property="Opacity" Value="1"/>
+                            <Setter TargetName="Border" Property="Background" Value="#3300F0FF"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource Brush.AccentCyan}"/>
+                            <Setter TargetName="Border" Property="Effect">
+                                <Setter.Value>
+                                    <DropShadowEffect Color="{StaticResource Color.NeonCyan}" BlurRadius="5" ShadowDepth="0" Opacity="0.5"/>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

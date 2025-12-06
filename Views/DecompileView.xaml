@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:APKToolUI.Views"
              xmlns:vm="clr-namespace:APKToolUI.ViewModels"
+             xmlns:properties="clr-namespace:APKToolUI.Properties"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="800">
     <UserControl.Resources>
@@ -19,7 +20,11 @@
         </Grid.RowDefinitions>
 
         <!-- Title -->
-        <TextBlock Text="Decompilation" Foreground="{StaticResource Brush.TextPrimary}" FontSize="18" Margin="0,0,0,10"/>
+        <TextBlock Text="{x:Static properties:Resources.DecompileHeader}" FontSize="28" FontWeight="SemiBold" Foreground="{StaticResource Brush.TextPrimary}" Margin="0,0,0,20">
+            <TextBlock.Effect>
+                <DropShadowEffect Color="{StaticResource Color.NeonCyan}" BlurRadius="10" ShadowDepth="0" Opacity="0.5"/>
+            </TextBlock.Effect>
+        </TextBlock>
 
         <!-- Drag Drop Zone -->
         <Border Grid.Row="1" Style="{StaticResource CyberPanelStyle}" Height="150" Margin="0,0,0,20" AllowDrop="True" DragEnter="Border_DragEnter" Drop="Border_Drop">
@@ -30,8 +35,8 @@
                 </Grid.ColumnDefinitions>
                 
                 <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="20">
-                    <TextBlock Text="{Binding ApkPath, TargetNullValue='Select APK'}" Foreground="{StaticResource Brush.TextPrimary}" FontSize="24" HorizontalAlignment="Center" TextTrimming="CharacterEllipsis" MaxWidth="500"/>
-                    <TextBlock Text="Drag and drop a file" Foreground="{StaticResource Brush.TextSecondary}" FontSize="14" HorizontalAlignment="Center" Margin="0,5,0,0" Visibility="{Binding IsHintVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                    <TextBlock Text="{Binding ApkPath, TargetNullValue={x:Static properties:Resources.SelectApk}}" Foreground="{StaticResource Brush.TextPrimary}" FontSize="24" HorizontalAlignment="Center" TextTrimming="CharacterEllipsis" MaxWidth="500"/>
+                    <TextBlock Text="{x:Static properties:Resources.DragDropHint}" Foreground="{StaticResource Brush.TextSecondary}" FontSize="14" HorizontalAlignment="Center" Margin="0,5,0,0" Visibility="{Binding IsHintVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                 </StackPanel>
 
                 <Button Grid.Column="1"
@@ -51,9 +56,9 @@
             </Grid.ColumnDefinitions>
 
             <StackPanel Grid.Column="0" Margin="0,0,40,0">
-                <CheckBox Content="Decode resources" IsChecked="{Binding DecodeResources}" Foreground="{StaticResource Brush.TextPrimary}" Margin="0,5" ToolTip="When unchecked, resources.arsc will be left intact (-r)."/>
-                <CheckBox Content="Decode sources" IsChecked="{Binding DecodeSources}" Foreground="{StaticResource Brush.TextPrimary}" Margin="0,5" ToolTip="When unchecked, smali code will be skipped (-s)."/>
-                <CheckBox Content="Keep original manifest" IsChecked="{Binding KeepOriginalManifest}" Foreground="{StaticResource Brush.TextPrimary}" Margin="0,5" ToolTip="Preserve the original AndroidManifest.xml when decoding (-m)."/>
+                <CheckBox Content="{x:Static properties:Resources.DecodeResources}" IsChecked="{Binding DecodeResources}" Style="{StaticResource CyberCheckBoxStyle}" Margin="0,0,20,10"/>
+                <CheckBox Content="{x:Static properties:Resources.DecodeSources}" IsChecked="{Binding DecodeSources}" Style="{StaticResource CyberCheckBoxStyle}" Margin="0,0,20,10"/>
+                <CheckBox Content="{x:Static properties:Resources.KeepOriginalManifest}" IsChecked="{Binding KeepOriginalManifest}" Style="{StaticResource CyberCheckBoxStyle}"/>
             </StackPanel>
 
             <StackPanel Grid.Column="1">
@@ -62,10 +67,10 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
-                    <TextBox Text="{Binding OutputFolder, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, TargetNullValue='Output folder'}" Style="{StaticResource CyberTextBox}" Height="30" VerticalContentAlignment="Center" Background="{StaticResource Brush.Panel}" Foreground="{StaticResource Brush.TextPrimary}" BorderBrush="{StaticResource Brush.BorderGlow}"/>
+                    <TextBox Text="{Binding OutputFolder, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, TargetNullValue={x:Static properties:Resources.OutputFolder}}" Style="{StaticResource CyberTextBoxStyle}" Tag="{x:Static properties:Resources.OutputFolder}" Height="30" VerticalContentAlignment="Center" Background="{StaticResource Brush.Panel}" Foreground="{StaticResource Brush.TextPrimary}" BorderBrush="{StaticResource Brush.BorderGlow}"/>
                     <StackPanel Grid.Column="1" Orientation="Vertical" Margin="10,0,0,0">
-                        <Button Content="Browse" Style="{StaticResource CyberButtonStyle}" Height="30" Padding="16,0" MinWidth="90" Command="{Binding BrowseOutputFolderCommand}" Margin="0,0,0,4"/>
-                        <Button Content="Open" Style="{StaticResource CyberButtonStyle}" Height="30" Padding="16,0" MinWidth="90" Command="{Binding OpenOutputFolderCommand}" Margin="0,4,0,0"/>
+                        <Button Content="{x:Static properties:Resources.Browse}" Style="{StaticResource CyberButtonStyle}" Height="30" Padding="16,0" MinWidth="90" Command="{Binding BrowseOutputFolderCommand}" Margin="0,0,0,4"/>
+                        <Button Content="{x:Static properties:Resources.Open}" Style="{StaticResource CyberButtonStyle}" Height="30" Padding="16,0" MinWidth="90" Command="{Binding OpenOutputFolderCommand}" Margin="0,4,0,0"/>
                     </StackPanel>
                 </Grid>
             </StackPanel>

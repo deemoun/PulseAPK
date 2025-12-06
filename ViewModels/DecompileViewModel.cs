@@ -29,7 +29,7 @@ namespace APKToolUI.ViewModels
         private string? _outputFolder;
 
         [ObservableProperty]
-        private string _consoleLog = "Waiting for command...";
+        private string _consoleLog = Properties.Resources.WaitingForCommand;
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(RunDecompileCommand))]
@@ -98,30 +98,30 @@ namespace APKToolUI.ViewModels
             }
         }
 
-        [RelayCommand]
-        private void OpenOutputFolder()
+    [RelayCommand]
+    private void OpenOutputFolder()
+    {
+        if (string.IsNullOrWhiteSpace(OutputFolder))
         {
-            if (string.IsNullOrWhiteSpace(OutputFolder))
-            {
-                MessageBox.Show("Output folder is not set.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-
-            if (!Directory.Exists(OutputFolder))
-            {
-                MessageBox.Show($"The folder '{OutputFolder}' does not exist.", "Folder Not Found", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-
-            try
-            {
-                Process.Start("explorer.exe", OutputFolder);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Could not open folder: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            MessageBox.Show(Properties.Resources.Error_OutputFolderNotSet, Properties.Resources.AppTitle, MessageBoxButton.OK, MessageBoxImage.Warning);
+            return;
         }
+
+        if (!Directory.Exists(OutputFolder))
+        {
+            MessageBox.Show(string.Format(Properties.Resources.Error_FolderNotFound, OutputFolder), Properties.Resources.Error_OutputFolderNotSet, MessageBoxButton.OK, MessageBoxImage.Warning);
+            return;
+        }
+
+        try
+        {
+            Process.Start("explorer.exe", OutputFolder);
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show(string.Format(Properties.Resources.Error_CouldNotOpenFolder, ex.Message), Properties.Resources.AppTitle, MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+    }
 
         [RelayCommand(CanExecute = nameof(CanRunDecompile))]
         private async Task RunDecompile()
@@ -135,18 +135,18 @@ namespace APKToolUI.ViewModels
             var apktoolPath = _settingsService.Settings.ApktoolPath?.Trim();
             if (string.IsNullOrWhiteSpace(apktoolPath))
             {
-                MessageBox.Show("Please configure the apktool path in Settings before running a decompile.", "Missing apktool", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show(Properties.Resources.Error_MissingApktool, Properties.Resources.SettingsHeader, MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
             if (!File.Exists(apktoolPath))
             {
-                MessageBox.Show($"The apktool path '{apktoolPath}' does not exist. Please update it in Settings.", "Invalid apktool path", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(string.Format(Properties.Resources.Error_InvalidApktoolPath, apktoolPath), Properties.Resources.Error_InvalidApkFile, MessageBoxButton.OK, MessageBoxImage.Error);
                 RunDecompileCommand.NotifyCanExecuteChanged();
                 return;
             }
 
-            SetConsoleLog("Starting apktool...");
+            SetConsoleLog(Properties.Resources.StartingApktool);
 
             var outputDir = !string.IsNullOrWhiteSpace(OutputFolder)
                 ? OutputFolder
@@ -187,18 +187,19 @@ namespace APKToolUI.ViewModels
 
                 if (exitCode == 0)
                 {
-                    AppendLog("Decompile finished.");
+                    AppendLog(Properties.Resources.DecompileSuccessful);
+                    MessageBox.Show(Properties.Resources.DecompileSuccessful, Properties.Resources.AppTitle, MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 else
                 {
-                    AppendLog($"Decompile failed with exit code {exitCode}. Check the log above for details.");
-                    MessageBox.Show("Apktool reported an error while decompiling. Please review the console log for details.", "Decompile failed", MessageBoxButton.OK, MessageBoxImage.Error);
+                    AppendLog($"{Properties.Resources.DecompileFailed} (Exit Code: {exitCode})");
+                    MessageBox.Show(Properties.Resources.DecompileFailed, Properties.Resources.AppTitle, MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
             catch (Exception ex)
             {
-                AppendLog($"Decompile failed: {ex.Message}");
-                MessageBox.Show(ex.Message, "Decompile failed", MessageBoxButton.OK, MessageBoxImage.Error);
+                AppendLog($"{Properties.Resources.DecompileFailed}: {ex.Message}");
+                MessageBox.Show(ex.Message, Properties.Resources.AppTitle, MessageBoxButton.OK, MessageBoxImage.Error);
             }
             finally
             {

@@ -10,7 +10,7 @@ namespace APKToolUI.ViewModels
         private object _currentView;
 
         [ObservableProperty]
-        private string _windowTitle = "PulseAPK";
+        private string _windowTitle = Properties.Resources.AppTitle;
 
         [ObservableProperty]
         private string _selectedMenu = "Decompile";

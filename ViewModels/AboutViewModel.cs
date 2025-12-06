@@ -7,9 +7,14 @@ namespace APKToolUI.ViewModels
 {
     public partial class AboutViewModel : ObservableObject
     {
-        public string AppVersion { get; } = Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "1.0.0";
+        public string AppVersion => getAppVersion();
         public string DeveloperName { get; } = "Dmitry Yarygin";
         public string Year { get; } = "2025";
+        
+        private string getAppVersion() {
+             var version = Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "1.0.0";
+             return string.Format(Properties.Resources.About_Version, version);
+        }
 
         [RelayCommand]
         private void OpenProjectPage()
