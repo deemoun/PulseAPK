@@ -37,25 +37,16 @@ namespace APKToolUI.ViewModels
         [RelayCommand]
         private void BrowseApktool()
         {
-            var file = _filePickerService.OpenFile("Jar Files (*.jar)|*.jar|Executable Files (*.exe)|*.exe|All Files (*.*)|*.*");
+            var file = _filePickerService.OpenFile("Jar Files (*.jar)|*.jar");
             if (string.IsNullOrWhiteSpace(file))
             {
                 return;
             }
 
-            var extension = Path.GetExtension(file);
-            if (extension.Equals(".jar", StringComparison.OrdinalIgnoreCase))
+            var (isValid, message) = Utils.FileSanitizer.ValidateJar(file);
+            if (!isValid)
             {
-                var (isValid, message) = Utils.FileSanitizer.ValidateJar(file);
-                if (!isValid)
-                {
-                    System.Windows.MessageBox.Show(message, "Invalid Jar File", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
-                    return;
-                }
-            }
-            else if (!extension.Equals(".exe", StringComparison.OrdinalIgnoreCase))
-            {
-                System.Windows.MessageBox.Show("Please select a .jar or .exe file for apktool.", "Unsupported file", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Warning);
+                System.Windows.MessageBox.Show(message, "Invalid Jar File", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
                 return;
             }
 
