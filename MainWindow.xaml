@@ -20,6 +20,9 @@
         <DataTemplate DataType="{x:Type vm:SettingsViewModel}">
             <views:SettingsView/>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:AboutViewModel}">
+            <views:AboutView/>
+        </DataTemplate>
     </Window.Resources>
 
     <Border Background="{StaticResource Brush.Background}" CornerRadius="15" BorderBrush="{StaticResource Brush.BorderGlow}" BorderThickness="1">
@@ -71,6 +74,28 @@
                                 <Setter Property="Margin" Value="0,5"/>
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding SelectedMenu}" Value="Settings">
+                                        <Setter Property="Background" Value="#3300F0FF"/>
+                                        <Setter Property="Foreground" Value="{StaticResource Brush.TextPrimary}"/>
+                                        <Setter Property="BorderBrush" Value="{StaticResource Brush.AccentCyan}"/>
+                                        <Setter Property="FontWeight" Value="Bold"/>
+                                        <Setter Property="Effect">
+                                            <Setter.Value>
+                                                <DropShadowEffect Color="{StaticResource Color.NeonCyan}" BlurRadius="20" ShadowDepth="0" Opacity="0.6"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                    <Button Content="About" Command="{Binding NavigateToAboutCommand}">
+                        <Button.Style>
+                            <Style TargetType="Button" BasedOn="{StaticResource CyberButtonStyle}">
+                                <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                                <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                                <Setter Property="Margin" Value="0,5"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding SelectedMenu}" Value="About">
                                         <Setter Property="Background" Value="#3300F0FF"/>
                                         <Setter Property="Foreground" Value="{StaticResource Brush.TextPrimary}"/>
                                         <Setter Property="BorderBrush" Value="{StaticResource Brush.AccentCyan}"/>

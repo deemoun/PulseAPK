@@ -34,5 +34,12 @@ namespace APKToolUI.ViewModels
             CurrentView = new SettingsViewModel();
             SelectedMenu = "Settings";
         }
+
+        [RelayCommand]
+        private void NavigateToAbout()
+        {
+            CurrentView = new AboutViewModel();
+            SelectedMenu = "About";
+        }
     }
 }
