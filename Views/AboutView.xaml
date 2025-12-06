@@ -19,7 +19,7 @@
 
             <!-- Developer Info -->
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,5">
-                <TextBlock Text="{x:Static properties:Resources.About_DevelopedBy}" Foreground="{StaticResource Brush.TextSecondary}" FontSize="16"/>
+                <TextBlock Text="{x:Static properties:Resources.About_DevelopedBy}" Foreground="{StaticResource Brush.TextSecondary}" FontSize="16" Margin="0,0,5,0"/>
                 <TextBlock Text="{Binding DeveloperName}" Foreground="{StaticResource Brush.AccentCyan}" FontSize="16" FontWeight="SemiBold"/>
             </StackPanel>
             
