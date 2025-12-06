@@ -12,8 +12,8 @@ namespace PulseAPK.ViewModels
         public string Year { get; } = "2025";
         
         private string getAppVersion() {
-             var version = Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "1.0.0";
-             return string.Format(Properties.Resources.About_Version, version);
+             var version = Assembly.GetExecutingAssembly().GetName().Version;
+             return string.Format(Properties.Resources.About_Version, version != null ? $"{version.Major}.{version.Minor}.{version.Build}" : "1.0.0");
         }
 
         [RelayCommand]
