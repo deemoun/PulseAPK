@@ -1,5 +1,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using System;
+using System.IO;
 
 namespace APKToolUI.ViewModels
 {
@@ -31,38 +33,28 @@ namespace APKToolUI.ViewModels
         private void BrowseApktool()
         {
             var file = _filePickerService.OpenFile("Jar Files (*.jar)|*.jar|Executable Files (*.exe)|*.exe|All Files (*.*)|*.*");
-            if (file != null)
+            if (string.IsNullOrWhiteSpace(file))
+            {
+                return;
+            }
+
+            var extension = Path.GetExtension(file);
+            if (extension.Equals(".jar", StringComparison.OrdinalIgnoreCase))
             {
                 var (isValid, message) = Utils.FileSanitizer.ValidateJar(file);
                 if (!isValid)
                 {
-                    // If the user selected an EXE, we might want to allow it if it's a wrapper, but the request was "sanitation of the jar file".
-                    // The file filter allows *.exe. If it is an EXE, ValidateJar (checking for ZIP magic) might fail or pass depending on the EXE.
-                    // However, standard apktool is a JAR.
-                    // If the user picked an EXE, ValidateJar will reject it if it doesn't have a ZIP header (which EXEs usually don't, they implement PE).
-                    // Let's assume strict JAR requirement based on "sanitation of the jar file".
-                    // But wait, the filter is "Jar Files (*.jar)|*.jar|Executable Files (*.exe)|*.exe".
-                    // If the user selects an EXE, should I reject it? The user asked for "sanitation of the jar file".
-                    // If they select an EXE, they are not selecting a JAR.
-                    // I will check the extension first. If it is .exe, I might let it pass or warn?
-                    // The prompt was specific: "sanitation of the jar file".
-                    // I'll stick to validating if it is a .jar. If it is an .exe, I will skip ValidateJar or handle it differently.
-                    // But for now, I will assume if they pick a .jar, it must be a valid .jar.
-
-                    if (file.EndsWith(".jar", StringComparison.OrdinalIgnoreCase))
-                    {
-                        if (!isValid)
-                        {
-                            // It failed validation
-                            System.Windows.MessageBox.Show(message, "Invalid Jar File", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
-                            return;
-                        }
-                    }
-                    // If it is an EXE, we presently don't have instructions to sanitize it, so we accept it as before.
-
-                    ApktoolPath = file;
+                    System.Windows.MessageBox.Show(message, "Invalid Jar File", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+                    return;
                 }
             }
+            else if (!extension.Equals(".exe", StringComparison.OrdinalIgnoreCase))
+            {
+                System.Windows.MessageBox.Show("Please select a .jar or .exe file for apktool.", "Unsupported file", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Warning);
+                return;
+            }
+
+            ApktoolPath = file;
         }
 
         partial void OnApktoolPathChanged(string value)
