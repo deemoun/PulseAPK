@@ -4,6 +4,8 @@
 
 ![PulseAPK UI](images/pulse_apk.png)
 
+[Watch the demo on Youtube](https://youtu.be/yxqQjJZ4Obc)
+
 ## Key Features
 
 - **🚀 Sleek Interface**: A modern dark-themed UI that feels right at home on your desktop.
