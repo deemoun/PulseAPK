@@ -36,7 +36,7 @@ namespace PulseAPK.ViewModels
             }
             catch (System.Exception)
             {
-                // Handle or ignore error if browser fails to open
+                // Ignore failures to launch the browser.
             }
         }
     }

@@ -1,4 +1,5 @@
 using Microsoft.Win32;
+using System.IO;
 using System.Windows;
 
 namespace PulseAPK.Services
@@ -19,9 +20,15 @@ namespace PulseAPK.Services
             return null;
         }
 
-        public string? OpenFolder()
+        public string? OpenFolder(string? initialDirectory = null)
         {
             var dialog = new OpenFolderDialog();
+
+            if (!string.IsNullOrWhiteSpace(initialDirectory) && Directory.Exists(initialDirectory))
+            {
+                dialog.InitialDirectory = initialDirectory;
+            }
+
             if (dialog.ShowDialog() == true)
             {
                 return dialog.FolderName;

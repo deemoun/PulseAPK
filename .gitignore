@@ -236,3 +236,8 @@ orleans.codegen.cs
 
 # Output folder (as per user request)
 output/
+
+# Unit Test Artifacts
+tests/**/bin/
+tests/**/obj/
+TestResults/

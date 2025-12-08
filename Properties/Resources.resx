@@ -79,6 +79,9 @@
   <data name="OutputFolder" xml:space="preserve">
     <value>Output Folder</value>
   </data>
+  <data name="OutputApkLabel" xml:space="preserve">
+    <value>Output APK Path</value>
+  </data>
   <data name="Browse" xml:space="preserve">
     <value>Browse</value>
   </data>
@@ -133,6 +136,9 @@
   <data name="Error_InvalidJarFile" xml:space="preserve">
     <value>Invalid Jar File</value>
   </data>
+  <data name="Error_InvalidProjectSelection" xml:space="preserve">
+    <value>Drop a valid project folder that contains apktool.yml and AndroidManifest.xml.</value>
+  </data>
   <data name="FileFilter_Apk" xml:space="preserve">
     <value>APK Files (*.apk)|*.apk|All Files (*.*)|*.*</value>
   </data>
@@ -168,5 +174,32 @@
   </data>
   <data name="DownloadJava" xml:space="preserve">
     <value>Download JAVA: </value>
+  </data>
+  <data name="MenuBuild" xml:space="preserve">
+    <value>Build APK</value>
+  </data>
+  <data name="BuildHeader" xml:space="preserve">
+    <value>Build APK</value>
+  </data>
+  <data name="SelectProjectFolder" xml:space="preserve">
+    <value>Select Project Folder</value>
+  </data>
+    <data name="UseAapt2" xml:space="preserve">
+      <value>Use AAPT2</value>
+    </data>
+    <data name="RunBuild" xml:space="preserve">
+      <value>Run Build</value>
+    </data>
+  <data name="BuildSuccessful" xml:space="preserve">
+    <value>APK file successfully created.</value>
+  </data>
+  <data name="BuildFailed" xml:space="preserve">
+    <value>APK file creation failed</value>
+  </data>
+  <data name="Warning_InvalidProjectFolder" xml:space="preserve">
+    <value>The selected folder does not appear to be a valid apktool project (missing apktool.yml or AndroidManifest.xml).</value>
+  </data>
+  <data name="DragDropFolderHint" xml:space="preserve">
+    <value>Drag and drop a folder</value>
   </data>
 </root>

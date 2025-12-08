@@ -1,5 +1,6 @@
 using System.Windows;
 using System.Windows.Controls;
+using PulseAPK.Utils;
 
 namespace PulseAPK.Views
 {
@@ -31,7 +32,7 @@ namespace PulseAPK.Views
                 {
                     var file = files[0];
                     var (isValid, message) = Utils.FileSanitizer.ValidateApk(file);
-                    
+
                     if (isValid)
                     {
                         if (DataContext is ViewModels.DecompileViewModel vm)
@@ -41,7 +42,7 @@ namespace PulseAPK.Views
                     }
                     else
                     {
-                        MessageBox.Show(message, "Invalid APK File", MessageBoxButton.OK, MessageBoxImage.Error);
+                        MessageBoxUtils.ShowError(message, "Invalid APK File");
                     }
                 }
             }

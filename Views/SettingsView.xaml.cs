@@ -1,6 +1,6 @@
 using System.Diagnostics;
+using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Navigation;
 
 namespace PulseAPK.Views
 {
@@ -11,14 +11,15 @@ namespace PulseAPK.Views
             InitializeComponent();
         }
 
-        private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
+        private void LinkButton_Click(object sender, RoutedEventArgs e)
         {
-            Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri)
+            if (sender is Button button && button.CommandParameter is string uri)
             {
-                UseShellExecute = true
-            });
-
-            e.Handled = true;
+                Process.Start(new ProcessStartInfo(uri)
+                {
+                    UseShellExecute = true
+                });
+            }
         }
     }
 }

@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Text;
 using System.Windows;
-using System.Diagnostics;
+using PulseAPK.Utils;
 
 namespace PulseAPK.ViewModels
 {
@@ -81,7 +81,7 @@ namespace PulseAPK.ViewModels
                 var (isValid, message) = Utils.FileSanitizer.ValidateApk(file);
                 if (!isValid)
                 {
-                    MessageBox.Show(message, "Invalid APK File", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBoxUtils.ShowError(message, "Invalid APK File");
                     return;
                 }
                 ApkPath = file;
@@ -91,7 +91,13 @@ namespace PulseAPK.ViewModels
         [RelayCommand]
         private void BrowseOutputFolder()
         {
-            var folder = _filePickerService.OpenFolder();
+            var folder = Utils.BrowseUtils.BrowseFolder(
+                _filePickerService,
+                OutputFolder,
+                Properties.Resources.Error_OutputFolderNotSet,
+                Properties.Resources.Error_FolderNotFound,
+                requireExistingBasePath: true);
+
             if (folder != null)
             {
                 OutputFolder = folder;
@@ -101,26 +107,7 @@ namespace PulseAPK.ViewModels
         [RelayCommand]
         private void OpenOutputFolder()
         {
-            if (string.IsNullOrWhiteSpace(OutputFolder))
-            {
-                MessageBox.Show(Properties.Resources.Error_OutputFolderNotSet, Properties.Resources.AppTitle, MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-
-            if (!Directory.Exists(OutputFolder))
-            {
-                MessageBox.Show(string.Format(Properties.Resources.Error_FolderNotFound, OutputFolder), Properties.Resources.Error_OutputFolderNotSet, MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-
-            try
-            {
-                Process.Start("explorer.exe", OutputFolder);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(string.Format(Properties.Resources.Error_CouldNotOpenFolder, ex.Message), Properties.Resources.AppTitle, MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            Utils.BrowseUtils.TryOpenFolder(OutputFolder, Properties.Resources.Error_OutputFolderNotSet, Properties.Resources.Error_FolderNotFound);
         }
 
         [RelayCommand(CanExecute = nameof(CanRunDecompile))]
@@ -128,20 +115,20 @@ namespace PulseAPK.ViewModels
         {
             if (string.IsNullOrWhiteSpace(ApkPath))
             {
-                MessageBox.Show("Please select an APK file to decompile.", "Missing APK", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBoxUtils.ShowWarning("Please select an APK file to decompile.", "Missing APK");
                 return;
             }
 
             var apktoolPath = _settingsService.Settings.ApktoolPath?.Trim();
             if (string.IsNullOrWhiteSpace(apktoolPath))
             {
-                MessageBox.Show(Properties.Resources.Error_MissingApktool, Properties.Resources.SettingsHeader, MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBoxUtils.ShowWarning(Properties.Resources.Error_MissingApktool, Properties.Resources.SettingsHeader);
                 return;
             }
 
             if (!File.Exists(apktoolPath))
             {
-                MessageBox.Show(string.Format(Properties.Resources.Error_InvalidApktoolPath, apktoolPath), Properties.Resources.Error_InvalidApkFile, MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBoxUtils.ShowError(string.Format(Properties.Resources.Error_InvalidApktoolPath, apktoolPath), Properties.Resources.Error_InvalidApkFile);
                 RunDecompileCommand.NotifyCanExecuteChanged();
                 return;
             }
@@ -156,7 +143,7 @@ namespace PulseAPK.ViewModels
 
             if (IsHighRiskOutputDirectory(normalizedOutputDir))
             {
-                MessageBox.Show($"The selected output folder '{normalizedOutputDir}' is unsafe. Choose a different location.", "Invalid output folder", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBoxUtils.ShowError($"The selected output folder '{normalizedOutputDir}' is unsafe. Choose a different location.", "Invalid output folder");
                 return;
             }
 
@@ -168,7 +155,7 @@ namespace PulseAPK.ViewModels
 
                 if (!isEmpty)
                 {
-                    var result = MessageBox.Show($"The output directory '{normalizedOutputDir}' already exists and is not empty. Overwrite its contents?", "Confirm overwrite", MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No);
+                    var result = MessageBoxUtils.ShowQuestion($"The output directory '{normalizedOutputDir}' already exists and is not empty. Overwrite its contents?", "Confirm overwrite", MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No);
 
                     if (result != MessageBoxResult.Yes)
                     {
@@ -188,18 +175,18 @@ namespace PulseAPK.ViewModels
                 if (exitCode == 0)
                 {
                     AppendLog(Properties.Resources.DecompileSuccessful);
-                    MessageBox.Show(Properties.Resources.DecompileSuccessful, Properties.Resources.AppTitle, MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBoxUtils.ShowInfo(Properties.Resources.DecompileSuccessful);
                 }
                 else
                 {
                     AppendLog($"{Properties.Resources.DecompileFailed} (Exit Code: {exitCode})");
-                    MessageBox.Show(Properties.Resources.DecompileFailed, Properties.Resources.AppTitle, MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBoxUtils.ShowError(Properties.Resources.DecompileFailed);
                 }
             }
             catch (Exception ex)
             {
                 AppendLog($"{Properties.Resources.DecompileFailed}: {ex.Message}");
-                MessageBox.Show(ex.Message, Properties.Resources.AppTitle, MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBoxUtils.ShowError(ex.Message);
             }
             finally
             {

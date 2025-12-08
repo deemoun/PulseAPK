@@ -17,7 +17,7 @@ namespace PulseAPK.ViewModels
 
         public MainViewModel()
         {
-            // Default view
+            // Start on the decompile view.
             CurrentView = new DecompileViewModel();
         }
 
@@ -33,6 +33,13 @@ namespace PulseAPK.ViewModels
         {
             CurrentView = new SettingsViewModel();
             SelectedMenu = "Settings";
+        }
+
+        [RelayCommand]
+        private void NavigateToBuild()
+        {
+            CurrentView = new BuildViewModel();
+            SelectedMenu = "Build";
         }
 
         [RelayCommand]
