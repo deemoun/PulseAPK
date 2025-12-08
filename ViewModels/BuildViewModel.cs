@@ -23,9 +23,6 @@ namespace PulseAPK.ViewModels
         private bool _useAapt2;
 
         [ObservableProperty]
-        private bool _forceAll;
-
-        [ObservableProperty]
         private string _consoleLog = Properties.Resources.WaitingForCommand;
 
         [ObservableProperty]
@@ -74,7 +71,6 @@ namespace PulseAPK.ViewModels
 
         partial void OnOutputApkPathChanged(string value) => UpdateCommandPreview();
         partial void OnUseAapt2Changed(bool value) => UpdateCommandPreview();
-        partial void OnForceAllChanged(bool value) => UpdateCommandPreview();
 
         [RelayCommand]
         private void BrowseProject()
@@ -140,7 +136,7 @@ namespace PulseAPK.ViewModels
 
             try
             {
-                var exitCode = await _apktoolRunner.RunBuildAsync(ProjectPath, OutputApkPath, UseAapt2, ForceAll);
+                var exitCode = await _apktoolRunner.RunBuildAsync(ProjectPath, OutputApkPath, UseAapt2);
 
                 if (exitCode == 0)
                 {

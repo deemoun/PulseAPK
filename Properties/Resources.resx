@@ -181,15 +181,12 @@
   <data name="SelectProjectFolder" xml:space="preserve">
     <value>Select Project Folder</value>
   </data>
-  <data name="UseAapt2" xml:space="preserve">
-    <value>Use AAPT2</value>
-  </data>
-  <data name="ForceAll" xml:space="preserve">
-    <value>Force Rebuild All</value>
-  </data>
-  <data name="RunBuild" xml:space="preserve">
-    <value>Run Build</value>
-  </data>
+    <data name="UseAapt2" xml:space="preserve">
+      <value>Use AAPT2</value>
+    </data>
+    <data name="RunBuild" xml:space="preserve">
+      <value>Run Build</value>
+    </data>
   <data name="BuildSuccessful" xml:space="preserve">
     <value>APK file successfully created.</value>
   </data>
