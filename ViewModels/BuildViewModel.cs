@@ -14,10 +14,17 @@ namespace PulseAPK.ViewModels
     {
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(IsHintVisible))]
+        [NotifyPropertyChangedFor(nameof(HasProject))]
         private string _projectPath;
 
         [ObservableProperty]
         private string _outputApkPath;
+
+        [ObservableProperty]
+        private string _outputFolderPath;
+
+        [ObservableProperty]
+        private string _outputApkName;
 
         [ObservableProperty]
         private bool _useAapt2;
@@ -36,6 +43,8 @@ namespace PulseAPK.ViewModels
         private readonly Services.ApktoolRunner _apktoolRunner;
 
         public bool IsHintVisible => string.IsNullOrEmpty(ProjectPath);
+
+        public bool HasProject => !string.IsNullOrWhiteSpace(ProjectPath);
 
         public BuildViewModel()
         {
@@ -63,13 +72,20 @@ namespace PulseAPK.ViewModels
                 var folderName = Path.GetFileName(sanitizedPath);
                 var compiledDir = EnsureCompiledDirectory();
 
-                OutputApkPath = Path.Combine(compiledDir, $"{folderName}.apk");
+                OutputFolderPath = compiledDir;
+                OutputApkName = $"{folderName}.apk";
             }
-            UpdateCommandPreview();
+            UpdateOutputApkPath();
             RunBuildCommand.NotifyCanExecuteChanged();
         }
 
         partial void OnOutputApkPathChanged(string value) => UpdateCommandPreview();
+        partial void OnOutputFolderPathChanged(string value) => UpdateOutputApkPath();
+        partial void OnOutputApkNameChanged(string value)
+        {
+            UpdateOutputApkPath();
+            RunBuildCommand.NotifyCanExecuteChanged();
+        }
         partial void OnUseAapt2Changed(bool value) => UpdateCommandPreview();
 
         [RelayCommand]
@@ -102,10 +118,9 @@ namespace PulseAPK.ViewModels
             // Let's assume standard browse behavior but defaulting to the 'compiled' logic.
             
             var folder = _filePickerService.OpenFolder();
-            if (folder != null && !string.IsNullOrWhiteSpace(ProjectPath))
+            if (folder != null)
             {
-                var folderName = Path.GetFileName(ProjectPath);
-                OutputApkPath = Path.Combine(folder, $"{folderName}.apk");
+                OutputFolderPath = folder;
             }
         }
 
@@ -200,7 +215,11 @@ namespace PulseAPK.ViewModels
 
         private bool CanRunBuild()
         {
-            return !IsRunning && !string.IsNullOrWhiteSpace(ProjectPath) && !string.IsNullOrWhiteSpace(OutputApkPath);
+            return !IsRunning
+                && HasProject
+                && !string.IsNullOrWhiteSpace(OutputApkName)
+                && !string.IsNullOrWhiteSpace(OutputApkPath)
+                && !Directory.Exists(OutputApkPath);
         }
 
         private string BuildCommandPreview()
@@ -208,7 +227,7 @@ namespace PulseAPK.ViewModels
              var apktoolPath = _settingsService.Settings.ApktoolPath?.Trim();
             var apktool = string.IsNullOrWhiteSpace(apktoolPath) ? "<set apktool path>" : $"\"{apktoolPath}\"";
             var project = string.IsNullOrWhiteSpace(ProjectPath) ? "<select project>" : $"\"{ProjectPath}\"";
-            var output = string.IsNullOrWhiteSpace(OutputApkPath) ? "<output apk>" : $"\"{OutputApkPath}\"";
+            var output = string.IsNullOrWhiteSpace(OutputApkName) ? "<output apk>" : $"\"{OutputApkPath}\"";
 
             var builder = new StringBuilder();
             builder.Append($"java -jar {apktool} b {project} -o {output}");
@@ -219,8 +238,9 @@ namespace PulseAPK.ViewModels
 
         private void InitializeOutputPath()
         {
-            var compiledDir = EnsureCompiledDirectory();
-            OutputApkPath = Path.Combine(compiledDir, "output.apk");
+            OutputFolderPath = EnsureCompiledDirectory();
+            OutputApkName = string.Empty;
+            OutputApkPath = OutputFolderPath;
         }
 
         private string EnsureCompiledDirectory()
@@ -233,6 +253,21 @@ namespace PulseAPK.ViewModels
             }
 
             return compiledDir;
+        }
+
+        private void UpdateOutputApkPath()
+        {
+            if (string.IsNullOrWhiteSpace(OutputFolderPath) || string.IsNullOrWhiteSpace(OutputApkName))
+            {
+                OutputApkPath = string.IsNullOrWhiteSpace(OutputFolderPath) ? string.Empty : OutputFolderPath;
+                UpdateCommandPreview();
+                RunBuildCommand.NotifyCanExecuteChanged();
+                return;
+            }
+
+            OutputApkPath = Path.Combine(OutputFolderPath, OutputApkName);
+            UpdateCommandPreview();
+            RunBuildCommand.NotifyCanExecuteChanged();
         }
     }
 }
