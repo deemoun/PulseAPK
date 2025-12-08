@@ -275,7 +275,16 @@ namespace PulseAPK.Properties {
                 return ResourceManager.GetString("Error_InvalidJarFile", resourceCulture);
             }
         }
-        
+
+        /// <summary>
+        ///   Looks up a localized string similar to Drop a valid project folder that contains apktool.yml and AndroidManifest.xml..
+        /// </summary>
+        public static string Error_InvalidProjectSelection {
+            get {
+                return ResourceManager.GetString("Error_InvalidProjectSelection", resourceCulture);
+            }
+        }
+
         /// <summary>
         ///   Looks up a localized string similar to Please configure the apktool path in Settings before running a decompile..
         /// </summary>
