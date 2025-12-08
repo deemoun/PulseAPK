@@ -82,6 +82,16 @@ namespace PulseAPK.ViewModels
         partial void OnOutputApkPathChanged(string value) => UpdateCommandPreview();
         partial void OnOutputFolderPathChanged(string value)
         {
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                var defaultPath = GetApplicationRootPath();
+                if (!string.Equals(OutputFolderPath, defaultPath, StringComparison.OrdinalIgnoreCase))
+                {
+                    OutputFolderPath = defaultPath;
+                    return;
+                }
+            }
+
             UpdateOutputApkPath();
             BrowseOutputApkCommand.NotifyCanExecuteChanged();
         }
@@ -268,6 +278,13 @@ namespace PulseAPK.ViewModels
             }
 
             return compiledDir;
+        }
+
+        private string GetApplicationRootPath()
+        {
+            return string.IsNullOrWhiteSpace(AppDomain.CurrentDomain.BaseDirectory)
+                ? Directory.GetCurrentDirectory()
+                : AppDomain.CurrentDomain.BaseDirectory;
         }
 
         private void UpdateOutputApkPath()
