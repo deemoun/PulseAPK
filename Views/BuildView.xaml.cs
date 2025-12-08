@@ -1,5 +1,6 @@
 using System.Windows;
 using System.Windows.Controls;
+using PulseAPK.Utils;
 using PulseAPK.ViewModels;
 
 namespace PulseAPK.Views
@@ -42,12 +43,12 @@ namespace PulseAPK.Views
                         }
                         else
                         {
-                             MessageBox.Show(message, Properties.Resources.Warning_InvalidProjectFolder, MessageBoxButton.OK, MessageBoxImage.Warning);
+                             MessageBoxUtils.ShowWarning(message, Properties.Resources.Warning_InvalidProjectFolder);
                         }
                     }
                     else
                     {
-                        MessageBox.Show(Properties.Resources.Error_InvalidProjectSelection, Properties.Resources.BuildHeader, MessageBoxButton.OK, MessageBoxImage.Warning);
+                        MessageBoxUtils.ShowWarning(Properties.Resources.Error_InvalidProjectSelection, Properties.Resources.BuildHeader);
                     }
                 }
             }
