@@ -61,8 +61,8 @@ jobs:
           --configuration Release
           --runtime win-x64
           --self-contained false
-          -p:PublishSingleFile=true
-          -p:IncludeNativeLibrariesForSelfExtract=true
+          -p:PublishSingleFile=false
+          -p:IncludeNativeLibrariesForSelfExtract=false
           --output "${{ github.workspace }}\\publish"
 
       - name: Upload artifacts
