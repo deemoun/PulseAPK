@@ -46,8 +46,10 @@ namespace PulseAPK.ViewModels
             _settingsService = new Services.SettingsService();
             _apktoolRunner = new Services.ApktoolRunner(_settingsService);
 
+            InitializeOutputPath();
+
             _apktoolRunner.OutputDataReceived += OnOutputDataReceived;
-            
+
             UpdateCommandPreview();
             RunBuildCommand.NotifyCanExecuteChanged();
         }
@@ -59,17 +61,10 @@ namespace PulseAPK.ViewModels
                 // Logic based on user request:
                 // "Itstead of 'Output Folder' it should just be the current folder of the application + 'compiled' folder. It fill just create the file there"
                 // "The name of the APK file should be the name of the current folder" (project name)
-                
+
                 var sanitizedPath = value.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
                 var folderName = Path.GetFileName(sanitizedPath);
-                var appDir = AppDomain.CurrentDomain.BaseDirectory;
-                var compiledDir = Path.Combine(appDir, "compiled");
-                
-                // Ensure directory exists
-                if (!Directory.Exists(compiledDir))
-                {
-                    try { Directory.CreateDirectory(compiledDir); } catch { }
-                }
+                var compiledDir = EnsureCompiledDirectory();
 
                 OutputApkPath = Path.Combine(compiledDir, $"{folderName}.apk");
             }
@@ -224,6 +219,24 @@ namespace PulseAPK.ViewModels
             if(UseAapt2) builder.Append(" --use-aapt2");
 
             return $"Command preview: {builder}";
+        }
+
+        private void InitializeOutputPath()
+        {
+            var compiledDir = EnsureCompiledDirectory();
+            OutputApkPath = Path.Combine(compiledDir, "output.apk");
+        }
+
+        private string EnsureCompiledDirectory()
+        {
+            var compiledDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "compiled");
+
+            if (!Directory.Exists(compiledDir))
+            {
+                try { Directory.CreateDirectory(compiledDir); } catch { }
+            }
+
+            return compiledDir;
         }
     }
 }
