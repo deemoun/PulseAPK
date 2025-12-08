@@ -57,7 +57,6 @@
 
             <StackPanel Grid.Column="0" Margin="0,0,40,0">
                 <CheckBox Content="{x:Static properties:Resources.UseAapt2}" IsChecked="{Binding UseAapt2}" Style="{StaticResource CyberCheckBoxStyle}" Margin="0,0,20,10"/>
-                <CheckBox Content="{x:Static properties:Resources.ForceAll}" IsChecked="{Binding ForceAll}" Style="{StaticResource CyberCheckBoxStyle}" Margin="0,0,20,10"/>
             </StackPanel>
 
             <StackPanel Grid.Column="1">

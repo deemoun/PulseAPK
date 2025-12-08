@@ -41,15 +41,14 @@ namespace PulseAPK.Services
             return await RunProcessAsync(args.ToString(), cancellationToken);
         }
 
-        public async Task<int> RunBuildAsync(string projectPath, string outputApk, bool useAapt2, bool forceAll, CancellationToken cancellationToken = default)
+        public async Task<int> RunBuildAsync(string projectPath, string outputApk, bool useAapt2, CancellationToken cancellationToken = default)
         {
             var args = new StringBuilder("b");
             args.Append($" \"{projectPath}\"");
             args.Append($" -o \"{outputApk}\"");
 
             if (useAapt2) args.Append(" --use-aapt2");
-            if (forceAll) args.Append(" -f");
-            
+
             return await RunProcessAsync(args.ToString(), cancellationToken);
         }
 

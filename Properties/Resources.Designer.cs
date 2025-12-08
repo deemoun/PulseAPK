@@ -322,15 +322,6 @@ namespace PulseAPK.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Force Rebuild All.
-        /// </summary>
-        public static string ForceAll {
-            get {
-                return ResourceManager.GetString("ForceAll", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to JAVA Path: Not Found.
         /// </summary>
         public static string JavaPathNotFound {
