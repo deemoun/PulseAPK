@@ -18,25 +18,17 @@
             <TextBlock Text="{Binding JavaPathDisplay}" Foreground="{StaticResource Brush.TextSecondary}" Margin="0,5,0,0" TextWrapping="Wrap"/>
             <StackPanel Margin="0,5,0,0">
                 <StackPanel Orientation="Horizontal" Margin="0,0,0,3">
-                    <TextBlock Foreground="{StaticResource Brush.TextSecondary}" TextWrapping="Wrap" VerticalAlignment="Center">
-                        <Run Text="{x:Static properties:Resources.DownloadApktool}"/>
-                    </TextBlock>
-                    <Button Content="https://bitbucket.org/iBotPeaches/apktool/downloads/"
+                    <Button Content="Download ApkTool"
                             Style="{StaticResource CyberButtonStyle}"
                             CommandParameter="https://bitbucket.org/iBotPeaches/apktool/downloads/"
                             Click="LinkButton_Click"
-                            Margin="8,0,0,0"
                             Padding="12,4"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Foreground="{StaticResource Brush.TextSecondary}" TextWrapping="Wrap" VerticalAlignment="Center">
-                        <Run Text="{x:Static properties:Resources.DownloadJava}"/>
-                    </TextBlock>
-                    <Button Content="https://www.azul.com/downloads/?package=jdk#zulu"
+                    <Button Content="Download JAVA"
                             Style="{StaticResource CyberButtonStyle}"
                             CommandParameter="https://www.azul.com/downloads/?package=jdk#zulu"
                             Click="LinkButton_Click"
-                            Margin="8,0,0,0"
                             Padding="12,4"/>
                 </StackPanel>
             </StackPanel>
