@@ -60,12 +60,23 @@
             </StackPanel>
 
             <StackPanel Grid.Column="1">
+                <TextBox Text="{Binding OutputApkName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                         Style="{StaticResource CyberTextBoxStyle}"
+                         Tag="APK Name"
+                         Height="30"
+                         Margin="0,0,0,10"
+                         VerticalContentAlignment="Center"
+                         Background="{StaticResource Brush.Panel}"
+                         Foreground="{StaticResource Brush.TextPrimary}"
+                         BorderBrush="{StaticResource Brush.BorderGlow}"
+                         Visibility="{Binding HasProject, Converter={StaticResource BooleanToVisibilityConverter}}"
+                         IsEnabled="{Binding HasProject}"/>
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
-                    <TextBox Text="{Binding OutputApkPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, TargetNullValue={x:Static properties:Resources.OutputApkLabel}}" Style="{StaticResource CyberTextBoxStyle}" Tag="{x:Static properties:Resources.OutputApkLabel}" Height="30" VerticalContentAlignment="Center" Background="{StaticResource Brush.Panel}" Foreground="{StaticResource Brush.TextPrimary}" BorderBrush="{StaticResource Brush.BorderGlow}"/>
+                    <TextBox Text="{Binding OutputFolderPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, TargetNullValue={x:Static properties:Resources.OutputApkLabel}}" Style="{StaticResource CyberTextBoxStyle}" Tag="{x:Static properties:Resources.OutputApkLabel}" Height="30" VerticalContentAlignment="Center" Background="{StaticResource Brush.Panel}" Foreground="{StaticResource Brush.TextPrimary}" BorderBrush="{StaticResource Brush.BorderGlow}"/>
                     <StackPanel Grid.Column="1" Orientation="Vertical" Margin="10,0,0,0">
                         <Button Content="{x:Static properties:Resources.Browse}" Style="{StaticResource CyberButtonStyle}" Height="30" Padding="16,0" MinWidth="90" Command="{Binding BrowseOutputApkCommand}" Margin="0,0,0,4"/>
                     </StackPanel>
