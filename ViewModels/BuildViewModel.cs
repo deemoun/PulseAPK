@@ -64,8 +64,7 @@ namespace PulseAPK.ViewModels
         {
             if (!string.IsNullOrWhiteSpace(value))
             {
-                // Logic based on user request:
-                // "Itstead of 'Output Folder' it should just be the current folder of the application + 'compiled' folder. It fill just create the file there"
+                // "Instead of 'Output Folder' it should be the current folder of the application + 'compiled' folder. It fill just create the file there"
                 // "The name of the APK file should be the name of the current folder" (project name)
 
                 var sanitizedPath = value.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
