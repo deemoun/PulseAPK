@@ -81,15 +81,7 @@ namespace PulseAPK.ViewModels
         partial void OnOutputApkPathChanged(string value) => UpdateCommandPreview();
         partial void OnOutputFolderPathChanged(string value)
         {
-            if (string.IsNullOrWhiteSpace(value))
-            {
-                var defaultPath = GetApplicationRootPath();
-                if (!string.Equals(OutputFolderPath, defaultPath, StringComparison.OrdinalIgnoreCase))
-                {
-                    OutputFolderPath = defaultPath;
-                    return;
-                }
-            }
+            EnsureOutputFolderPathInitialized();
 
             UpdateOutputApkPath();
             BrowseOutputApkCommand.NotifyCanExecuteChanged();
@@ -120,9 +112,7 @@ namespace PulseAPK.ViewModels
         [RelayCommand(CanExecute = nameof(CanBrowseOutputApk))]
         private void BrowseOutputApk()
         {
-            var folder = string.IsNullOrWhiteSpace(OutputFolderPath)
-                ? EnsureCompiledDirectory()
-                : OutputFolderPath;
+            var folder = EnsureOutputFolderPathInitialized();
 
             try
             {
@@ -289,17 +279,33 @@ namespace PulseAPK.ViewModels
 
         private void UpdateOutputApkPath()
         {
-            if (string.IsNullOrWhiteSpace(OutputFolderPath) || string.IsNullOrWhiteSpace(OutputApkName))
+            var folderPath = EnsureOutputFolderPathInitialized();
+
+            if (string.IsNullOrWhiteSpace(folderPath) || string.IsNullOrWhiteSpace(OutputApkName))
             {
-                OutputApkPath = string.IsNullOrWhiteSpace(OutputFolderPath) ? string.Empty : OutputFolderPath;
+                OutputApkPath = string.IsNullOrWhiteSpace(folderPath) ? string.Empty : folderPath;
                 UpdateCommandPreview();
                 RunBuildCommand.NotifyCanExecuteChanged();
                 return;
             }
 
-            OutputApkPath = Path.Combine(OutputFolderPath, OutputApkName);
+            OutputApkPath = Path.Combine(folderPath, OutputApkName);
             UpdateCommandPreview();
             RunBuildCommand.NotifyCanExecuteChanged();
+        }
+
+        private string EnsureOutputFolderPathInitialized()
+        {
+            if (string.IsNullOrWhiteSpace(OutputFolderPath))
+            {
+                var defaultPath = EnsureCompiledDirectory();
+                if (!string.Equals(OutputFolderPath, defaultPath, StringComparison.OrdinalIgnoreCase))
+                {
+                    OutputFolderPath = defaultPath;
+                }
+            }
+
+            return OutputFolderPath;
         }
     }
 }
