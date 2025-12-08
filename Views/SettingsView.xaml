@@ -22,18 +22,14 @@
                             Style="{StaticResource CyberButtonStyle}"
                             CommandParameter="https://bitbucket.org/iBotPeaches/apktool/downloads/"
                             Click="LinkButton_Click"
-                            HorizontalAlignment="Center"
-                            Margin="12,0"
-                            Padding="28,8"/>
+                            Padding="20,6"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <Button Content="Download JAVA"
                             Style="{StaticResource CyberButtonStyle}"
                             CommandParameter="https://www.azul.com/downloads/?package=jdk#zulu"
                             Click="LinkButton_Click"
-                            HorizontalAlignment="Center"
-                            Margin="12,0"
-                            Padding="28,8"/>
+                            Padding="20,6"/>
                 </StackPanel>
             </StackPanel>
         </StackPanel>
