@@ -56,18 +56,21 @@ namespace PulseAPK.ViewModels
         {
             if (!string.IsNullOrWhiteSpace(value))
             {
-                // Auto-generate output path if not set or if previous default
-                var folderName = Path.GetFileName(value);
-                // "dist" folder inside the project is where apktool puts it by default if no -o, 
-                // but we want to control it or put it side-by-side?
-                // User said: "Output directory... name of APK should be name of current folder"
-                // Let's start with a default next to the folder.
+                // Logic based on user request:
+                // "Itstead of 'Output Folder' it should just be the current folder of the application + 'compiled' folder. It fill just create the file there"
+                // "The name of the APK file should be the name of the current folder" (project name)
                 
-                var parentDir = Path.GetDirectoryName(value);
-                if (!string.IsNullOrEmpty(parentDir))
+                var folderName = Path.GetFileName(value);
+                var appDir = AppDomain.CurrentDomain.BaseDirectory;
+                var compiledDir = Path.Combine(appDir, "compiled");
+                
+                // Ensure directory exists
+                if (!Directory.Exists(compiledDir))
                 {
-                    OutputApkPath = Path.Combine(parentDir, $"{folderName}_signed.apk");
+                    try { Directory.CreateDirectory(compiledDir); } catch { }
                 }
+
+                OutputApkPath = Path.Combine(compiledDir, $"{folderName}.apk");
             }
             UpdateCommandPreview();
             RunBuildCommand.NotifyCanExecuteChanged();
@@ -96,12 +99,15 @@ namespace PulseAPK.ViewModels
         [RelayCommand]
         private void BrowseOutputApk()
         {
-            // We need a "Save File" dialog really, but FilePickerService only has OpenFile/OpenFolder.
-            // For now, let's assume we pick a FOLDER and we append the filename? 
-            // Or we should update FilePickerService to support SaveFile?
-            // The user requirement says "Have a field to select the output directory".
-            // So we select a DIRECTORY, and the filename is automatic? 
-            // "The name of the APK file should be the name of the current folder"
+            // User requested automatic path. 
+            // "Have a field to select the output directory" -> "Itstead of 'Output Folder' it should just be the current folder... + compiled"
+            // This implies the Browse button might be redundant or should potentially just show the folder?
+            // "The user requirement says 'Have a field to select the output directory', make sure it does NOT overwrite anything"
+            // Actually, in the latest prompt: "Itstead of 'Output Folder' it should just be the current folder... + compiled... It fill just create the file there"
+            // So we can keep the field read-only or just let them change the filename if they really want, but simpler to just auto-set it.
+            // I will keep the browse button but make it open the target folder location instead of picking a new one?
+            // Or just check if user wants to change it. 
+            // Let's assume standard browse behavior but defaulting to the 'compiled' logic.
             
             var folder = _filePickerService.OpenFolder();
             if (folder != null && !string.IsNullOrWhiteSpace(ProjectPath))
@@ -138,7 +144,7 @@ namespace PulseAPK.ViewModels
 
             try
             {
-                var exitCode = await _apktoolRunner.RunBuildAsync(ProjectPath, OutputApkPath, UseAapt2);
+                var exitCode = await _apktoolRunner.RunBuildAsync(ProjectPath, OutputApkPath, UseAapt2, ForceAll);
 
                 if (exitCode == 0)
                 {

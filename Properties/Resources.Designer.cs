@@ -223,6 +223,15 @@ namespace PulseAPK.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Drag and drop a folder.
+        /// </summary>
+        public static string DragDropFolderHint {
+            get {
+                return ResourceManager.GetString("DragDropFolderHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Could not open folder: {0}.
         /// </summary>
         public static string Error_CouldNotOpenFolder {

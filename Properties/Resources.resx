@@ -173,7 +173,7 @@
     <value>Build APK</value>
   </data>
   <data name="BuildHeader" xml:space="preserve">
-    <value>Build &amp; Sign APK</value>
+    <value>Build APK</value>
   </data>
   <data name="SelectProjectFolder" xml:space="preserve">
     <value>Select Project Folder</value>
@@ -195,5 +195,8 @@
   </data>
   <data name="Warning_InvalidProjectFolder" xml:space="preserve">
     <value>The selected folder does not appear to be a valid apktool project (missing apktool.yml or AndroidManifest.xml).</value>
+  </data>
+  <data name="DragDropFolderHint" xml:space="preserve">
+    <value>Drag and drop a folder</value>
   </data>
 </root>
