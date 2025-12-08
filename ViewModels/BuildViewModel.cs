@@ -112,28 +112,12 @@ namespace PulseAPK.ViewModels
         [RelayCommand(CanExecute = nameof(CanBrowseOutputApk))]
         private void BrowseOutputApk()
         {
-            var folder = EnsureOutputFolderPathInitialized();
+            var folder = _filePickerService.OpenFolder();
 
-            try
+            if (!string.IsNullOrWhiteSpace(folder))
             {
-                if (!Directory.Exists(folder))
-                {
-                    Directory.CreateDirectory(folder);
-                }
-
-                Process.Start(new ProcessStartInfo
-                {
-                    FileName = folder,
-                    UseShellExecute = true,
-                    Verb = "open"
-                });
+                OutputFolderPath = folder;
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Unable to open folder: {ex.Message}", Properties.Resources.AppTitle, MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-
-            OutputFolderPath = folder;
         }
 
         private bool CanBrowseOutputApk() => !string.IsNullOrWhiteSpace(OutputFolderPath);
