@@ -91,7 +91,7 @@ namespace PulseAPK.ViewModels
         [RelayCommand]
         private void BrowseOutputFolder()
         {
-            var folder = _filePickerService.OpenFolder();
+            var folder = _filePickerService.OpenFolder(OutputFolder);
             if (folder != null)
             {
                 OutputFolder = folder;
