@@ -17,14 +17,28 @@
             </DockPanel>
             <TextBlock Text="{Binding JavaPathDisplay}" Foreground="{StaticResource Brush.TextSecondary}" Margin="0,5,0,0" TextWrapping="Wrap"/>
             <StackPanel Margin="0,5,0,0">
-                <TextBlock Foreground="{StaticResource Brush.TextSecondary}" TextWrapping="Wrap">
-                    <Run Text="{x:Static properties:Resources.DownloadApktool}"/>
-                    <Hyperlink NavigateUri="https://bitbucket.org/iBotPeaches/apktool/downloads/" RequestNavigate="Hyperlink_RequestNavigate">https://bitbucket.org/iBotPeaches/apktool/downloads/</Hyperlink>
-                </TextBlock>
-                <TextBlock Foreground="{StaticResource Brush.TextSecondary}" TextWrapping="Wrap" Margin="0,3,0,0">
-                    <Run Text="{x:Static properties:Resources.DownloadJava}"/>
-                    <Hyperlink NavigateUri="https://www.azul.com/downloads/?package=jdk#zulu" RequestNavigate="Hyperlink_RequestNavigate">https://www.azul.com/downloads/?package=jdk#zulu</Hyperlink>
-                </TextBlock>
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,3">
+                    <TextBlock Foreground="{StaticResource Brush.TextSecondary}" TextWrapping="Wrap" VerticalAlignment="Center">
+                        <Run Text="{x:Static properties:Resources.DownloadApktool}"/>
+                    </TextBlock>
+                    <Button Content="https://bitbucket.org/iBotPeaches/apktool/downloads/"
+                            Style="{StaticResource CyberButtonStyle}"
+                            CommandParameter="https://bitbucket.org/iBotPeaches/apktool/downloads/"
+                            Click="LinkButton_Click"
+                            Margin="8,0,0,0"
+                            Padding="12,4"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Foreground="{StaticResource Brush.TextSecondary}" TextWrapping="Wrap" VerticalAlignment="Center">
+                        <Run Text="{x:Static properties:Resources.DownloadJava}"/>
+                    </TextBlock>
+                    <Button Content="https://www.azul.com/downloads/?package=jdk#zulu"
+                            Style="{StaticResource CyberButtonStyle}"
+                            CommandParameter="https://www.azul.com/downloads/?package=jdk#zulu"
+                            Click="LinkButton_Click"
+                            Margin="8,0,0,0"
+                            Padding="12,4"/>
+                </StackPanel>
             </StackPanel>
         </StackPanel>
     </Grid>
