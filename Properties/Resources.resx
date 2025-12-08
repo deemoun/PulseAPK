@@ -136,6 +136,9 @@
   <data name="Error_InvalidJarFile" xml:space="preserve">
     <value>Invalid Jar File</value>
   </data>
+  <data name="Error_InvalidProjectSelection" xml:space="preserve">
+    <value>Drop a valid project folder that contains apktool.yml and AndroidManifest.xml.</value>
+  </data>
   <data name="FileFilter_Apk" xml:space="preserve">
     <value>APK Files (*.apk)|*.apk|All Files (*.*)|*.*</value>
   </data>

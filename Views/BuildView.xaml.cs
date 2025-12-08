@@ -45,6 +45,10 @@ namespace PulseAPK.Views
                              MessageBox.Show(message, Properties.Resources.Warning_InvalidProjectFolder, MessageBoxButton.OK, MessageBoxImage.Warning);
                         }
                     }
+                    else
+                    {
+                        MessageBox.Show(Properties.Resources.Error_InvalidProjectSelection, Properties.Resources.BuildHeader, MessageBoxButton.OK, MessageBoxImage.Warning);
+                    }
                 }
             }
         }
