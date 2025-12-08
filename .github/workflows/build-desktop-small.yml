@@ -1,4 +1,4 @@
-name: Build Desktop Release
+name: Build Small Desktop Release
 
 on:
   workflow_dispatch:
@@ -53,21 +53,12 @@ jobs:
         run: dotnet restore
 
       - name: Build
-        run: dotnet build --configuration Release --no-restore
+        run: dotnet build PulseAPK.csproj --configuration Release --no-restore
 
-      - name: Publish
-        run: >-
-          dotnet publish PulseAPK.csproj
-          --configuration Release
-          --runtime win-x64
-          --self-contained false
-          -p:PublishSingleFile=true
-          -p:IncludeNativeLibrariesForSelfExtract=false
-          --output "${{ github.workspace }}\\publish"
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: PulseAPK-windows-x64
-          path: publish
+          path: bin/Release/net8.0-windows/PulseAPK.exe
           if-no-files-found: error
