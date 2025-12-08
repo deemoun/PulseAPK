@@ -13,7 +13,7 @@ namespace PulseAPK.ViewModels
         
         private string getAppVersion() {
              var version = Assembly.GetExecutingAssembly().GetName().Version;
-             return string.Format(Properties.Resources.About_Version, version != null ? $"{version.Major}.{version.Minor}.{version.Build}" : "1.0.0");
+             return string.Format(Properties.Resources.About_Version, version != null ? $"{version.Major}.{version.Minor}.{version.Build}" : "1.0.1");
         }
 
         [RelayCommand]
