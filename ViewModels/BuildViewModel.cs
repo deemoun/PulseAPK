@@ -80,7 +80,11 @@ namespace PulseAPK.ViewModels
         }
 
         partial void OnOutputApkPathChanged(string value) => UpdateCommandPreview();
-        partial void OnOutputFolderPathChanged(string value) => UpdateOutputApkPath();
+        partial void OnOutputFolderPathChanged(string value)
+        {
+            UpdateOutputApkPath();
+            BrowseOutputApkCommand.NotifyCanExecuteChanged();
+        }
         partial void OnOutputApkNameChanged(string value)
         {
             UpdateOutputApkPath();
@@ -104,7 +108,7 @@ namespace PulseAPK.ViewModels
             }
         }
 
-        [RelayCommand]
+        [RelayCommand(CanExecute = nameof(CanBrowseOutputApk))]
         private void BrowseOutputApk()
         {
             var folder = string.IsNullOrWhiteSpace(OutputFolderPath)
@@ -132,6 +136,8 @@ namespace PulseAPK.ViewModels
 
             OutputFolderPath = folder;
         }
+
+        private bool CanBrowseOutputApk() => !string.IsNullOrWhiteSpace(OutputFolderPath);
 
         [RelayCommand(CanExecute = nameof(CanRunBuild))]
         private async Task RunBuild()
