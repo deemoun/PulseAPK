@@ -17,7 +17,7 @@ namespace PulseAPK.ViewModels
 
         public MainViewModel()
         {
-            // Default view
+            // Start on the decompile view.
             CurrentView = new DecompileViewModel();
         }
 

@@ -13,20 +13,20 @@
     </UserControl.Resources>
     <Grid Margin="20">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/> <!-- Title -->
-            <RowDefinition Height="Auto"/> <!-- Drag Drop -->
-            <RowDefinition Height="Auto"/> <!-- Options -->
-            <RowDefinition Height="*"/>    <!-- Console -->
+            <RowDefinition Height="Auto"/> <!-- Header row -->
+            <RowDefinition Height="Auto"/> <!-- Drop zone row -->
+            <RowDefinition Height="Auto"/> <!-- Options row -->
+            <RowDefinition Height="*"/>    <!-- Console row -->
         </Grid.RowDefinitions>
 
-        <!-- Title -->
+        <!-- Header -->
         <TextBlock Text="{x:Static properties:Resources.BuildHeader}" FontSize="28" FontWeight="SemiBold" Foreground="{StaticResource Brush.TextPrimary}" Margin="0,0,0,20">
             <TextBlock.Effect>
                 <DropShadowEffect Color="{StaticResource Color.NeonCyan}" BlurRadius="10" ShadowDepth="0" Opacity="0.5"/>
             </TextBlock.Effect>
         </TextBlock>
 
-        <!-- Drag Drop Zone -->
+        <!-- Drop zone -->
         <Border Grid.Row="1" Style="{StaticResource CyberPanelStyle}" Height="150" Margin="0,0,0,20" AllowDrop="True" DragEnter="Border_DragEnter" Drop="Border_Drop">
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -48,7 +48,7 @@
             </Grid>
         </Border>
 
-        <!-- Options -->
+        <!-- Build options -->
         <Grid Grid.Row="2" Margin="0,0,0,20">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
@@ -84,7 +84,7 @@
             </StackPanel>
         </Grid>
 
-        <!-- Console Log -->
+        <!-- Console -->
         <Border Grid.Row="3" Style="{StaticResource CyberPanelStyle}">
             <Grid Margin="10">
                 <Grid.RowDefinitions>
