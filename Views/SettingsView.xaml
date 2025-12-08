@@ -16,22 +16,21 @@
                 <Button Content="{x:Static properties:Resources.Browse}" Command="{Binding BrowseApktoolCommand}" Style="{StaticResource CyberButtonStyle}" Margin="10,0,0,0" Padding="16,0" MinWidth="90"/>
             </DockPanel>
             <TextBlock Text="{Binding JavaPathDisplay}" Foreground="{StaticResource Brush.TextSecondary}" Margin="0,5,0,0" TextWrapping="Wrap"/>
-            <StackPanel Margin="0,12,0,0" HorizontalAlignment="Center" Width="320">
-                <Button Content="Download ApkTool"
-                        Style="{StaticResource CyberButtonStyle}"
-                        CommandParameter="https://bitbucket.org/iBotPeaches/apktool/downloads/"
-                        Click="LinkButton_Click"
-                        HorizontalAlignment="Stretch"
-                        Margin="0,0,0,10"
-                        Padding="36,12"
-                        MinWidth="240"/>
-                <Button Content="Download JAVA"
-                        Style="{StaticResource CyberButtonStyle}"
-                        CommandParameter="https://www.azul.com/downloads/?package=jdk#zulu"
-                        Click="LinkButton_Click"
-                        HorizontalAlignment="Stretch"
-                        Padding="36,12"
-                        MinWidth="240"/>
+                <StackPanel Margin="0,5,0,0">
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,3">
+                    <Button Content="Download ApkTool"
+                            Style="{StaticResource CyberButtonStyle}"
+                            CommandParameter="https://bitbucket.org/iBotPeaches/apktool/downloads/"
+                            Click="LinkButton_Click"
+                            Padding="20,6"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Button Content="Download JAVA"
+                            Style="{StaticResource CyberButtonStyle}"
+                            CommandParameter="https://www.azul.com/downloads/?package=jdk#zulu"
+                            Click="LinkButton_Click"
+                            Padding="20,6"/>
+                </StackPanel>
             </StackPanel>
         </StackPanel>
     </Grid>
