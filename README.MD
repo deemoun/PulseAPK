@@ -13,6 +13,7 @@
 - **⚡ Safe & Secure**: Validates files before processing and prevents accidental overwrites of critical system folders.
 - **🔧 Configurable**: Set your own path to `apktool.jar` and manage your workspace settings easily.
 - **📜 Live Logging**: Watch the decompilation process in real-time with a built-in console viewer.
+- **🧩 Compilation Support**: Rebuild modified projects back into APKs directly from the app.
 
 ## Prerequisites
 
@@ -42,6 +43,11 @@ Before running **PulseAPK**, ensure you have the following:
     - Configure options like **Decode Resources** or **Decode Sources**.
     - Click **Run Decompile**.
     - Monitor progress in the console window below.
+
+4.  **Recompile an APK**
+    - Open your edited project folder in the **Compilation** tab.
+    - Specify the output location for the rebuilt APK.
+    - Click **Run Compile** to generate a new APK and follow progress via the console.
 
 ## Technical Details
 
