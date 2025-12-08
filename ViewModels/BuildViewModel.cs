@@ -80,7 +80,11 @@ namespace PulseAPK.ViewModels
         }
 
         partial void OnOutputApkPathChanged(string value) => UpdateCommandPreview();
-        partial void OnOutputFolderPathChanged(string value) => UpdateOutputApkPath();
+        partial void OnOutputFolderPathChanged(string value)
+        {
+            UpdateOutputApkPath();
+            BrowseOutputApkCommand.NotifyCanExecuteChanged();
+        }
         partial void OnOutputApkNameChanged(string value)
         {
             UpdateOutputApkPath();
@@ -104,25 +108,36 @@ namespace PulseAPK.ViewModels
             }
         }
 
-        [RelayCommand]
+        [RelayCommand(CanExecute = nameof(CanBrowseOutputApk))]
         private void BrowseOutputApk()
         {
-            // User requested automatic path. 
-            // "Have a field to select the output directory" -> "Itstead of 'Output Folder' it should just be the current folder... + compiled"
-            // This implies the Browse button might be redundant or should potentially just show the folder?
-            // "The user requirement says 'Have a field to select the output directory', make sure it does NOT overwrite anything"
-            // Actually, in the latest prompt: "Itstead of 'Output Folder' it should just be the current folder... + compiled... It fill just create the file there"
-            // So we can keep the field read-only or just let them change the filename if they really want, but simpler to just auto-set it.
-            // I will keep the browse button but make it open the target folder location instead of picking a new one?
-            // Or just check if user wants to change it. 
-            // Let's assume standard browse behavior but defaulting to the 'compiled' logic.
-            
-            var folder = _filePickerService.OpenFolder();
-            if (folder != null)
+            var folder = string.IsNullOrWhiteSpace(OutputFolderPath)
+                ? EnsureCompiledDirectory()
+                : OutputFolderPath;
+
+            try
             {
-                OutputFolderPath = folder;
+                if (!Directory.Exists(folder))
+                {
+                    Directory.CreateDirectory(folder);
+                }
+
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = folder,
+                    UseShellExecute = true,
+                    Verb = "open"
+                });
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Unable to open folder: {ex.Message}", Properties.Resources.AppTitle, MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
+            OutputFolderPath = folder;
         }
+
+        private bool CanBrowseOutputApk() => !string.IsNullOrWhiteSpace(OutputFolderPath);
 
         [RelayCommand(CanExecute = nameof(CanRunBuild))]
         private async Task RunBuild()
