@@ -61,7 +61,7 @@ jobs:
           --configuration Release
           --runtime win-x64
           --self-contained false
-          -p:PublishSingleFile=false
+          -p:PublishSingleFile=true
           -p:IncludeNativeLibrariesForSelfExtract=false
           --output "${{ github.workspace }}\\publish"
 
