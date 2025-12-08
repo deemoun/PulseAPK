@@ -252,7 +252,8 @@ namespace PulseAPK.ViewModels
              var apktoolPath = _settingsService.Settings.ApktoolPath?.Trim();
             var apktool = string.IsNullOrWhiteSpace(apktoolPath) ? "<set apktool path>" : $"\"{apktoolPath}\"";
             var project = string.IsNullOrWhiteSpace(ProjectPath) ? "<select project>" : $"\"{ProjectPath}\"";
-            var output = string.IsNullOrWhiteSpace(OutputApkName) ? "<output apk>" : $"\"{OutputApkPath}\"";
+            var hasFileTarget = !string.IsNullOrWhiteSpace(OutputApkPath) && !Directory.Exists(OutputApkPath);
+            var output = hasFileTarget ? $"\"{OutputApkPath}\"" : "<output apk>";
 
             var builder = new StringBuilder();
             builder.Append($"java -jar {apktool} b {project} -o {output}");
