@@ -36,6 +36,13 @@ namespace PulseAPK.ViewModels
         }
 
         [RelayCommand]
+        private void NavigateToBuild()
+        {
+            CurrentView = new BuildViewModel();
+            SelectedMenu = "Build";
+        }
+
+        [RelayCommand]
         private void NavigateToAbout()
         {
             CurrentView = new AboutViewModel();

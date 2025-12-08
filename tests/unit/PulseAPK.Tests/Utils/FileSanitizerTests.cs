@@ -72,5 +72,21 @@ namespace PulseAPK.Tests.Utils
             Assert.False(result.IsValid);
             Assert.Equal("File path is empty.", result.Message);
         }
+
+        [Fact]
+        public void ValidateProjectFolder_ShouldReturnFalse_WhenPathIsEmpty()
+        {
+            var result = FileSanitizer.ValidateProjectFolder("");
+            Assert.False(result.IsValid);
+            Assert.Equal("Folder path is empty.", result.Message);
+        }
+
+        [Fact]
+        public void ValidateProjectFolder_ShouldReturnFalse_WhenFolderDoesNotExist()
+        {
+            var result = FileSanitizer.ValidateProjectFolder("C:\\DoesNotExist\\Project");
+            Assert.False(result.IsValid);
+            Assert.Equal("Folder does not exist.", result.Message);
+        }
     }
 }

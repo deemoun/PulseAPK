@@ -124,6 +124,33 @@ namespace PulseAPK.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to APK file creation failed.
+        /// </summary>
+        public static string BuildFailed {
+            get {
+                return ResourceManager.GetString("BuildFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Build &amp; Sign APK.
+        /// </summary>
+        public static string BuildHeader {
+            get {
+                return ResourceManager.GetString("BuildHeader", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to APK file successfully created.
+        /// </summary>
+        public static string BuildSuccessful {
+            get {
+                return ResourceManager.GetString("BuildSuccessful", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Decode Resources.
         /// </summary>
         public static string DecodeResources {
@@ -286,6 +313,15 @@ namespace PulseAPK.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Force Rebuild All.
+        /// </summary>
+        public static string ForceAll {
+            get {
+                return ResourceManager.GetString("ForceAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to JAVA Path: Not Found.
         /// </summary>
         public static string JavaPathNotFound {
@@ -309,6 +345,15 @@ namespace PulseAPK.Properties {
         public static string MenuAbout {
             get {
                 return ResourceManager.GetString("MenuAbout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Build APK.
+        /// </summary>
+        public static string MenuBuild {
+            get {
+                return ResourceManager.GetString("MenuBuild", resourceCulture);
             }
         }
         
@@ -358,11 +403,29 @@ namespace PulseAPK.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Run Build.
+        /// </summary>
+        public static string RunBuild {
+            get {
+                return ResourceManager.GetString("RunBuild", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select APK.
         /// </summary>
         public static string SelectApk {
             get {
                 return ResourceManager.GetString("SelectApk", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select Project Folder.
+        /// </summary>
+        public static string SelectProjectFolder {
+            get {
+                return ResourceManager.GetString("SelectProjectFolder", resourceCulture);
             }
         }
         
@@ -390,6 +453,24 @@ namespace PulseAPK.Properties {
         public static string WaitingForCommand {
             get {
                 return ResourceManager.GetString("WaitingForCommand", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use AAPT2.
+        /// </summary>
+        public static string UseAapt2 {
+            get {
+                return ResourceManager.GetString("UseAapt2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The selected folder does not appear to be a valid apktool project (missing apktool.yml or AndroidManifest.xml).
+        /// </summary>
+        public static string Warning_InvalidProjectFolder {
+            get {
+                return ResourceManager.GetString("Warning_InvalidProjectFolder", resourceCulture);
             }
         }
     }
