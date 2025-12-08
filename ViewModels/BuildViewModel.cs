@@ -96,7 +96,7 @@ namespace PulseAPK.ViewModels
         [RelayCommand]
         private void BrowseProject()
         {
-            var folder = _filePickerService.OpenFolder();
+            var folder = _filePickerService.OpenFolder(ProjectPath);
             if (folder != null)
             {
                 var (isValid, message) = Utils.FileSanitizer.ValidateProjectFolder(folder);
@@ -112,7 +112,7 @@ namespace PulseAPK.ViewModels
         [RelayCommand(CanExecute = nameof(CanBrowseOutputApk))]
         private void BrowseOutputApk()
         {
-            var folder = _filePickerService.OpenFolder();
+            var folder = _filePickerService.OpenFolder(OutputFolderPath);
 
             if (!string.IsNullOrWhiteSpace(folder))
             {
