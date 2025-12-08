@@ -60,7 +60,8 @@ namespace PulseAPK.ViewModels
                 // "Itstead of 'Output Folder' it should just be the current folder of the application + 'compiled' folder. It fill just create the file there"
                 // "The name of the APK file should be the name of the current folder" (project name)
                 
-                var folderName = Path.GetFileName(value);
+                var sanitizedPath = value.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+                var folderName = Path.GetFileName(sanitizedPath);
                 var appDir = AppDomain.CurrentDomain.BaseDirectory;
                 var compiledDir = Path.Combine(appDir, "compiled");
                 

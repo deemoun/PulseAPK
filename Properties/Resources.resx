@@ -79,6 +79,9 @@
   <data name="OutputFolder" xml:space="preserve">
     <value>Output Folder</value>
   </data>
+  <data name="OutputApkLabel" xml:space="preserve">
+    <value>Output APK Path</value>
+  </data>
   <data name="Browse" xml:space="preserve">
     <value>Browse</value>
   </data>

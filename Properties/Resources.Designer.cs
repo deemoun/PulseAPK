@@ -394,6 +394,15 @@ namespace PulseAPK.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Output APK Path.
+        /// </summary>
+        public static string OutputApkLabel {
+            get {
+                return ResourceManager.GetString("OutputApkLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Output Folder.
         /// </summary>
         public static string OutputFolder {
