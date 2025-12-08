@@ -95,7 +95,13 @@ namespace PulseAPK.ViewModels
         [RelayCommand]
         private void BrowseProject()
         {
-            var folder = _filePickerService.OpenFolder(ProjectPath);
+            var folder = Utils.BrowseUtils.BrowseFolder(
+                _filePickerService,
+                ProjectPath,
+                missingPathMessage: null,
+                folderNotFoundMessage: Properties.Resources.Error_FolderNotFound,
+                requireExistingBasePath: false);
+
             if (folder != null)
             {
                 var (isValid, message) = Utils.FileSanitizer.ValidateProjectFolder(folder);
@@ -111,7 +117,12 @@ namespace PulseAPK.ViewModels
         [RelayCommand(CanExecute = nameof(CanBrowseOutputApk))]
         private void BrowseOutputApk()
         {
-            var folder = _filePickerService.OpenFolder(OutputFolderPath);
+            var folder = Utils.BrowseUtils.BrowseFolder(
+                _filePickerService,
+                OutputFolderPath,
+                Properties.Resources.Error_OutputFolderNotSet,
+                Properties.Resources.Error_FolderNotFound,
+                requireExistingBasePath: true);
 
             if (!string.IsNullOrWhiteSpace(folder))
             {

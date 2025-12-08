@@ -6,7 +6,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Text;
 using System.Windows;
-using System.Diagnostics;
 
 namespace PulseAPK.ViewModels
 {
@@ -91,7 +90,13 @@ namespace PulseAPK.ViewModels
         [RelayCommand]
         private void BrowseOutputFolder()
         {
-            var folder = _filePickerService.OpenFolder(OutputFolder);
+            var folder = Utils.BrowseUtils.BrowseFolder(
+                _filePickerService,
+                OutputFolder,
+                Properties.Resources.Error_OutputFolderNotSet,
+                Properties.Resources.Error_FolderNotFound,
+                requireExistingBasePath: true);
+
             if (folder != null)
             {
                 OutputFolder = folder;
@@ -101,26 +106,7 @@ namespace PulseAPK.ViewModels
         [RelayCommand]
         private void OpenOutputFolder()
         {
-            if (string.IsNullOrWhiteSpace(OutputFolder))
-            {
-                MessageBox.Show(Properties.Resources.Error_OutputFolderNotSet, Properties.Resources.AppTitle, MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-
-            if (!Directory.Exists(OutputFolder))
-            {
-                MessageBox.Show(string.Format(Properties.Resources.Error_FolderNotFound, OutputFolder), Properties.Resources.Error_OutputFolderNotSet, MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-
-            try
-            {
-                Process.Start("explorer.exe", OutputFolder);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(string.Format(Properties.Resources.Error_CouldNotOpenFolder, ex.Message), Properties.Resources.AppTitle, MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            Utils.BrowseUtils.TryOpenFolder(OutputFolder, Properties.Resources.Error_OutputFolderNotSet, Properties.Resources.Error_FolderNotFound);
         }
 
         [RelayCommand(CanExecute = nameof(CanRunDecompile))]
