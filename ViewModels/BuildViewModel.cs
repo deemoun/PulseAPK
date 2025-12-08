@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Diagnostics;
 using PulseAPK.Services;
+using PulseAPK.Utils;
 
 namespace PulseAPK.ViewModels
 {
@@ -107,7 +108,7 @@ namespace PulseAPK.ViewModels
                 var (isValid, message) = Utils.FileSanitizer.ValidateProjectFolder(folder);
                 if (!isValid)
                 {
-                    MessageBox.Show(message, Properties.Resources.Warning_InvalidProjectFolder, MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBoxUtils.ShowWarning(message, Properties.Resources.Warning_InvalidProjectFolder);
                     return;
                 }
                 ProjectPath = folder;
@@ -137,20 +138,20 @@ namespace PulseAPK.ViewModels
         {
             if (string.IsNullOrWhiteSpace(ProjectPath))
             {
-                 MessageBox.Show(Properties.Resources.SelectProjectFolder, Properties.Resources.BuildHeader, MessageBoxButton.OK, MessageBoxImage.Warning);
+             MessageBoxUtils.ShowWarning(Properties.Resources.SelectProjectFolder, Properties.Resources.BuildHeader);
                  return;
             }
 
             var apktoolPath = _settingsService.Settings.ApktoolPath?.Trim();
              if (string.IsNullOrWhiteSpace(apktoolPath) || !File.Exists(apktoolPath))
             {
-                MessageBox.Show(string.Format(Properties.Resources.Error_InvalidApktoolPath, apktoolPath), Properties.Resources.SettingsHeader, MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBoxUtils.ShowError(string.Format(Properties.Resources.Error_InvalidApktoolPath, apktoolPath), Properties.Resources.SettingsHeader);
                 return;
             }
 
             if (File.Exists(OutputApkPath))
             {
-                 var result = MessageBox.Show($"The output file '{OutputApkPath}' already exists. Overwrite?", "Confirm overwrite", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                 var result = MessageBoxUtils.ShowQuestion($"The output file '{OutputApkPath}' already exists. Overwrite?", "Confirm overwrite", MessageBoxButton.YesNo, MessageBoxImage.Warning);
                  if (result != MessageBoxResult.Yes) return;
             }
 
@@ -164,18 +165,18 @@ namespace PulseAPK.ViewModels
                 if (exitCode == 0)
                 {
                     AppendLog(Properties.Resources.BuildSuccessful);
-                     MessageBox.Show(Properties.Resources.BuildSuccessful, Properties.Resources.AppTitle, MessageBoxButton.OK, MessageBoxImage.Information);
+                     MessageBoxUtils.ShowInfo(Properties.Resources.BuildSuccessful);
                 }
                 else
                 {
                      AppendLog($"{Properties.Resources.BuildFailed} (Exit Code: {exitCode})");
-                     MessageBox.Show(Properties.Resources.BuildFailed, Properties.Resources.AppTitle, MessageBoxButton.OK, MessageBoxImage.Error);
+                     MessageBoxUtils.ShowError(Properties.Resources.BuildFailed);
                 }
             }
             catch (Exception ex)
             {
                 AppendLog($"{Properties.Resources.BuildFailed}: {ex.Message}");
-                MessageBox.Show(ex.Message, Properties.Resources.AppTitle, MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBoxUtils.ShowError(ex.Message);
             }
             finally
             {

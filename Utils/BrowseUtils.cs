@@ -1,7 +1,6 @@
 using System;
 using System.Diagnostics;
 using System.IO;
-using System.Windows;
 
 namespace PulseAPK.Utils
 {
@@ -56,7 +55,7 @@ namespace PulseAPK.Utils
             }
             catch (Exception ex)
             {
-                MessageBox.Show(string.Format(Properties.Resources.Error_CouldNotOpenFolder, ex.Message), Properties.Resources.AppTitle, MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBoxUtils.ShowError(string.Format(Properties.Resources.Error_CouldNotOpenFolder, ex.Message));
                 return false;
             }
         }
@@ -93,14 +92,14 @@ namespace PulseAPK.Utils
             {
                 if (!string.IsNullOrWhiteSpace(missingPathMessage))
                 {
-                    MessageBox.Show(missingPathMessage, Properties.Resources.AppTitle, MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBoxUtils.ShowWarning(missingPathMessage);
                 }
                 return;
             }
 
             if (!string.IsNullOrWhiteSpace(folderNotFoundMessage))
             {
-                MessageBox.Show(string.Format(folderNotFoundMessage, path), Properties.Resources.AppTitle, MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBoxUtils.ShowWarning(string.Format(folderNotFoundMessage, path));
             }
         }
     }

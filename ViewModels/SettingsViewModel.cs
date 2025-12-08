@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using System;
 using System.IO;
 using System.Linq;
+using PulseAPK.Utils;
 
 namespace PulseAPK.ViewModels
 {
@@ -46,7 +47,7 @@ namespace PulseAPK.ViewModels
             var (isValid, message) = Utils.FileSanitizer.ValidateJar(file);
             if (!isValid)
             {
-                System.Windows.MessageBox.Show(message, Properties.Resources.Error_InvalidJarFile, System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+                MessageBoxUtils.ShowError(message, Properties.Resources.Error_InvalidJarFile);
                 return;
             }
 
