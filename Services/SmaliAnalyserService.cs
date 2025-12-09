@@ -134,24 +134,27 @@ namespace PulseAPK.Services
 
         private bool IsLibraryClass(string filePath)
         {
-            // Library prefixes to filter out
-            var libraryPrefixes = new[]
+            // Normalize path separators for comparison
+            var normalizedPath = filePath.Replace("/", "\\").ToLowerInvariant();
+            
+            // Library path patterns to filter out
+            var libraryPatterns = new[]
             {
-                "Landroidx/",
-                "Lkotlin/",
-                "Lkotlinx/",
-                "Lcom/google/",
-                "Lcom/squareup/",
-                "Lokhttp3/",
-                "Lokio/",
-                "Lretrofit2/"
+                "\\androidx\\",
+                "\\kotlin\\",
+                "\\kotlinx\\",
+                "\\com\\google\\",
+                "\\com\\squareup\\",
+                "\\okhttp3\\",
+                "\\okio\\",
+                "\\retrofit2\\",
+                "\\com\\android\\",
+                "\\android\\support\\"
             };
 
-            // Extract class name from file path
-            var fileName = Path.GetFileName(filePath);
-            foreach (var prefix in libraryPrefixes)
+            foreach (var pattern in libraryPatterns)
             {
-                if (filePath.Contains(prefix.Replace("/", "\\")))
+                if (normalizedPath.Contains(pattern))
                 {
                     return true;
                 }
@@ -163,9 +166,16 @@ namespace PulseAPK.Services
         {
             foreach (var pattern in patterns)
             {
-                if (Regex.IsMatch(line, pattern, RegexOptions.IgnoreCase))
+                try
                 {
-                    return true;
+                    if (Regex.IsMatch(line, pattern, RegexOptions.IgnoreCase))
+                    {
+                        return true;
+                    }
+                }
+                catch
+                {
+                    // Skip invalid regex patterns silently
                 }
             }
             return false;
@@ -175,29 +185,34 @@ namespace PulseAPK.Services
         {
             return new[]
             {
-                // Exec calls to su/busybox/magisk/xposed binaries
-                @"invoke-static.*Runtime.*getRuntime.*exec.*(su|magisk|busybox|superuser|xposed)",
-                @"const-string.*(/system/xbin/su|/system/bin/su|/sbin/su|/system/bin/magisk|/system/bin/busybox)",
+                // Runtime.exec() with su/magisk/busybox/superuser/xposed
+                @"Runtime.*exec.*[""'](su|magisk|busybox|superuser|xposed)[""']",
                 
-                // Checks for known root packages or file paths
-                @"const-string.*(com\.topjohnwu\.magisk|eu\.chainfire\.supersu|com\.noshufou\.android\.su|com\.koushikdutta\.superuser|org\.meowcat\.edxposed|de\.robv\.android\.xposed\.installer)",
-                @"const-string.*(/data/local/tmp|/data/local|/system/app/Superuser|/system/app/SuperSU|/system/app/Magisk|/system/xbin/which)",
+                // Root binary paths
+                @"const-string.*[""/]system/(xbin|bin)/(su|magisk|busybox)[""']",
+                @"const-string.*[""/]sbin/su[""']",
                 
-                // Build.* inspection for root/emulator tags
-                @"const-string.*(test-keys|test_keys|dev-keys|userdebug|eng)",
-                @"invoke-static.*Landroid/os/Build.*get(Tags|Fingerprint|Brand|Model|Manufacturer|Product)",
+                // Known root management packages
+                @"const-string.*[""']com\.topjohnwu\.magisk",
+                @"const-string.*[""']eu\.chainfire\.supersu",
+                @"const-string.*[""']com\.noshufou\.android\.su",
+                @"const-string.*[""']com\.koushikdutta\.superuser",
+                @"const-string.*[""']de\.robv\.android\.xposed",
                 
-                // Busybox or su presence via which or file existence
-                @"const-string.*""which""",
-                @"const-string.*""su""",
+                // Root-specific file paths
+                @"const-string.*[""/]system/app/(Superuser|SuperSU|Magisk)",
+                @"const-string.*[""/]data/local/tmp[""']",
                 
-                // Legacy patterns for backwards compatibility
+                // Build.TAGS with root/debug indicators (only with Build context)
+                @"Build.*TAGS.*test-keys",
+                @"Build.*TAGS.*dev-keys",
+                @"Build.*TAGS.*userdebug",
+                
+                // Root detection library names
                 @"RootBeer",
                 @"RootTools",
                 @"isDeviceRooted",
-                @"checkRootMethod",
-                @"detectRootManagementApps",
-                @"detectPotentiallyDangerousApps"
+                @"checkRootMethod"
             };
         }
 
@@ -205,24 +220,32 @@ namespace PulseAPK.Services
         {
             return new[]
             {
-                // System property checks for emulator indicators
-                @"const-string.*ro\.kernel\.qemu",
-                @"const-string.*(ro\.product\.(manufacturer|brand|model|device|name)|ro\.hardware|ro\.serial|gsm\.operator\.numeric)",
+                // System property checks for emulator
+                @"const-string.*[""']ro\.kernel\.qemu[""']",
+                @"const-string.*[""']ro\.hardware[""'].*goldfish",
+                @"const-string.*[""']ro\.product\.model[""'].*sdk",
+                @"const-string.*[""']ro\.product\.model[""'].*Emulator",
                 
-                // Comparison against emulator fingerprints, models, or brands
-                @"const-string.*(generic|sdk|google_sdk|vbox|test-keys|emulator|goldfish|ranchu|sdk_gphone|Genymotion|BlueStacks|Nox|MuMu|LDPlayer)",
-                @"invoke-static.*Landroid/os/Build.*(FINGERPRINT|MODEL|BRAND|PRODUCT|HARDWARE|DEVICE)",
+                // Clear emulator product names
+                @"const-string.*[""'](generic_x86|sdk_gphone|google_sdk|sdk.*x86)[""']",
                 
-                // Fake device ID/phone number checks
-                @"const-string.*(15555215554|15555215556|15555215558|000000000000000|eMulator|android-emulator)",
+                // Emulator software names
+                @"const-string.*[""'](Genymotion|BlueStacks|NoxPlayer|MEmu|LDPlayer)[""']",
                 
-                // Legacy patterns
-                @"Android SDK built for x86",
+                // Fake IMEI patterns used by emulators
+                @"const-string.*[""'](15555215554|15555215556|15555215558)[""']",
+                @"const-string.*[""']0000000000000000[""']",
+                
+                // Build fingerprint checks (only with Build context)
+                @"Build.*FINGERPRINT.*generic",
+                @"Build.*FINGERPRINT.*test-keys",
+                @"Build.*MODEL.*sdk",
+                @"Build.*MODEL.*Emulator",
+                
+                // Emulator detection methods
                 @"isEmulator",
                 @"checkEmulator",
-                @"detectEmulator",
-                @"Build\.MODEL",
-                @"Build\.MANUFACTURER"
+                @"detectEmulator"
             };
         }
 
@@ -230,23 +253,31 @@ namespace PulseAPK.Services
         {
             return new[]
             {
-                // Identifier names suggesting credentials - simplified
-                @"(password|passwd|pwd|secret|token|apikey|api_key|auth|login|username|email).*=.*""[^""]{4,}""",
+                // Authorization headers (clear indicators)
+                @"const-string.*[""']Authorization:\s*(Bearer|Basic|Token)\s+[A-Za-z0-9\-_\.]+",
+                @"const-string.*[""'](Bearer|Basic)\s+[A-Za-z0-9\-_\.]{20,}[""']",
                 
-                // Authorization headers with embedded tokens
-                @"const-string.*""Authorization:? (Bearer|Basic|Token)",
-                @"const-string.*""(Bearer|Basic) [A-Za-z0-9\-_.:+/]{8,}""",
+                // API keys (long alphanumeric strings labeled as key/token)
+                @"sput-object.*\.(api_?key|api_?token|auth_?token|access_?token)",
+                @"const-string.*[A-Za-z0-9]{32,}.*\.(api_?key|token|secret)",
                 
-                // Long random-looking tokens/keys (base64-like or hex)
-                @"const-string.*""[A-Za-z0-9+/]{16,}=*""",
-                @"const-string.*""[A-Fa-f0-9]{32,}""",
+                // Base64-like secrets (avoid short strings and UI labels)
+                @"const-string.*[""'][A-Za-z0-9+/]{40,}={0,2}[""']",
                 
-                // Legacy patterns
-                @"const-string.*password",
-                @"const-string.*username",
-                @"const-string.*admin",
-                @"const-string.*apikey",
-                @"const-string.*api_key"
+                // Long hex secrets (likely keys, not colors)
+                @"const-string.*[""'][0-9A-Fa-f]{40,}[""']",
+                
+                // Password/secret assignment (avoid InputType/AutofillHint)
+                @"\.field.*password.*Ljava/lang/String;.*[""'][^""']{6,}[""']",
+                @"\.field.*secret.*Ljava/lang/String;.*[""'][^""']{6,}[""']",
+                @"\.field.*api_?key.*Ljava/lang/String;.*[""'][^""']{10,}[""']",
+                
+                // Hardcoded basic auth credentials
+                @"const-string.*[""'][a-zA-Z0-9_]+:[a-zA-Z0-9_]{8,}@",
+                
+                // AWS/cloud provider keys
+                @"const-string.*[""'](AKIA|ASIA)[A-Z0-9]{16}[""']",
+                @"const-string.*[""']AIza[A-Za-z0-9\-_]{35}[""']"
             };
         }
 
@@ -254,18 +285,22 @@ namespace PulseAPK.Services
         {
             return new[]
             {
-                // Raw SQL statements in strings
-                @"const-string.*\s*(SELECT|INSERT|UPDATE|DELETE|CREATE TABLE|DROP TABLE|ALTER TABLE)\b",
-                @"const-string.*\s*(FROM|WHERE|VALUES|SET)\b",
+                // SQL keywords in string literals (check for actual SQL structure)
+                @"const-string.*[""']\s*SELECT\s+\*?\s+(FROM|[a-zA-Z_])",
+                @"const-string.*[""']\s*INSERT\s+INTO\s+",
+                @"const-string.*[""']\s*UPDATE\s+\w+\s+SET\s+",
+                @"const-string.*[""']\s*DELETE\s+FROM\s+",
+                @"const-string.*[""']\s*CREATE\s+TABLE\s+",
+                @"const-string.*[""']\s*DROP\s+TABLE\s+",
+                @"const-string.*[""']\s*ALTER\s+TABLE\s+",
                 
-                // Exec/compile of SQL APIs with raw strings
-                @"invoke-virtual.*Landroid/database/sqlite/SQLiteDatabase.*(execSQL|rawQuery|compileStatement)",
-                @"invoke-interface.*Landroid/database/Cursor.*(rawQuery|execSQL)",
+                // SQL with WHERE clause (strong indicator)
+                @"const-string.*\s+WHERE\s+\w+\s*=",
                 
-                // Legacy patterns
-                @"rawQuery",
-                @"execSQL",
-                @"SQLiteDatabase"
+                // SQLiteDatabase method calls (strong indicators)
+                @"invoke-virtual.*SQLiteDatabase;->execSQL\(Ljava/lang/String",
+                @"invoke-virtual.*SQLiteDatabase;->rawQuery\(Ljava/lang/String",
+                @"invoke-virtual.*SQLiteDatabase;->compileStatement\("
             };
         }
 
@@ -273,12 +308,19 @@ namespace PulseAPK.Services
         {
             return new[]
             {
-                // Capture HTTP/HTTPS URLs
-                @"const-string.*""https?://[^""]+""",
+                // HTTP/HTTPS URLs in string literals
+                @"const-string.*[""']https?://[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,}[/\w\-\._~:/?#\[\]@!$&'()*+,;=]*[""']",
                 
-                // Legacy patterns
-                @"https?://[^\s""']+",
-                @"URL.*http"
+                // Interesting API endpoints
+                @"https?://[^""']+/(api|v1|v2|v3)/",
+                @"https?://[^""']+/(auth|login|signin|signup|register)/",
+                @"https?://[^""']+/(user|account|profile)/",
+                @"https?://[^""']+/(token|oauth|refresh)/",
+                @"https?://[^""']+/(payment|checkout|billing)/",
+                @"https?://[^""']+/(admin|dashboard)/",
+                
+                // Non-HTTPS URLs (potential security issue)
+                @"const-string.*[""']http://[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,}"
             };
         }
     }
