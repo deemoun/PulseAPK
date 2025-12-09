@@ -29,24 +29,118 @@ namespace PulseAPK.Services
             logCallback?.Invoke($"Found {smaliFiles.Length} Smali files. Starting analysis...");
             logCallback?.Invoke("");
 
-            // Run all detection methods
+            // Run all detection methods with progress reporting
             await Task.Run(() =>
             {
-                result.RootChecks = DetectRootChecks(smaliFiles, logCallback);
-                result.EmulatorChecks = DetectEmulatorChecks(smaliFiles, logCallback);
-                result.HardcodedCredentials = DetectHardcodedCredentials(smaliFiles, logCallback);
-                result.SqlQueries = DetectSqlQueries(smaliFiles, logCallback);
-                result.HttpUrls = DetectHttpUrls(smaliFiles, logCallback);
+                int processedFiles = 0;
+                int totalFiles = smaliFiles.Length;
+                int reportInterval = totalFiles > 100 ? totalFiles / 20 : 10; // Report every 5% or every 10 files
+
+                foreach (var file in smaliFiles)
+                {
+                    try
+                    {
+                        var lines = File.ReadAllLines(file);
+                        
+                        // Run all detections on this file
+                        AnalyzeFile(file, lines, result);
+                        
+                        processedFiles++;
+                        
+                        // Report progress periodically
+                        if (processedFiles % reportInterval == 0 || processedFiles == totalFiles)
+                        {
+                            logCallback?.Invoke($"({processedFiles}/{totalFiles} files processed)");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        logCallback?.Invoke($"Error reading file {file}: {ex.Message}");
+                    }
+                }
             });
 
             return result;
         }
 
-        private List<Finding> DetectRootChecks(string[] smaliFiles, Action<string> logCallback)
+        private void AnalyzeFile(string filePath, string[] lines, AnalysisResult result)
         {
-            var findings = new List<Finding>();
+            for (int i = 0; i < lines.Length; i++)
+            {
+                var line = lines[i];
+                
+                // Check for root detection patterns
+                if (CheckPatterns(line, GetRootCheckPatterns()))
+                {
+                    result.RootChecks.Add(new Finding
+                    {
+                        FilePath = filePath,
+                        LineNumber = i + 1,
+                        Context = line.Trim()
+                    });
+                }
+                
+                // Check for emulator detection patterns
+                if (CheckPatterns(line, GetEmulatorCheckPatterns()))
+                {
+                    result.EmulatorChecks.Add(new Finding
+                    {
+                        FilePath = filePath,
+                        LineNumber = i + 1,
+                        Context = line.Trim()
+                    });
+                }
+                
+                // Check for hardcoded credentials patterns
+                if (CheckPatterns(line, GetCredentialPatterns()))
+                {
+                    result.HardcodedCredentials.Add(new Finding
+                    {
+                        FilePath = filePath,
+                        LineNumber = i + 1,
+                        Context = line.Trim()
+                    });
+                }
+                
+                // Check for SQL query patterns
+                if (CheckPatterns(line, GetSqlPatterns()))
+                {
+                    result.SqlQueries.Add(new Finding
+                    {
+                        FilePath = filePath,
+                        LineNumber = i + 1,
+                        Context = line.Trim()
+                    });
+                }
+                
+                // Check for HTTP/HTTPS URL patterns
+                if (CheckPatterns(line, GetHttpUrlPatterns()))
+                {
+                    result.HttpUrls.Add(new Finding
+                    {
+                        FilePath = filePath,
+                        LineNumber = i + 1,
+                        Context = line.Trim()
+                    });
+                }
+            }
+        }
 
-            var patterns = new[]
+        private bool CheckPatterns(string line, string[] patterns)
+        {
+            foreach (var pattern in patterns)
+            {
+                if (Regex.IsMatch(line, pattern, RegexOptions.IgnoreCase))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private string[] GetRootCheckPatterns()
+        {
+            return new[]
             {
                 @"/system/bin/su",
                 @"/system/xbin/su",
@@ -61,44 +155,11 @@ namespace PulseAPK.Services
                 @"su\s*""",
                 @"which\s+su"
             };
-
-            foreach (var file in smaliFiles)
-            {
-                try
-                {
-                    var lines = File.ReadAllLines(file);
-                    for (int i = 0; i < lines.Length; i++)
-                    {
-                        var line = lines[i];
-                        foreach (var pattern in patterns)
-                        {
-                            if (Regex.IsMatch(line, pattern, RegexOptions.IgnoreCase))
-                            {
-                                findings.Add(new Finding
-                                {
-                                    FilePath = file,
-                                    LineNumber = i + 1,
-                                    Context = line.Trim()
-                                });
-                                break; // Only add one finding per line
-                            }
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    logCallback?.Invoke($"Error reading file {file}: {ex.Message}");
-                }
-            }
-
-            return findings;
         }
 
-        private List<Finding> DetectEmulatorChecks(string[] smaliFiles, Action<string> logCallback)
+        private string[] GetEmulatorCheckPatterns()
         {
-            var findings = new List<Finding>();
-
-            var patterns = new[]
+            return new[]
             {
                 @"goldfish",
                 @"ro\.product\.model",
@@ -117,44 +178,11 @@ namespace PulseAPK.Services
                 @"Build\.DEVICE.*generic",
                 @"Build\.PRODUCT.*sdk"
             };
-
-            foreach (var file in smaliFiles)
-            {
-                try
-                {
-                    var lines = File.ReadAllLines(file);
-                    for (int i = 0; i < lines.Length; i++)
-                    {
-                        var line = lines[i];
-                        foreach (var pattern in patterns)
-                        {
-                            if (Regex.IsMatch(line, pattern, RegexOptions.IgnoreCase))
-                            {
-                                findings.Add(new Finding
-                                {
-                                    FilePath = file,
-                                    LineNumber = i + 1,
-                                    Context = line.Trim()
-                                });
-                                break;
-                            }
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    logCallback?.Invoke($"Error reading file {file}: {ex.Message}");
-                }
-            }
-
-            return findings;
         }
 
-        private List<Finding> DetectHardcodedCredentials(string[] smaliFiles, Action<string> logCallback)
+        private string[] GetCredentialPatterns()
         {
-            var findings = new List<Finding>();
-
-            var patterns = new[]
+            return new[]
             {
                 @"const-string.*[""']password[""']",
                 @"const-string.*[""']pwd[""']",
@@ -169,44 +197,11 @@ namespace PulseAPK.Services
                 @"const-string.*[""']api_key[""']",
                 @"const-string.*[""']secret[""']"
             };
-
-            foreach (var file in smaliFiles)
-            {
-                try
-                {
-                    var lines = File.ReadAllLines(file);
-                    for (int i = 0; i < lines.Length; i++)
-                    {
-                        var line = lines[i];
-                        foreach (var pattern in patterns)
-                        {
-                            if (Regex.IsMatch(line, pattern, RegexOptions.IgnoreCase))
-                            {
-                                findings.Add(new Finding
-                                {
-                                    FilePath = file,
-                                    LineNumber = i + 1,
-                                    Context = line.Trim()
-                                });
-                                break;
-                            }
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    logCallback?.Invoke($"Error reading file {file}: {ex.Message}");
-                }
-            }
-
-            return findings;
         }
 
-        private List<Finding> DetectSqlQueries(string[] smaliFiles, Action<string> logCallback)
+        private string[] GetSqlPatterns()
         {
-            var findings = new List<Finding>();
-
-            var patterns = new[]
+            return new[]
             {
                 @"const-string.*[""'].*SELECT\s+",
                 @"const-string.*[""'].*INSERT\s+INTO",
@@ -219,80 +214,16 @@ namespace PulseAPK.Services
                 @"execSQL",
                 @"SQLiteDatabase"
             };
-
-            foreach (var file in smaliFiles)
-            {
-                try
-                {
-                    var lines = File.ReadAllLines(file);
-                    for (int i = 0; i < lines.Length; i++)
-                    {
-                        var line = lines[i];
-                        foreach (var pattern in patterns)
-                        {
-                            if (Regex.IsMatch(line, pattern, RegexOptions.IgnoreCase))
-                            {
-                                findings.Add(new Finding
-                                {
-                                    FilePath = file,
-                                    LineNumber = i + 1,
-                                    Context = line.Trim()
-                                });
-                                break;
-                            }
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    logCallback?.Invoke($"Error reading file {file}: {ex.Message}");
-                }
-            }
-
-            return findings;
         }
 
-        private List<Finding> DetectHttpUrls(string[] smaliFiles, Action<string> logCallback)
+        private string[] GetHttpUrlPatterns()
         {
-            var findings = new List<Finding>();
-
-            var patterns = new[]
+            return new[]
             {
                 @"https?://[^\s""']+",
                 @"const-string.*[""']https?://",
                 @"URL.*http"
             };
-
-            foreach (var file in smaliFiles)
-            {
-                try
-                {
-                    var lines = File.ReadAllLines(file);
-                    for (int i = 0; i < lines.Length; i++)
-                    {
-                        var line = lines[i];
-                        foreach (var pattern in patterns)
-                        {
-                            if (Regex.IsMatch(line, pattern, RegexOptions.IgnoreCase))
-                            {
-                                findings.Add(new Finding
-                                {
-                                    FilePath = file,
-                                    LineNumber = i + 1,
-                                    Context = line.Trim()
-                                });
-                                break;
-                            }
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    logCallback?.Invoke($"Error reading file {file}: {ex.Message}");
-                }
-            }
-
-            return findings;
         }
     }
 
