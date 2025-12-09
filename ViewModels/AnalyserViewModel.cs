@@ -34,6 +34,11 @@ namespace PulseAPK.ViewModels
             _analyserService = new SmaliAnalyserService();
         }
 
+        partial void OnProjectPathChanged(string value)
+        {
+            RunAnalysisCommand.NotifyCanExecuteChanged();
+        }
+
         [RelayCommand(CanExecute = nameof(CanRunAnalysis))]
         private async Task RunAnalysis()
         {
