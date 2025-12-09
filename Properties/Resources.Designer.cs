@@ -491,5 +491,167 @@ namespace PulseAPK.Properties {
                 return ResourceManager.GetString("Warning_InvalidProjectFolder", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to APK Analyser.
+        /// </summary>
+        public static string MenuAnalyser {
+            get {
+                return ResourceManager.GetString("MenuAnalyser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to APK Analyser.
+        /// </summary>
+        public static string AnalyserHeader {
+            get {
+                return ResourceManager.GetString("AnalyserHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Run Analysis.
+        /// </summary>
+        public static string RunAnalysis {
+            get {
+                return ResourceManager.GetString("RunAnalysis", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Starting analysis....
+        /// </summary>
+        public static string AnalysisStarting {
+            get {
+                return ResourceManager.GetString("AnalysisStarting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Analysis complete.
+        /// </summary>
+        public static string AnalysisComplete {
+            get {
+                return ResourceManager.GetString("AnalysisComplete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Analysis failed.
+        /// </summary>
+        public static string AnalysisFailed {
+            get {
+                return ResourceManager.GetString("AnalysisFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Root check: True.
+        /// </summary>
+        public static string RootCheckFound {
+            get {
+                return ResourceManager.GetString("RootCheckFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Root check: False.
+        /// </summary>
+        public static string RootCheckNotFound {
+            get {
+                return ResourceManager.GetString("RootCheckNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Emulator check: True.
+        /// </summary>
+        public static string EmulatorCheckFound {
+            get {
+                return ResourceManager.GetString("EmulatorCheckFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Emulator check: False.
+        /// </summary>
+        public static string EmulatorCheckNotFound {
+            get {
+                return ResourceManager.GetString("EmulatorCheckNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hardcoded username/password: True.
+        /// </summary>
+        public static string CredentialsFound {
+            get {
+                return ResourceManager.GetString("CredentialsFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hardcoded username/password: False.
+        /// </summary>
+        public static string CredentialsNotFound {
+            get {
+                return ResourceManager.GetString("CredentialsNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SQL queries: True.
+        /// </summary>
+        public static string SqlQueriesFound {
+            get {
+                return ResourceManager.GetString("SqlQueriesFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SQL queries: False.
+        /// </summary>
+        public static string SqlQueriesNotFound {
+            get {
+                return ResourceManager.GetString("SqlQueriesNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to HTTP/HTTPS paths: True.
+        /// </summary>
+        public static string HttpUrlsFound {
+            get {
+                return ResourceManager.GetString("HttpUrlsFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to HTTP/HTTPS paths: False.
+        /// </summary>
+        public static string HttpUrlsNotFound {
+            get {
+                return ResourceManager.GetString("HttpUrlsNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to   Found in:.
+        /// </summary>
+        public static string FoundIn {
+            get {
+                return ResourceManager.GetString("FoundIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The selected folder does not contain Smali files..
+        /// </summary>
+        public static string Error_InvalidSmaliProject {
+            get {
+                return ResourceManager.GetString("Error_InvalidSmaliProject", resourceCulture);
+            }
+        }
     }
 }
