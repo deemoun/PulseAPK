@@ -18,6 +18,27 @@ namespace PulseAPK.Utils
             return ValidateFile(path, ".jar");
         }
 
+        public static (bool IsValid, string Message) ValidateUbersign(string path)
+        {
+            if (string.IsNullOrWhiteSpace(path))
+            {
+                return (false, "File path is empty.");
+            }
+
+            if (!File.Exists(path))
+            {
+                return (false, "File does not exist.");
+            }
+
+            var extension = Path.GetExtension(path);
+            if (extension.Equals(".jar", StringComparison.OrdinalIgnoreCase))
+            {
+                return ValidateJar(path);
+            }
+
+            return (false, "File must be a .jar file.");
+        }
+
         public static (bool IsValid, string Message) ValidateProjectFolder(string path)
         {
             if (string.IsNullOrWhiteSpace(path))

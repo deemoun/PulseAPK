@@ -148,6 +148,9 @@
   <data name="FileFilter_Jar" xml:space="preserve">
     <value>Jar Files (*.jar)|*.jar</value>
   </data>
+    <data name="FileFilter_Ubersign" xml:space="preserve">
+        <value>Ubersign Jar Files (*.jar)|*.jar</value>
+    </data>
   <data name="SettingsHeader" xml:space="preserve">
     <value>Settings</value>
   </data>
