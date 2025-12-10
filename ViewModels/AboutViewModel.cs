@@ -17,24 +17,7 @@ namespace PulseAPK.ViewModels
                                                .GetCustomAttribute<AssemblyInformationalVersionAttribute>()?
                                                .InformationalVersion;
 
-            if (!string.IsNullOrWhiteSpace(informationalVersion))
-            {
-                var metadataSeparatorIndex = informationalVersion.IndexOf('+');
-                if (metadataSeparatorIndex >= 0)
-                {
-                    informationalVersion = informationalVersion[..metadataSeparatorIndex];
-                }
-
-                var prereleaseSeparatorIndex = informationalVersion.IndexOf('-');
-                if (prereleaseSeparatorIndex >= 0)
-                {
-                    informationalVersion = informationalVersion[..prereleaseSeparatorIndex];
-                }
-            }
-
-            var version = string.IsNullOrWhiteSpace(informationalVersion)
-                ? Assembly.GetExecutingAssembly().GetName().Version?.ToString(3) ?? "1.0.1"
-                : informationalVersion;
+            var version = string.IsNullOrWhiteSpace(informationalVersion) ? "1.0.1" : informationalVersion;
 
             return string.Format(Properties.Resources.About_Version, version);
         }
