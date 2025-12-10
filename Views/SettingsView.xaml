@@ -36,6 +36,13 @@
                             Click="LinkButton_Click"
                             Padding="20,6"/>
                 </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,3,0,0">
+                    <Button Content="Download Ubersigner"
+                            Style="{StaticResource CyberButtonStyle}"
+                            CommandParameter="https://github.com/patrickfav/uber-apk-signer/releases"
+                            Click="LinkButton_Click"
+                            Padding="20,6"/>
+                </StackPanel>
             </StackPanel>
         </StackPanel>
     </Grid>
