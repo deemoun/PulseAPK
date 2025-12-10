@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -33,11 +34,17 @@ namespace PulseAPK.Services
                 throw new FileNotFoundException($"Could not find 'ubersign.jar' (or executable) in the application root at '{ubersignPath}'.");
             }
 
+            var outputDirectory = Path.GetDirectoryName(signedOutputApk);
+            outputDirectory ??= Directory.GetCurrentDirectory();
+            Directory.CreateDirectory(outputDirectory);
+
+            var ubersignArguments = $"-a \"{inputApk}\" -o \"{outputDirectory}\" --allowResign --overwrite";
+
             var startInfo = isJar
                 ? new ProcessStartInfo
                 {
                     FileName = "java",
-                    Arguments = $"-jar \"{ubersignPath}\" \"{inputApk}\" \"{signedOutputApk}\"",
+                    Arguments = $"-jar \"{ubersignPath}\" {ubersignArguments}",
                     RedirectStandardOutput = true,
                     RedirectStandardError = true,
                     UseShellExecute = false,
@@ -46,7 +53,7 @@ namespace PulseAPK.Services
                 : new ProcessStartInfo
                 {
                     FileName = ubersignPath,
-                    Arguments = $"\"{inputApk}\" \"{signedOutputApk}\"",
+                    Arguments = ubersignArguments,
                     RedirectStandardOutput = true,
                     RedirectStandardError = true,
                     UseShellExecute = false,
@@ -78,6 +85,39 @@ namespace PulseAPK.Services
             process.BeginErrorReadLine();
 
             await process.WaitForExitAsync(cancellationToken);
+
+            if (process.ExitCode != 0)
+            {
+                return process.ExitCode;
+            }
+
+            var inputFileName = Path.GetFileNameWithoutExtension(inputApk);
+            var expectedNames = new[]
+            {
+                $"{inputFileName}-aligned-signed.apk",
+                $"{inputFileName}-signed.apk"
+            };
+
+            var createdFile = expectedNames
+                .Select(name => Path.Combine(outputDirectory, name))
+                .FirstOrDefault(File.Exists);
+
+            if (createdFile == null)
+            {
+                createdFile = Directory.GetFiles(outputDirectory, "*.apk", SearchOption.TopDirectoryOnly)
+                    .OrderByDescending(File.GetLastWriteTimeUtc)
+                    .FirstOrDefault();
+            }
+
+            if (string.IsNullOrWhiteSpace(createdFile))
+            {
+                return 1;
+            }
+
+            if (!string.Equals(createdFile, signedOutputApk, StringComparison.OrdinalIgnoreCase))
+            {
+                File.Copy(createdFile, signedOutputApk, true);
+            }
 
             return process.ExitCode;
         }

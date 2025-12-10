@@ -410,12 +410,13 @@ namespace PulseAPK.ViewModels
 
             if (!hasOutputPath || string.IsNullOrWhiteSpace(signedApk))
             {
-                return "Signing preview: ubersign <output apk> <signed apk>";
+                return "Signing preview: ubersign -a <output apk> -o <output folder>";
             }
 
             var sanitizedSignedApk = signedApk.Trim().Trim('"');
+            var outputFolder = Path.GetDirectoryName(sanitizedSignedApk) ?? string.Empty;
 
-            return $"Signing preview: {signingCommand} \"{sanitizedOutputApk}\" \"{sanitizedSignedApk}\"";
+            return $"Signing preview: {signingCommand} -a \"{sanitizedOutputApk}\" -o \"{outputFolder}\"";
         }
     }
 }
