@@ -31,6 +31,9 @@ namespace PulseAPK.ViewModels
         private bool _useAapt2;
 
         [ObservableProperty]
+        private bool _signApk = true;
+
+        [ObservableProperty]
         private string _consoleLog = Properties.Resources.WaitingForCommand;
 
         [ObservableProperty]
@@ -95,6 +98,7 @@ namespace PulseAPK.ViewModels
             RunBuildCommand.NotifyCanExecuteChanged();
         }
         partial void OnUseAapt2Changed(bool value) => UpdateCommandPreview();
+        partial void OnSignApkChanged(bool value) => UpdateCommandPreview();
 
         [RelayCommand]
         private void BrowseProject()
@@ -158,8 +162,8 @@ namespace PulseAPK.ViewModels
                  if (result != MessageBoxResult.Yes) return;
             }
 
-            var signedApkPath = GetSignedApkPath(OutputApkPath);
-            if (!string.IsNullOrWhiteSpace(signedApkPath) && File.Exists(signedApkPath))
+            var signedApkPath = SignApk ? GetSignedApkPath(OutputApkPath) : string.Empty;
+            if (SignApk && !string.IsNullOrWhiteSpace(signedApkPath) && File.Exists(signedApkPath))
             {
                 var result = MessageBoxUtils.ShowQuestion($"The signed output file '{signedApkPath}' already exists. Overwrite?", "Confirm overwrite", MessageBoxButton.YesNo, MessageBoxImage.Warning);
                 if (result != MessageBoxResult.Yes) return;
@@ -176,7 +180,7 @@ namespace PulseAPK.ViewModels
                 {
                     AppendLog(Properties.Resources.BuildSuccessful);
 
-                    if (!string.IsNullOrWhiteSpace(signedApkPath))
+                    if (SignApk && !string.IsNullOrWhiteSpace(signedApkPath))
                     {
                         await RunSigningAsync(OutputApkPath, signedApkPath);
                     }
@@ -372,6 +376,11 @@ namespace PulseAPK.ViewModels
 
         private string BuildSigningCommandPreview(string outputApk)
         {
+            if (!SignApk)
+            {
+                return string.Empty;
+            }
+
             var hasOutputPath = !string.IsNullOrWhiteSpace(outputApk) && outputApk != "<output apk>";
             var signedApk = GetSignedApkPath(OutputApkPath);
 
