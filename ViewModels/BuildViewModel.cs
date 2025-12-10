@@ -265,7 +265,7 @@ namespace PulseAPK.ViewModels
 
             var commandPreview = new StringBuilder($"Command preview: {builder}");
 
-            var signingCommandPreview = BuildSigningCommandPreview(output);
+            var signingCommandPreview = BuildSigningCommandPreview(OutputApkPath);
             if (!string.IsNullOrWhiteSpace(signingCommandPreview))
             {
                 commandPreview.Append($"{Environment.NewLine}{signingCommandPreview}");
@@ -382,7 +382,8 @@ namespace PulseAPK.ViewModels
             }
 
             var hasOutputPath = !string.IsNullOrWhiteSpace(outputApk) && outputApk != "<output apk>";
-            var signedApk = GetSignedApkPath(OutputApkPath);
+            var sanitizedOutputApk = hasOutputPath ? outputApk.Trim().Trim('"') : string.Empty;
+            var signedApk = hasOutputPath ? GetSignedApkPath(sanitizedOutputApk) : string.Empty;
 
             var ubersignJarPath = Path.Combine(GetApplicationRootPath(), "ubersign.jar");
             var ubersignPath = Path.Combine(GetApplicationRootPath(), "ubersign");
@@ -412,7 +413,9 @@ namespace PulseAPK.ViewModels
                 return "Signing preview: ubersign <output apk> <signed apk>";
             }
 
-            return $"Signing preview: {signingCommand} \"{outputApk}\" \"{signedApk}\"";
+            var sanitizedSignedApk = signedApk.Trim().Trim('"');
+
+            return $"Signing preview: {signingCommand} \"{sanitizedOutputApk}\" \"{sanitizedSignedApk}\"";
         }
     }
 }
