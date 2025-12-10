@@ -383,7 +383,9 @@ namespace PulseAPK.ViewModels
 
             var hasOutputPath = !string.IsNullOrWhiteSpace(outputApk) && outputApk != "<output apk>";
             var sanitizedOutputApk = hasOutputPath ? outputApk.Trim().Trim('"') : string.Empty;
-            var signedApk = hasOutputPath ? GetSignedApkPath(sanitizedOutputApk) : string.Empty;
+            var hasExtension = hasOutputPath && !string.IsNullOrWhiteSpace(Path.GetExtension(sanitizedOutputApk));
+
+            var signedApk = hasExtension ? GetSignedApkPath(sanitizedOutputApk) : string.Empty;
 
             var ubersignJarPath = Path.Combine(GetApplicationRootPath(), "ubersign.jar");
             var ubersignPath = Path.Combine(GetApplicationRootPath(), "ubersign");
@@ -408,13 +410,21 @@ namespace PulseAPK.ViewModels
                 signingCommand = "<ubersign.jar in app root>";
             }
 
-            if (!hasOutputPath || string.IsNullOrWhiteSpace(signedApk))
+            if (!hasOutputPath)
             {
                 return "Signing preview: ubersign -a <output apk> -o <output folder>";
             }
 
             var sanitizedSignedApk = signedApk.Trim().Trim('"');
-            var outputFolder = Path.GetDirectoryName(sanitizedSignedApk) ?? string.Empty;
+
+            var outputFolder = hasExtension
+                ? Path.GetDirectoryName(sanitizedSignedApk) ?? string.Empty
+                : sanitizedOutputApk;
+
+            if (string.IsNullOrWhiteSpace(outputFolder))
+            {
+                outputFolder = EnsureCompiledDirectory();
+            }
 
             return $"Signing preview: {signingCommand} -a \"{sanitizedOutputApk}\" -o \"{outputFolder}\"";
         }
