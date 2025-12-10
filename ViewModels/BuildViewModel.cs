@@ -56,7 +56,7 @@ namespace PulseAPK.ViewModels
             _filePickerService = new Services.FilePickerService();
             _settingsService = new Services.SettingsService();
             _apktoolRunner = new Services.ApktoolRunner(_settingsService);
-            _ubersignRunner = new Services.UbersignRunner();
+            _ubersignRunner = new Services.UbersignRunner(_settingsService);
 
             InitializeOutputPath();
 
@@ -387,27 +387,45 @@ namespace PulseAPK.ViewModels
 
             var signedApk = hasExtension ? GetSignedApkPath(sanitizedOutputApk) : string.Empty;
 
-            var ubersignJarPath = Path.Combine(GetApplicationRootPath(), "ubersign.jar");
-            var ubersignPath = Path.Combine(GetApplicationRootPath(), "ubersign");
-            var windowsUbersign = $"{ubersignPath}.exe";
-
             string signingCommand;
 
-            if (File.Exists(ubersignJarPath))
+            var configuredUbersign = _settingsService.Settings.UbersignPath?.Trim().Trim('"');
+            if (!string.IsNullOrWhiteSpace(configuredUbersign))
             {
-                signingCommand = $"java -jar \"{ubersignJarPath}\"";
-            }
-            else if (File.Exists(ubersignPath))
-            {
-                signingCommand = $"\"{ubersignPath}\"";
-            }
-            else if (File.Exists(windowsUbersign))
-            {
-                signingCommand = $"\"{windowsUbersign}\"";
+                var configuredExists = File.Exists(configuredUbersign);
+                var isJar = string.Equals(Path.GetExtension(configuredUbersign), ".jar", StringComparison.OrdinalIgnoreCase);
+
+                signingCommand = isJar
+                    ? $"java -jar \"{configuredUbersign}\""
+                    : $"\"{configuredUbersign}\"";
+
+                if (!configuredExists)
+                {
+                    signingCommand = $"<{signingCommand} (not found)>";
+                }
             }
             else
             {
-                signingCommand = "<ubersign.jar in app root>";
+                var ubersignJarPath = Path.Combine(GetApplicationRootPath(), "ubersign.jar");
+                var ubersignPath = Path.Combine(GetApplicationRootPath(), "ubersign");
+                var windowsUbersign = $"{ubersignPath}.exe";
+
+                if (File.Exists(ubersignJarPath))
+                {
+                    signingCommand = $"java -jar \"{ubersignJarPath}\"";
+                }
+                else if (File.Exists(ubersignPath))
+                {
+                    signingCommand = $"\"{ubersignPath}\"";
+                }
+                else if (File.Exists(windowsUbersign))
+                {
+                    signingCommand = $"\"{windowsUbersign}\"";
+                }
+                else
+                {
+                    signingCommand = "<ubersign.jar in app root>";
+                }
             }
 
             if (!hasOutputPath)
