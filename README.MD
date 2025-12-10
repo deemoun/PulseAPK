@@ -1,6 +1,6 @@
 # PulseAPK
 
-**PulseAPK** is a modern, reliable, and user-friendly GUI wrapper for `apktool` built with WPF (Windows Presentation Foundation) and .NET 8. It wraps the powerful command-line utility with a sleek cyberpunk-inspired interface, making decompilation effortless for both beginners and professionals.
+**PulseAPK** is a modern, reliable, and user-friendly GUI wrapper for `apktool` built with WPF (Windows Presentation Foundation) and .NET 8. It wraps the powerful command-line utility with a sleek cyberpunk-inspired interface, making decompilation effortless for both beginners and professionals while also streamlining APK signing.
 
 ![PulseAPK UI](images/pulse_apk_1_0_1.png)
 
@@ -8,12 +8,13 @@
 
 ## Key Features
 
-- **🚀 Sleek Interface**: A modern dark-themed UI that feels right at home on your desktop.
+- **🚀 Sleek Interface**: A modern dark-themed UI that feels right at home.
 - **📁 Drag & Drop Support**: Simply drag and drop your APK files to start working.
 - **⚡ Safe & Secure**: Validates files before processing and prevents accidental overwrites of critical system folders.
 - **🔧 Configurable**: Set your own path to `apktool.jar` and manage your workspace settings easily.
 - **📜 Live Logging**: Watch the decompilation process in real-time with a built-in console viewer.
 - **🧩 Compilation Support**: Rebuild modified projects back into APKs directly from the app.
+- **🔏 Signing Support**: Sign rebuilt APKs using your keystore to produce ready-to-install builds.
 
 ## Prerequisites
 

@@ -104,7 +104,16 @@ namespace PulseAPK.Properties {
                 return ResourceManager.GetString("ApktoolPath", resourceCulture);
             }
         }
-        
+
+        /// <summary>
+        ///   Looks up a localized string similar to Ubersign Path.
+        /// </summary>
+        public static string UbersignPath {
+            get {
+                return ResourceManager.GetString("UbersignPath", resourceCulture);
+            }
+        }
+
         /// <summary>
         ///   Looks up a localized string similar to PulseAPK.
         /// </summary>
@@ -277,6 +286,15 @@ namespace PulseAPK.Properties {
         }
 
         /// <summary>
+        ///   Looks up a localized string similar to Invalid Ubersign File.
+        /// </summary>
+        public static string Error_InvalidUbersignFile {
+            get {
+                return ResourceManager.GetString("Error_InvalidUbersignFile", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Looks up a localized string similar to Drop a valid project folder that contains apktool.yml and AndroidManifest.xml..
         /// </summary>
         public static string Error_InvalidProjectSelection {
@@ -320,7 +338,16 @@ namespace PulseAPK.Properties {
                 return ResourceManager.GetString("FileFilter_Jar", resourceCulture);
             }
         }
-        
+
+        /// <summary>
+        ///   Looks up a localized string similar to Ubersign Jar Files (*.jar)|*.jar.
+        /// </summary>
+        public static string FileFilter_Ubersign {
+            get {
+                return ResourceManager.GetString("FileFilter_Ubersign", resourceCulture);
+            }
+        }
+
         /// <summary>
         ///   Looks up a localized string similar to JAVA Path: {0}.
         /// </summary>
@@ -473,7 +500,16 @@ namespace PulseAPK.Properties {
                 return ResourceManager.GetString("WaitingForCommand", resourceCulture);
             }
         }
-        
+
+        /// <summary>
+        ///   Looks up a localized string similar to Sign APK.
+        /// </summary>
+        public static string SignApk {
+            get {
+                return ResourceManager.GetString("SignApk", resourceCulture);
+            }
+        }
+
         /// <summary>
         ///   Looks up a localized string similar to Use AAPT2.
         /// </summary>

@@ -17,6 +17,9 @@ namespace PulseAPK.ViewModels
         private string _apktoolPath;
 
         [ObservableProperty]
+        private string _ubersignPath;
+
+        [ObservableProperty]
         private string _javaPathDisplay;
 
         public SettingsViewModel()
@@ -30,6 +33,7 @@ namespace PulseAPK.ViewModels
             _filePickerService = filePickerService;
 
             ApktoolPath = _settingsService.Settings.ApktoolPath;
+            UbersignPath = _settingsService.Settings.UbersignPath;
             JavaPathDisplay = GetJavaPathDisplay();
 
             _isInitialized = true;
@@ -62,6 +66,36 @@ namespace PulseAPK.ViewModels
             }
 
             _settingsService.Settings.ApktoolPath = value?.Trim() ?? string.Empty;
+            _settingsService.Save();
+        }
+
+        [RelayCommand]
+        private void BrowseUbersign()
+        {
+            var file = _filePickerService.OpenFile(Properties.Resources.FileFilter_Jar);
+            if (string.IsNullOrWhiteSpace(file))
+            {
+                return;
+            }
+
+            var (isValid, message) = Utils.FileSanitizer.ValidateJar(file);
+            if (!isValid)
+            {
+                MessageBoxUtils.ShowError(message, Properties.Resources.Error_InvalidUbersignFile);
+                return;
+            }
+
+            UbersignPath = file;
+        }
+
+        partial void OnUbersignPathChanged(string value)
+        {
+            if (!_isInitialized)
+            {
+                return;
+            }
+
+            _settingsService.Settings.UbersignPath = value?.Trim() ?? string.Empty;
             _settingsService.Save();
         }
 
