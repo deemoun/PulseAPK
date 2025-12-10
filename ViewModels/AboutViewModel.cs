@@ -11,9 +11,15 @@ namespace PulseAPK.ViewModels
         public string DeveloperName { get; } = "Dmitry Yarygin";
         public string Year { get; } = "2025";
         
-        private string getAppVersion() {
-             var version = Assembly.GetExecutingAssembly().GetName().Version;
-             return string.Format(Properties.Resources.About_Version, version != null ? $"{version.Major}.{version.Minor}.{version.Build}" : "1.0.1");
+        private string getAppVersion()
+        {
+            var informationalVersion = Assembly.GetExecutingAssembly()
+                                               .GetCustomAttribute<AssemblyInformationalVersionAttribute>()?
+                                               .InformationalVersion;
+
+            var version = string.IsNullOrWhiteSpace(informationalVersion) ? "1.0.1" : informationalVersion;
+
+            return string.Format(Properties.Resources.About_Version, version);
         }
 
         [RelayCommand]
