@@ -181,9 +181,12 @@
   <data name="BuildHeader" xml:space="preserve">
     <value>Build APK</value>
   </data>
-  <data name="SelectProjectFolder" xml:space="preserve">
+    <data name="SelectProjectFolder" xml:space="preserve">
     <value>Select Project Folder</value>
-  </data>
+    </data>
+    <data name="SignApk" xml:space="preserve">
+      <value>Sign APK</value>
+    </data>
     <data name="UseAapt2" xml:space="preserve">
       <value>Use AAPT2</value>
     </data>

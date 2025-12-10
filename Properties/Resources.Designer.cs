@@ -473,7 +473,16 @@ namespace PulseAPK.Properties {
                 return ResourceManager.GetString("WaitingForCommand", resourceCulture);
             }
         }
-        
+
+        /// <summary>
+        ///   Looks up a localized string similar to Sign APK.
+        /// </summary>
+        public static string SignApk {
+            get {
+                return ResourceManager.GetString("SignApk", resourceCulture);
+            }
+        }
+
         /// <summary>
         ///   Looks up a localized string similar to Use AAPT2.
         /// </summary>
