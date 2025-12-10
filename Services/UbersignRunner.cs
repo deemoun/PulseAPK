@@ -9,6 +9,18 @@ namespace PulseAPK.Services
 {
     public class UbersignRunner
     {
+        private readonly ISettingsService _settingsService;
+
+        public UbersignRunner()
+            : this(new SettingsService())
+        {
+        }
+
+        public UbersignRunner(ISettingsService settingsService)
+        {
+            _settingsService = settingsService;
+        }
+
         public event Action<string>? OutputDataReceived;
 
         public async Task<int> RunSigningAsync(string inputApk, string signedOutputApk, CancellationToken cancellationToken = default)
@@ -31,7 +43,7 @@ namespace PulseAPK.Services
             var (ubersignPath, isJar) = GetUbersignPath();
             if (!File.Exists(ubersignPath))
             {
-                throw new FileNotFoundException($"Could not find 'ubersign.jar' (or executable) in the application root at '{ubersignPath}'.");
+                throw new FileNotFoundException($"Could not find 'ubersign.jar' (or executable) at '{ubersignPath}'.");
             }
 
             var outputDirectory = Path.GetDirectoryName(signedOutputApk);
@@ -108,8 +120,15 @@ namespace PulseAPK.Services
             return process.ExitCode;
         }
 
-        private static (string Path, bool IsJar) GetUbersignPath()
+        private (string Path, bool IsJar) GetUbersignPath()
         {
+            var configuredPath = _settingsService.Settings.UbersignPath?.Trim();
+            if (!string.IsNullOrWhiteSpace(configuredPath) && File.Exists(configuredPath))
+            {
+                var isJar = string.Equals(Path.GetExtension(configuredPath), ".jar", StringComparison.OrdinalIgnoreCase);
+                return (configuredPath, isJar);
+            }
+
             var root = string.IsNullOrWhiteSpace(AppDomain.CurrentDomain.BaseDirectory)
                 ? Directory.GetCurrentDirectory()
                 : AppDomain.CurrentDomain.BaseDirectory;

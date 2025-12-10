@@ -136,6 +136,9 @@
   <data name="Error_InvalidJarFile" xml:space="preserve">
     <value>Invalid Jar File</value>
   </data>
+  <data name="Error_InvalidUbersignFile" xml:space="preserve">
+    <value>Invalid Ubersign File</value>
+  </data>
   <data name="Error_InvalidProjectSelection" xml:space="preserve">
     <value>Drop a valid project folder that contains apktool.yml and AndroidManifest.xml.</value>
   </data>
@@ -145,11 +148,17 @@
   <data name="FileFilter_Jar" xml:space="preserve">
     <value>Jar Files (*.jar)|*.jar</value>
   </data>
+  <data name="FileFilter_Ubersign" xml:space="preserve">
+    <value>Ubersign Files (*.jar;*.exe)|*.jar;*.exe|All Files (*.*)|*.*</value>
+  </data>
   <data name="SettingsHeader" xml:space="preserve">
     <value>Settings</value>
   </data>
   <data name="ApktoolPath" xml:space="preserve">
     <value>Apktool Path</value>
+  </data>
+  <data name="UbersignPath" xml:space="preserve">
+    <value>Ubersign Path</value>
   </data>
   <data name="JavaPathNotFound" xml:space="preserve">
     <value>JAVA Path: Not Found</value>
