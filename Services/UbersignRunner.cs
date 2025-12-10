@@ -130,12 +130,29 @@ namespace PulseAPK.Services
             var expectedNames = new[]
             {
                 $"{inputFileName}-aligned-signed.apk",
-                $"{inputFileName}-signed.apk"
+                $"{inputFileName}-signed.apk",
+                $"{inputFileName}-aligned-debugSigned.apk",
+                $"{inputFileName}-debugSigned.apk"
             };
 
-            return expectedNames
+            var matchedFile = expectedNames
                 .Select(name => Path.Combine(outputDirectory, name))
                 .FirstOrDefault(File.Exists);
+
+            if (matchedFile is not null)
+            {
+                return matchedFile;
+            }
+
+            return Directory.EnumerateFiles(outputDirectory, "*.apk")
+                .Where(path =>
+                {
+                    var fileName = Path.GetFileNameWithoutExtension(path);
+                    return fileName.StartsWith(inputFileName, StringComparison.OrdinalIgnoreCase)
+                           && fileName.Contains("signed", StringComparison.OrdinalIgnoreCase);
+                })
+                .OrderByDescending(File.GetLastWriteTimeUtc)
+                .FirstOrDefault();
         }
     }
 }
