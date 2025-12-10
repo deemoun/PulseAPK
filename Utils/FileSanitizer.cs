@@ -36,12 +36,7 @@ namespace PulseAPK.Utils
                 return ValidateJar(path);
             }
 
-            if (extension.Equals(".exe", StringComparison.OrdinalIgnoreCase))
-            {
-                return (true, string.Empty);
-            }
-
-            return (false, "File must be a .jar or .exe executable.");
+            return (false, "File must be a .jar file.");
         }
 
         public static (bool IsValid, string Message) ValidateProjectFolder(string path)
