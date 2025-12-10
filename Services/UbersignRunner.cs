@@ -122,16 +122,23 @@ namespace PulseAPK.Services
 
         private (string Path, bool IsJar) GetUbersignPath()
         {
-            var configuredPath = _settingsService.Settings.UbersignPath?.Trim();
-            if (!string.IsNullOrWhiteSpace(configuredPath) && File.Exists(configuredPath))
-            {
-                var isJar = string.Equals(Path.GetExtension(configuredPath), ".jar", StringComparison.OrdinalIgnoreCase);
-                return (configuredPath, isJar);
-            }
-
             var root = string.IsNullOrWhiteSpace(AppDomain.CurrentDomain.BaseDirectory)
                 ? Directory.GetCurrentDirectory()
                 : AppDomain.CurrentDomain.BaseDirectory;
+
+            var configuredPath = _settingsService.Settings.UbersignPath?.Trim();
+            if (!string.IsNullOrWhiteSpace(configuredPath))
+            {
+                var resolvedPath = Path.IsPathRooted(configuredPath)
+                    ? configuredPath
+                    : Path.Combine(root, configuredPath);
+
+                if (File.Exists(resolvedPath))
+                {
+                    var isJar = string.Equals(Path.GetExtension(resolvedPath), ".jar", StringComparison.OrdinalIgnoreCase);
+                    return (resolvedPath, isJar);
+                }
+            }
 
             var jarPath = Path.Combine(root, "ubersign.jar");
             if (File.Exists(jarPath)) return (jarPath, true);

@@ -389,15 +389,20 @@ namespace PulseAPK.ViewModels
 
             string signingCommand;
 
+            var appRoot = GetApplicationRootPath();
             var configuredUbersign = _settingsService.Settings.UbersignPath?.Trim().Trim('"');
             if (!string.IsNullOrWhiteSpace(configuredUbersign))
             {
-                var configuredExists = File.Exists(configuredUbersign);
-                var isJar = string.Equals(Path.GetExtension(configuredUbersign), ".jar", StringComparison.OrdinalIgnoreCase);
+                var resolvedUbersign = Path.IsPathRooted(configuredUbersign)
+                    ? configuredUbersign
+                    : Path.Combine(appRoot, configuredUbersign);
+
+                var configuredExists = File.Exists(resolvedUbersign);
+                var isJar = string.Equals(Path.GetExtension(resolvedUbersign), ".jar", StringComparison.OrdinalIgnoreCase);
 
                 signingCommand = isJar
-                    ? $"java -jar \"{configuredUbersign}\""
-                    : $"\"{configuredUbersign}\"";
+                    ? $"java -jar \"{resolvedUbersign}\""
+                    : $"\"{resolvedUbersign}\"";
 
                 if (!configuredExists)
                 {
@@ -406,8 +411,8 @@ namespace PulseAPK.ViewModels
             }
             else
             {
-                var ubersignJarPath = Path.Combine(GetApplicationRootPath(), "ubersign.jar");
-                var ubersignPath = Path.Combine(GetApplicationRootPath(), "ubersign");
+                var ubersignJarPath = Path.Combine(appRoot, "ubersign.jar");
+                var ubersignPath = Path.Combine(appRoot, "ubersign");
                 var windowsUbersign = $"{ubersignPath}.exe";
 
                 if (File.Exists(ubersignJarPath))
