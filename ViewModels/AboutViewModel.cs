@@ -10,14 +10,31 @@ namespace PulseAPK.ViewModels
         public string AppVersion => getAppVersion();
         public string DeveloperName { get; } = "Dmitry Yarygin";
         public string Year { get; } = "2025";
-        
+
         private string getAppVersion()
         {
             var informationalVersion = Assembly.GetExecutingAssembly()
                                                .GetCustomAttribute<AssemblyInformationalVersionAttribute>()?
                                                .InformationalVersion;
 
-            var version = string.IsNullOrWhiteSpace(informationalVersion) ? "1.0.1" : informationalVersion;
+            if (!string.IsNullOrWhiteSpace(informationalVersion))
+            {
+                var metadataSeparatorIndex = informationalVersion.IndexOf('+');
+                if (metadataSeparatorIndex >= 0)
+                {
+                    informationalVersion = informationalVersion[..metadataSeparatorIndex];
+                }
+
+                var prereleaseSeparatorIndex = informationalVersion.IndexOf('-');
+                if (prereleaseSeparatorIndex >= 0)
+                {
+                    informationalVersion = informationalVersion[..prereleaseSeparatorIndex];
+                }
+            }
+
+            var version = string.IsNullOrWhiteSpace(informationalVersion)
+                ? Assembly.GetExecutingAssembly().GetName().Version?.ToString(3) ?? "1.0.1"
+                : informationalVersion;
 
             return string.Format(Properties.Resources.About_Version, version);
         }
