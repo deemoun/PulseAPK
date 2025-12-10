@@ -92,26 +92,11 @@ namespace PulseAPK.Services
                 return process.ExitCode;
             }
 
-            var inputFileName = Path.GetFileNameWithoutExtension(inputApk);
-            var expectedNames = new[]
-            {
-                $"{inputFileName}-aligned-signed.apk",
-                $"{inputFileName}-signed.apk"
-            };
-
-            var createdFile = expectedNames
-                .Select(name => Path.Combine(outputDirectory, name))
-                .FirstOrDefault(File.Exists);
-
-            if (createdFile == null)
-            {
-                createdFile = Directory.GetFiles(outputDirectory, "*.apk", SearchOption.TopDirectoryOnly)
-                    .OrderByDescending(File.GetLastWriteTimeUtc)
-                    .FirstOrDefault();
-            }
+            var createdFile = FindSignedApk(inputApk, outputDirectory);
 
             if (string.IsNullOrWhiteSpace(createdFile))
             {
+                OutputDataReceived?.Invoke("Signing completed but no signed APK was produced in the output directory.");
                 return 1;
             }
 
@@ -137,6 +122,20 @@ namespace PulseAPK.Services
 
             var windowsExecutable = Path.Combine(root, "ubersign.exe");
             return File.Exists(windowsExecutable) ? (windowsExecutable, false) : (jarPath, true);
+        }
+
+        private static string? FindSignedApk(string inputApk, string outputDirectory)
+        {
+            var inputFileName = Path.GetFileNameWithoutExtension(inputApk);
+            var expectedNames = new[]
+            {
+                $"{inputFileName}-aligned-signed.apk",
+                $"{inputFileName}-signed.apk"
+            };
+
+            return expectedNames
+                .Select(name => Path.Combine(outputDirectory, name))
+                .FirstOrDefault(File.Exists);
         }
     }
 }
