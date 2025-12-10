@@ -42,6 +42,7 @@ namespace PulseAPK.ViewModels
         private readonly Services.IFilePickerService _filePickerService;
         private readonly Services.ISettingsService _settingsService;
         private readonly Services.ApktoolRunner _apktoolRunner;
+        private readonly Services.UbersignRunner _ubersignRunner;
 
         public bool IsHintVisible => string.IsNullOrEmpty(ProjectPath);
 
@@ -52,10 +53,12 @@ namespace PulseAPK.ViewModels
             _filePickerService = new Services.FilePickerService();
             _settingsService = new Services.SettingsService();
             _apktoolRunner = new Services.ApktoolRunner(_settingsService);
+            _ubersignRunner = new Services.UbersignRunner();
 
             InitializeOutputPath();
 
             _apktoolRunner.OutputDataReceived += OnOutputDataReceived;
+            _ubersignRunner.OutputDataReceived += OnOutputDataReceived;
 
             UpdateCommandPreview();
             RunBuildCommand.NotifyCanExecuteChanged();
@@ -155,6 +158,13 @@ namespace PulseAPK.ViewModels
                  if (result != MessageBoxResult.Yes) return;
             }
 
+            var signedApkPath = GetSignedApkPath(OutputApkPath);
+            if (!string.IsNullOrWhiteSpace(signedApkPath) && File.Exists(signedApkPath))
+            {
+                var result = MessageBoxUtils.ShowQuestion($"The signed output file '{signedApkPath}' already exists. Overwrite?", "Confirm overwrite", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                if (result != MessageBoxResult.Yes) return;
+            }
+
             SetConsoleLog(Properties.Resources.StartingApktool);
             IsRunning = true;
 
@@ -165,6 +175,12 @@ namespace PulseAPK.ViewModels
                 if (exitCode == 0)
                 {
                     AppendLog(Properties.Resources.BuildSuccessful);
+
+                    if (!string.IsNullOrWhiteSpace(signedApkPath))
+                    {
+                        await RunSigningAsync(OutputApkPath, signedApkPath);
+                    }
+
                      MessageBoxUtils.ShowInfo(Properties.Resources.BuildSuccessful);
                 }
                 else
@@ -243,7 +259,15 @@ namespace PulseAPK.ViewModels
             builder.Append($"java -jar {apktool} b {project} -o {output}");
             if(UseAapt2) builder.Append(" --use-aapt2");
 
-            return $"Command preview: {builder}";
+            var commandPreview = new StringBuilder($"Command preview: {builder}");
+
+            var signingCommandPreview = BuildSigningCommandPreview(output);
+            if (!string.IsNullOrWhiteSpace(signingCommandPreview))
+            {
+                commandPreview.Append($"{Environment.NewLine}{signingCommandPreview}");
+            }
+
+            return commandPreview.ToString();
         }
 
         private void InitializeOutputPath()
@@ -301,6 +325,72 @@ namespace PulseAPK.ViewModels
             }
 
             return OutputFolderPath;
+        }
+
+        private async Task RunSigningAsync(string inputApk, string signedApkPath)
+        {
+            AppendLog($"Signing APK via ubersign to '{signedApkPath}'...");
+
+            try
+            {
+                var exitCode = await _ubersignRunner.RunSigningAsync(inputApk, signedApkPath);
+
+                if (exitCode == 0)
+                {
+                    AppendLog($"Signed APK created at '{signedApkPath}'.");
+                }
+                else
+                {
+                    AppendLog($"Signing failed (Exit Code: {exitCode}).");
+                }
+            }
+            catch (Exception ex)
+            {
+                AppendLog($"Signing failed: {ex.Message}");
+                MessageBoxUtils.ShowWarning(ex.Message, "Signing failed");
+            }
+        }
+
+        private string GetSignedApkPath(string outputApkPath)
+        {
+            if (string.IsNullOrWhiteSpace(outputApkPath))
+            {
+                return string.Empty;
+            }
+
+            var folder = Path.GetDirectoryName(outputApkPath);
+            if (string.IsNullOrWhiteSpace(folder))
+            {
+                return string.Empty;
+            }
+
+            var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(outputApkPath);
+            var extension = Path.GetExtension(outputApkPath);
+
+            return Path.Combine(folder, $"{fileNameWithoutExtension}_signed{extension}");
+        }
+
+        private string BuildSigningCommandPreview(string outputApk)
+        {
+            var hasOutputPath = !string.IsNullOrWhiteSpace(outputApk) && outputApk != "<output apk>";
+            var signedApk = GetSignedApkPath(OutputApkPath);
+
+            var ubersignPath = Path.Combine(GetApplicationRootPath(), "ubersign");
+            if (!File.Exists(ubersignPath))
+            {
+                ubersignPath = File.Exists($"{ubersignPath}.exe") ? $"\"{ubersignPath}.exe\"" : "<ubersign in app root>";
+            }
+            else
+            {
+                ubersignPath = $"\"{ubersignPath}\"";
+            }
+
+            if (!hasOutputPath || string.IsNullOrWhiteSpace(signedApk))
+            {
+                return "Signing preview: ubersign <output apk> <signed apk>";
+            }
+
+            return $"Signing preview: {ubersignPath} \"{outputApk}\" \"{signedApk}\"";
         }
     }
 }
