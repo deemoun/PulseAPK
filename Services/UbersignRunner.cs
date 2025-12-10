@@ -38,7 +38,8 @@ namespace PulseAPK.Services
             outputDirectory ??= Directory.GetCurrentDirectory();
             Directory.CreateDirectory(outputDirectory);
 
-            var ubersignArguments = $"-a \"{inputApk}\" -o \"{outputDirectory}\" --allowResign --overwrite";
+            // When providing an output directory, ubersign does not allow the overwrite flag.
+            var ubersignArguments = $"-a \"{inputApk}\" -o \"{outputDirectory}\" --allowResign";
 
             var startInfo = isJar
                 ? new ProcessStartInfo
