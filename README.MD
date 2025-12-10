@@ -8,7 +8,7 @@
 
 ## Key Features
 
-- **🚀 Sleek Interface**: A modern dark-themed UI that feels right at home on your desktop.
+- **🚀 Sleek Interface**: A modern dark-themed UI that feels right at home.
 - **📁 Drag & Drop Support**: Simply drag and drop your APK files to start working.
 - **⚡ Safe & Secure**: Validates files before processing and prevents accidental overwrites of critical system folders.
 - **🔧 Configurable**: Set your own path to `apktool.jar` and manage your workspace settings easily.
