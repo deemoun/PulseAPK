@@ -7,7 +7,7 @@ namespace PulseAPK.Services
     public class AppSettings
     {
         public string ApktoolPath { get; set; } = "apktool.jar";
-        public string UbersignPath { get; set; } = "ubersign.jar";
+        public string UbersignPath { get; set; } = string.Empty;
     }
 
     public interface ISettingsService
