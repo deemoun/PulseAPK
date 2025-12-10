@@ -340,7 +340,7 @@ namespace PulseAPK.Properties {
         }
 
         /// <summary>
-        ///   Looks up a localized string similar to Ubersign Files (*.jar;*.exe)|*.jar;*.exe|All Files (*.*)|*.*.
+        ///   Looks up a localized string similar to Ubersign Jar Files (*.jar)|*.jar.
         /// </summary>
         public static string FileFilter_Ubersign {
             get {
