@@ -384,14 +384,27 @@ namespace PulseAPK.ViewModels
             var hasOutputPath = !string.IsNullOrWhiteSpace(outputApk) && outputApk != "<output apk>";
             var signedApk = GetSignedApkPath(OutputApkPath);
 
+            var ubersignJarPath = Path.Combine(GetApplicationRootPath(), "ubersign.jar");
             var ubersignPath = Path.Combine(GetApplicationRootPath(), "ubersign");
-            if (!File.Exists(ubersignPath))
+            var windowsUbersign = $"{ubersignPath}.exe";
+
+            string signingCommand;
+
+            if (File.Exists(ubersignJarPath))
             {
-                ubersignPath = File.Exists($"{ubersignPath}.exe") ? $"\"{ubersignPath}.exe\"" : "<ubersign in app root>";
+                signingCommand = $"java -jar \"{ubersignJarPath}\"";
+            }
+            else if (File.Exists(ubersignPath))
+            {
+                signingCommand = $"\"{ubersignPath}\"";
+            }
+            else if (File.Exists(windowsUbersign))
+            {
+                signingCommand = $"\"{windowsUbersign}\"";
             }
             else
             {
-                ubersignPath = $"\"{ubersignPath}\"";
+                signingCommand = "<ubersign.jar in app root>";
             }
 
             if (!hasOutputPath || string.IsNullOrWhiteSpace(signedApk))
@@ -399,7 +412,7 @@ namespace PulseAPK.ViewModels
                 return "Signing preview: ubersign <output apk> <signed apk>";
             }
 
-            return $"Signing preview: {ubersignPath} \"{outputApk}\" \"{signedApk}\"";
+            return $"Signing preview: {signingCommand} \"{outputApk}\" \"{signedApk}\"";
         }
     }
 }

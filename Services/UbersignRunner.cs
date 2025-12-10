@@ -27,21 +27,31 @@ namespace PulseAPK.Services
                 throw new FileNotFoundException($"Input APK '{inputApk}' was not found.");
             }
 
-            var ubersignPath = GetUbersignPath();
+            var (ubersignPath, isJar) = GetUbersignPath();
             if (!File.Exists(ubersignPath))
             {
-                throw new FileNotFoundException($"Could not find 'ubersign' in the application root at '{ubersignPath}'.");
+                throw new FileNotFoundException($"Could not find 'ubersign.jar' (or executable) in the application root at '{ubersignPath}'.");
             }
 
-            var startInfo = new ProcessStartInfo
-            {
-                FileName = ubersignPath,
-                Arguments = $"\"{inputApk}\" \"{signedOutputApk}\"",
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-                UseShellExecute = false,
-                CreateNoWindow = true
-            };
+            var startInfo = isJar
+                ? new ProcessStartInfo
+                {
+                    FileName = "java",
+                    Arguments = $"-jar \"{ubersignPath}\" \"{inputApk}\" \"{signedOutputApk}\"",
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                    UseShellExecute = false,
+                    CreateNoWindow = true
+                }
+                : new ProcessStartInfo
+                {
+                    FileName = ubersignPath,
+                    Arguments = $"\"{inputApk}\" \"{signedOutputApk}\"",
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                    UseShellExecute = false,
+                    CreateNoWindow = true
+                };
 
             using var process = new Process { StartInfo = startInfo };
 
@@ -72,18 +82,20 @@ namespace PulseAPK.Services
             return process.ExitCode;
         }
 
-        private static string GetUbersignPath()
+        private static (string Path, bool IsJar) GetUbersignPath()
         {
             var root = string.IsNullOrWhiteSpace(AppDomain.CurrentDomain.BaseDirectory)
                 ? Directory.GetCurrentDirectory()
                 : AppDomain.CurrentDomain.BaseDirectory;
 
-            var ubersignPath = Path.Combine(root, "ubersign");
+            var jarPath = Path.Combine(root, "ubersign.jar");
+            if (File.Exists(jarPath)) return (jarPath, true);
 
-            if (File.Exists(ubersignPath)) return ubersignPath;
+            var ubersignPath = Path.Combine(root, "ubersign");
+            if (File.Exists(ubersignPath)) return (ubersignPath, false);
 
             var windowsExecutable = Path.Combine(root, "ubersign.exe");
-            return File.Exists(windowsExecutable) ? windowsExecutable : ubersignPath;
+            return File.Exists(windowsExecutable) ? (windowsExecutable, false) : (jarPath, true);
         }
     }
 }
