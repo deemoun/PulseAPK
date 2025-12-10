@@ -72,13 +72,13 @@ namespace PulseAPK.ViewModels
         [RelayCommand]
         private void BrowseUbersign()
         {
-            var file = _filePickerService.OpenFile(Properties.Resources.FileFilter_Ubersign);
+            var file = _filePickerService.OpenFile(Properties.Resources.FileFilter_Jar);
             if (string.IsNullOrWhiteSpace(file))
             {
                 return;
             }
 
-            var (isValid, message) = Utils.FileSanitizer.ValidateUbersign(file);
+            var (isValid, message) = Utils.FileSanitizer.ValidateJar(file);
             if (!isValid)
             {
                 MessageBoxUtils.ShowError(message, Properties.Resources.Error_InvalidUbersignFile);

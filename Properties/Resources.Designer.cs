@@ -340,15 +340,6 @@ namespace PulseAPK.Properties {
         }
 
         /// <summary>
-        ///   Looks up a localized string similar to Ubersign Files (*.jar;*.exe)|*.jar;*.exe|All Files (*.*)|*.*.
-        /// </summary>
-        public static string FileFilter_Ubersign {
-            get {
-                return ResourceManager.GetString("FileFilter_Ubersign", resourceCulture);
-            }
-        }
-
-        /// <summary>
         ///   Looks up a localized string similar to JAVA Path: {0}.
         /// </summary>
         public static string JavaPathFound {
