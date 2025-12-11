@@ -36,4 +36,10 @@
     <Resource Include="Resources\CyberUnpack.png" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="apk_analysis_rules.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
