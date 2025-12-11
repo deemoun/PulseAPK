@@ -14,7 +14,7 @@
 - **🔧 Configurable**: Set your own path to `apktool.jar` and manage your workspace settings easily.
 - **📜 Live Logging**: Watch the decompilation process in real-time with a built-in console viewer.
 - **🧩 Compilation Support**: Rebuild modified projects back into APKs directly from the app.
-- **🔏 Signing Support**: Sign rebuilt APKs using your keystore to produce ready-to-install builds.
+- **🔏 Signing Support**: Sign rebuilt APKs to produce ready-to-install builds.
 
 ## Prerequisites
 
