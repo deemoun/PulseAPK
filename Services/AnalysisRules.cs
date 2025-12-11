@@ -29,7 +29,7 @@ namespace PulseAPK.Services
 
     public static class AnalysisRulesLoader
     {
-        private const string RulesFileName = "apk_analysis_rules.txt";
+        private const string RulesFileName = "smali_analysis_rules.json";
 
         public static AnalysisRuleSet LoadRules()
         {
