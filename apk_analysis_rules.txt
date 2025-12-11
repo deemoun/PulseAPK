@@ -15,68 +15,86 @@
     {
       "category": "root_check",
       "description": "Runtime exec calls and common root binaries",
+      "severity": "high",
       "regex_patterns": [
-        "Runtime.*exec.*[\\\"'](su|magisk|busybox|superuser|xposed)[\\\"']",
-        "const-string.*[\\\"/]system/(xbin|bin)/(su|magisk|busybox)[\\\"']",
-        "const-string.*[\\\"/]sbin/su[\\\"']",
-        "const-string.*[\\\"']com\\.topjohnwu\\.magisk",
+        "Runtime.*exec.*[\\\"'](su|magisk|busybox|superuser|xposed|zygisk)[\\\"']",
+        "const-string.*[\\\"/]system/(xbin|bin)/(su|magisk|busybox|toybox)[\\\"']",
+        "const-string.*[\\\"/]sbin/(su|magisk)[\\\"']",
+        "const-string.*[\\\"']/(vendor|system/vendor)/bin/magisk[\\\"']",
+        "const-string.*[\\\"'](com\\.topjohnwu\\.magisk|io\\.topjohnwu\\.magisk)",
         "const-string.*[\\\"']eu\\.chainfire\\.supersu",
         "const-string.*[\\\"']com\\.noshufou\\.android\\.su",
         "const-string.*[\\\"']com\\.koushikdutta\\.superuser",
-        "const-string.*[\\\"']de\\.robv\\.android\\.xposed",
+        "const-string.*[\\\"'](de\\.robv\\.android\\.xposed|org\\.lsposed)",
+        "const-string.*[\\\"'](com\\.thirdparty\\.superuser|com\\.kingoapp\\.root|com\\.kingroot\\.kinguser)",
         "const-string.*[\\\"/]system/app/(Superuser|SuperSU|Magisk)",
-        "const-string.*[\\\"/]data/local/tmp[\\\"']",
-        "Build.*TAGS.*test-keys",
-        "Build.*TAGS.*dev-keys",
-        "Build.*TAGS.*userdebug",
+        "const-string.*[\\\"']/(data/local/tmp|/cache/magisk)[\\\"']",
+        "const-string.*[\\\"']ro\\.build\\.tags[\\\"'].*(test-keys|dev-keys|userdebug)",
+        "Build.*TAGS.*(test-keys|dev-keys|userdebug)",
+        "const-string.*[\\\"']ro\\.debuggable[\\\"']",
+        "const-string.*[\\\"']persist\\.sys\\.magisk[\\\"']",
+        "const-string.*[\\\"']zygisk[\\\"']",
         "RootBeer",
         "RootTools",
         "isDeviceRooted",
-        "checkRootMethod"
+        "checkRootMethod",
+        "findBinary",
+        "canExecuteSu"
       ]
     },
     {
       "category": "emulator_check",
       "description": "System property and Build checks for emulators",
+      "severity": "high",
       "regex_patterns": [
         "const-string.*[\\\"']ro\\.kernel\\.qemu[\\\"']",
-        "const-string.*[\\\"']ro\\.hardware[\\\"'].*goldfish",
+        "const-string.*[\\\"']ro\\.hardware[\\\"'].*(goldfish|ranchu|qemu)",
         "const-string.*[\\\"']ro\\.product\\.model[\\\"'].*sdk",
         "const-string.*[\\\"']ro\\.product\\.model[\\\"'].*Emulator",
-        "const-string.*[\\\"'](generic_x86|sdk_gphone|google_sdk|sdk.*x86)[\\\"']",
-        "const-string.*[\\\"'](Genymotion|BlueStacks|NoxPlayer|MEmu|LDPlayer)[\\\"']",
-        "const-string.*[\\\"'](15555215554|15555215556|15555215558)[\\\"']",
+        "const-string.*[\\\"'](generic_x86|sdk_gphone|google_sdk|sdk.*x86|AOSP on IA Emulator)[\\\"']",
+        "const-string.*[\\\"'](Genymotion|BlueStacks|NoxPlayer|MEmu|LDPlayer|Memu|Andyroid|Droid4X)[\\\"']",
+        "const-string.*[\\\"'](15555215554|15555215556|15555215558|15555215560)[\\\"']",
         "const-string.*[\\\"']0000000000000000[\\\"']",
-        "Build.*FINGERPRINT.*generic",
+        "const-string.*[\\\"'](qemu_prop|qemu.hw.mainkeys|init\.rc_qemu)[\\\"']",
+        "const-string.*[\\\"']ro\\.product\\.(brand|device|name)[\\\"'].*(generic|emulator|vbox|sdk_gphone)",
+        "const-string.*[\\\"']ro\\.hardware[\\\"'].*(vbox|ttvm)",
+        "const-string.*[\\\"']gsm\\.operator\\.numeric[\\\"'].*(310260|000000)",
+        "const-string.*[\\\"']gsm\\.operator\\.alpha[\\\"'].*(Android|Test)",
+        "Build.*FINGERPRINT.*(generic|vbox|emulator)",
         "Build.*FINGERPRINT.*test-keys",
-        "Build.*MODEL.*sdk",
-        "Build.*MODEL.*Emulator",
+        "Build.*MODEL.*(sdk|Emulator|Android SDK built for)",
+        "Build.*MANUFACTURER.*(unknown|Genymotion|unknown|Google)",
+        "const-string.*[\\\"'](ranchu|goldfish|qemu)\\.pipe[\\\"']",
         "isEmulator",
         "checkEmulator",
-        "detectEmulator"
+        "detectEmulator",
+        "const-string.*[\\\"']/dev/(qemu_pipe|ranchu_pipe)[\\\"']",
+        "const-string.*[\\\"']/proc/tty/drivers[\\\"']",
+        "const-string.*[\\\"']/proc/cpuinfo[\\\"'].*(intel|amd).*hypervisor"
       ]
     },
     {
       "category": "hardcoded_creds",
       "description": "Hardcoded secrets, tokens, and credentials",
+      "severity": "medium",
       "regex_patterns": [
         "const-string.*[\\\"']Authorization:\\s*(Bearer|Basic|Token)\\s+[A-Za-z0-9\\\\-_\\.]+",
         "const-string.*[\\\"'](Bearer|Basic)\\s+[A-Za-z0-9\\\\-_\\.]{20,}[\\\"']",
         "sput-object.*\\.(api_?key|api_?token|auth_?token|access_?token)",
-        "const-string.*[A-Za-z0-9]{32,}.*\\.(api_?key|token|secret)",
-        "const-string.*[\\\"'][A-Za-z0-9+/]{40,}={0,2}[\\\"']",
-        "const-string.*[\\\"'][0-9A-Fa-f]{40,}[\\\"']",
-        "\\.field.*password.*Ljava/lang/String;.*[\\\"'][^\\\"']{6,}[\\\"']",
-        "\\.field.*secret.*Ljava/lang/String;.*[\\\"'][^\\\"']{6,}[\\\"']",
-        "\\.field.*api_?key.*Ljava/lang/String;.*[\\\"'][^\\\"']{10,}[\\\"']",
+        "const-string.*(?i)(key|secret|token|password|passphrase).{0,8}[\\\"'][A-Za-z0-9+/]{32,}={0,2}[\\\"']",
+        "const-string.*(?i)(key|secret|token|password|passphrase).{0,8}[\\\"'][0-9A-Fa-f]{32,}[\\\"']",
+        "const-string.*(?i)(key|secret|token|password).{0,6}[\\\"'][^\\\"']{12,}[\\\"']",
+        "\\.field.*(?i)(password|secret|api_?key|access_?token).*Ljava/lang/String;.*[\\\"'][^\\\"']{6,}[\\\"']",
         "const-string.*[\\\"'][a-zA-Z0-9_]+:[a-zA-Z0-9_]{8,}@",
         "const-string.*[\\\"'](AKIA|ASIA)[A-Z0-9]{16}[\\\"']",
-        "const-string.*[\\\"']AIza[A-Za-z0-9\\\\-_]{35}[\\\"']"
+        "const-string.*[\\\"']AIza[A-Za-z0-9\\\\-_]{35}[\\\"']",
+        "const-string.*(?i)(client_?secret|app_?secret|db_?password).*[\\\"'][^\\\"']{8,}[\\\"']"
       ]
     },
     {
       "category": "sql_query",
       "description": "SQL statements and database calls",
+      "severity": "medium",
       "regex_patterns": [
         "const-string.*[\\\"']\\s*SELECT\\s+\\*?\\s+(FROM|[a-zA-Z_])",
         "const-string.*[\\\"']\\s*INSERT\\s+INTO\\s+",
@@ -94,15 +112,16 @@
     {
       "category": "http_url",
       "description": "HTTP/HTTPS URLs and API endpoints",
+      "severity": "medium",
       "regex_patterns": [
         "const-string.*[\\\"']https?://[a-zA-Z0-9\\\\-\\\\.]+\\.[a-zA-Z]{2,}[/\\\\w\\\\-\\\\._~:/?#\\\\[\\\\]@!$&'()*+,;=]*[\\\"']",
+        "const-string.*[\\\"']http://[a-zA-Z0-9\\\\-\\\\.]+\\.[a-zA-Z]{2,}",
         "https?://[^\\\"']+/(api|v1|v2|v3)/",
         "https?://[^\\\"']+/(auth|login|signin|signup|register)/",
         "https?://[^\\\"']+/(user|account|profile)/",
         "https?://[^\\\"']+/(token|oauth|refresh)/",
         "https?://[^\\\"']+/(payment|checkout|billing)/",
-        "https?://[^\\\"']+/(admin|dashboard)/",
-        "const-string.*[\\\"']http://[a-zA-Z0-9\\\\-\\\\.]+\\.[a-zA-Z]{2,}"
+        "https?://[^\\\"']+/(admin|dashboard)/"
       ]
     }
   ]
