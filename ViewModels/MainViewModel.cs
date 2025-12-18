@@ -43,6 +43,13 @@ namespace PulseAPK.ViewModels
         }
 
         [RelayCommand]
+        private void NavigateToAnalyser()
+        {
+            CurrentView = new AnalyserViewModel();
+            SelectedMenu = "Analyser";
+        }
+
+        [RelayCommand]
         private void NavigateToAbout()
         {
             CurrentView = new AboutViewModel();
