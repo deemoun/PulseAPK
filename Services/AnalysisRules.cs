@@ -317,5 +317,10 @@ namespace PulseAPK.Services
             File.WriteAllText(directPath, DefaultRulesJson);
             return directPath;
         }
+
+        internal static object InitializeRules()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
