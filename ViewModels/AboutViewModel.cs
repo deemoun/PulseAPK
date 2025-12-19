@@ -33,7 +33,7 @@ namespace PulseAPK.ViewModels
             }
 
             var version = string.IsNullOrWhiteSpace(informationalVersion)
-                ? Assembly.GetExecutingAssembly().GetName().Version?.ToString(3) ?? "1.0.1"
+                ? Assembly.GetExecutingAssembly().GetName().Version?.ToString(3) ?? "1.1.0"
                 : informationalVersion;
 
             return string.Format(Properties.Resources.About_Version, version);
