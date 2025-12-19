@@ -320,7 +320,35 @@ namespace PulseAPK.Services
 
         internal static object InitializeRules()
         {
-            throw new NotImplementedException();
+            try
+            {
+                return LoadRules();
+            }
+            catch (Exception ex) when (ex is JsonException or InvalidOperationException or IOException or UnauthorizedAccessException)
+            {
+                var fallbackRules = JsonSerializer.Deserialize<AnalysisRuleSet>(DefaultRulesJson, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                }) ?? new AnalysisRuleSet();
+
+                var filePath = EnsureRulesFileExists();
+                try
+                {
+                    File.WriteAllText(filePath, DefaultRulesJson);
+                }
+                catch (Exception writeEx) when (writeEx is IOException or UnauthorizedAccessException)
+                {
+                    // Ignore failures to persist fallback rules.
+                }
+
+                lock (RulesLock)
+                {
+                    CachedRules = fallbackRules;
+                    EnsureRulesWatcher(filePath);
+                }
+
+                return fallbackRules;
+            }
         }
     }
 }
