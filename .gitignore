@@ -226,6 +226,7 @@ ClientBin/
 *.pfx
 *.publishsettings
 orleans.codegen.cs
+build_errors.txt
 
 # Including strong name key file is recommended for open source projects
 # but it is not recommended for private projects

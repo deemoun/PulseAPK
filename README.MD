@@ -1,6 +1,6 @@
 # PulseAPK
 
-**PulseAPK** is a modern, reliable, and user-friendly GUI wrapper for `apktool` built with WPF (Windows Presentation Foundation) and .NET 8. It wraps the powerful command-line utility with a sleek cyberpunk-inspired interface, making decompilation effortless for both beginners and professionals while also streamlining APK signing.
+**PulseAPK** is a professional-grade GUI for Android reverse engineering and security analysis, built with WPF and .NET 8. It combines the raw power of `apktool` with advanced static analysis capabilities, wrapped in a high-performance, cyberpunk-inspired interface. PulseAPK streamlines the entire workflow from decompilation to analysis, rebuilding, and signing.
 
 ![PulseAPK UI](images/pulse_apk_1_0_1.png)
 
@@ -8,66 +8,72 @@
 
 ## Key Features
 
-- **🚀 Sleek Interface**: A modern dark-themed UI that feels right at home.
-- **📁 Drag & Drop Support**: Simply drag and drop your APK files to start working.
-- **⚡ Safe & Secure**: Validates files before processing and prevents accidental overwrites of critical system folders.
-- **🔧 Configurable**: Set your own path to `apktool.jar` and manage your workspace settings easily.
-- **📜 Live Logging**: Watch the decompilation process in real-time with a built-in console viewer.
-- **🧩 Compilation Support**: Rebuild modified projects back into APKs directly from the app.
-- **🔏 Signing Support**: Sign rebuilt APKs to produce ready-to-install builds.
+- **🛡️ Static Security Analysis**: Automatically scan Smali code for vulnerabilities, including root detection, emulator checks, hardcoded credentials, and insecure SQL/HTTP usage.
+- **⚙️ Dynamic Rule Engine**: Fully customizable analysis rules via `smali_analysis_rules.json`. Modify detection patterns on the fly without restarting the application.
+- **🚀 Modern UI/UX**: A responsive, dark-themed interface designed for efficiency, featuring drag-and-drop support and real-time console feedback.
+- **📦 Complete Workflow**: Decompile, Analyze, Edit, Recompile, and Sign APKs in one unified environment.
+- **⚡ Safe & Robust**: Includes intelligent validation and crash prevention mechanisms to protect your workspace and data.
+- **🔧 Fully Configurable**: Manage tool paths (Java, Apktool), workspace settings, and analysis parameters with ease.
+
+## Advanced Capabilities
+
+### Security Analysis
+PulseAPK includes a built-in static analyzer that scans decompiled code for common security indicators:
+- **Root Detection**: Identifies checks for Magisk, SuperSU, and common root binaries.
+- **Emulator Detection**: Finds checks for QEMU, Genymotion, and specific system properties.
+- **Sensitive Data**: Scans for hardcoded API keys, tokens, and basic auth headers.
+- **Insecure Networking**: Flags HTTP usage and potential data leakage points.
+
+*Rules are defined in `smali_analysis_rules.json` and can be customized to your specific needs.*
+
+### APK Management
+- **Decompilation**: Effortlessly decode resources and sources with configurable options.
+- **Recompilation**: Rebuild your modified projects into valid APKs.
+- **Signing**: Integrated keystore management for signing rebuilt APKs, ensuring they are ready for device installation.
 
 ## Prerequisites
 
-Before running **PulseAPK**, ensure you have the following:
-
-1.  **Java Runtime Environment (JRE)**: `apktool` requires Java. Make sure `java` is added to your system `PATH`.
-2.  **Apktool**: Download the latest `apktool.jar` from [ibotpeaches.github.io](https://ibotpeaches.github.io/Apktool/).
-3.  **.NET 8.0 Runtime**: Required to run the application on Windows.
+1.  **Java Runtime Environment (JRE)**: Required for `apktool`. Ensure `java` is in your system `PATH`.
+2.  **Apktool**: Download `apktool.jar` from [ibotpeaches.github.io](https://ibotpeaches.github.io/Apktool/).
+3.  **.NET 8.0 Runtime**: Required to run PulseAPK on Windows.
 
 ## Quick Start Guide
 
 1.  **Download and Build**
-    Clone the repository and build the project:
     ```powershell
     dotnet build
     dotnet run
     ```
 
-2.  **First-Time Setup**
-    - Go to the **Settings** tab.
-    - Click **Browse** under "Apktool Path" and select your downloaded `apktool.jar`.
-    - (*Optional*) Verify that the App detects your Java installation.
+2.  **Setup**
+    - Open **Settings**.
+    - Link your `apktool.jar` path.
+    - PulseAPK will automatically detect your Java installation.
 
-3.  **Decompile an APK**
-    - Drag your `.apk` file into the main window, or click **Browse** to select one.
-    - Choose your desired **Output Folder**.
-    - Configure options like **Decode Resources** or **Decode Sources**.
-    - Click **Run Decompile**.
-    - Monitor progress in the console window below.
+3.  **Analyze an APK**
+    - **Decompile** your target APK using the Decompile tab.
+    - Switch to the **Analysis** tab.
+    - Select your decompiled project folder.
+    - Click **Analyze Smali** to generate a security report.
 
-4.  **Recompile an APK**
-    - Open your edited project folder in the **Compilation** tab.
-    - Specify the output location for the rebuilt APK.
-    - Click **Run Compile** to generate a new APK and follow progress via the console.
+4.  **Modify & Rebuild**
+    - Edit files in your project folder.
+    - Use the **Build** tab to recompile into a new APK.
+    - Use the **Sign** tab to sign the output APK.
 
-## Technical Details
+## Technical Architecture
 
-**PulseAPK** follows the MVVM (Model-View-ViewModel) architectural pattern for clean code separation and testability.
+PulseAPK utilizes a clean MVVM (Model-View-ViewModel) architecture:
 
-### Project Structure
-
-- **PulseAPK.csproj**: Main project file targeting `.NET 8.0-windows`.
-- **Views/**: XAML user controls (`DecompileView`, `SettingsView`, `AboutView`).
-- **ViewModels/**: Logic and data binding (`DecompileViewModel`, `MainViewModel`, etc.).
-- **Services/**: Core logic adapters (`ApktoolRunner`, `SettingsService`, `FilePickerService`).
-- **Utils/**: Helper classes for validation and path management.
-
-### Troubleshooting
-
-- **Crash on Start**: Ensure you have the latest .NET 8 Desktop Runtime installed.
-- **"Apktool not found"**: Go to Settings and ensure the path to `apktool.jar` is correct.
-- **"Java not found"**: Ensure `java.exe` is in your environment variables.
+- **Core**: .NET 8.0, WPF.
+- **Analysis**: Custom Regex-based static analysis engine with hot-reloadable rules.
+- **Services**: dedicated services for Apktool interaction, file system monitoring, and settings management.
 
 ## License
 
-This project is open-source and available under the [MIT License](LICENSE.md).
+This project is open-source and available under the [Apache License 2.0](LICENSE.md).
+
+### Contributing
+
+We welcome contributions! Please note that all contributors must sign our [Contributor License Agreement (CLA)](CLA.md) to ensure that their work can be legally distributed.
+By submitting a pull request, you agree to the terms of the CLA.

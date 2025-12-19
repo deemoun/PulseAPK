@@ -37,4 +37,10 @@
     <Resource Include="Resources\CyberUnpack.png" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="smali_analysis_rules.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
