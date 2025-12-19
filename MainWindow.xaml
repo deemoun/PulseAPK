@@ -27,6 +27,9 @@
         <DataTemplate DataType="{x:Type vm:BuildViewModel}">
             <views:BuildView/>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:AnalyserViewModel}">
+            <views:AnalyserView/>
+        </DataTemplate>
         <DataTemplate DataType="{x:Type vm:AboutViewModel}">
             <views:AboutView/>
         </DataTemplate>
@@ -71,6 +74,20 @@
                                 <Setter Property="Margin" Value="0,0,0,10"/>
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding SelectedMenu}" Value="Build">
+                                        <Setter Property="Background" Value="{StaticResource Brush.AccentCyan}"/>
+                                        <Setter Property="Foreground" Value="Black"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                    <Button Content="{x:Static properties:Resources.MenuAnalyser}" Command="{Binding NavigateToAnalyserCommand}">
+                        <Button.Style>
+                            <Style TargetType="Button" BasedOn="{StaticResource CyberButtonStyle}">
+                                <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                                <Setter Property="Margin" Value="0,0,0,10"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding SelectedMenu}" Value="Analyser">
                                         <Setter Property="Background" Value="{StaticResource Brush.AccentCyan}"/>
                                         <Setter Property="Foreground" Value="Black"/>
                                     </DataTrigger>

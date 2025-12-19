@@ -214,4 +214,58 @@
   <data name="DragDropFolderHint" xml:space="preserve">
     <value>Drag and drop a folder</value>
   </data>
+  <data name="MenuAnalyser" xml:space="preserve">
+    <value>APK Analyser</value>
+  </data>
+  <data name="AnalyserHeader" xml:space="preserve">
+    <value>APK Analyser</value>
+  </data>
+  <data name="RunAnalysis" xml:space="preserve">
+    <value>Run Analysis</value>
+  </data>
+  <data name="AnalysisStarting" xml:space="preserve">
+    <value>Starting analysis...</value>
+  </data>
+  <data name="AnalysisComplete" xml:space="preserve">
+    <value>Analysis complete</value>
+  </data>
+  <data name="AnalysisFailed" xml:space="preserve">
+    <value>Analysis failed</value>
+  </data>
+  <data name="RootCheckFound" xml:space="preserve">
+    <value>Root check: True</value>
+  </data>
+  <data name="RootCheckNotFound" xml:space="preserve">
+    <value>Root check: False</value>
+  </data>
+  <data name="EmulatorCheckFound" xml:space="preserve">
+    <value>Emulator check: True</value>
+  </data>
+  <data name="EmulatorCheckNotFound" xml:space="preserve">
+    <value>Emulator check: False</value>
+  </data>
+  <data name="CredentialsFound" xml:space="preserve">
+    <value>Hardcoded username/password: True</value>
+  </data>
+  <data name="CredentialsNotFound" xml:space="preserve">
+    <value>Hardcoded username/password: False</value>
+  </data>
+  <data name="SqlQueriesFound" xml:space="preserve">
+    <value>SQL queries: True</value>
+  </data>
+  <data name="SqlQueriesNotFound" xml:space="preserve">
+    <value>SQL queries: False</value>
+  </data>
+  <data name="HttpUrlsFound" xml:space="preserve">
+    <value>HTTP/HTTPS paths: True</value>
+  </data>
+  <data name="HttpUrlsNotFound" xml:space="preserve">
+    <value>HTTP/HTTPS paths: False</value>
+  </data>
+  <data name="FoundIn" xml:space="preserve">
+    <value>  Found in:</value>
+  </data>
+  <data name="Error_InvalidSmaliProject" xml:space="preserve">
+    <value>The selected folder does not contain Smali files.</value>
+  </data>
 </root>
