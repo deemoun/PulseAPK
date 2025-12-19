@@ -48,7 +48,7 @@ namespace PulseAPK.ViewModels
                 return;
             }
 
-            SetConsoleLog(Properties.Resources.AnalysisStarting);
+            SetConsoleLog("");
             IsRunning = true;
 
             try
