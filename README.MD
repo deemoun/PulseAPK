@@ -6,6 +6,10 @@
 
 [Watch the demo on Youtube](https://youtu.be/yxqQjJZ4Obc)
 
+You can also perform the Smali code analysis. Just drag and drop the Smali folder into the Analysis tab.
+
+![PulseAPK Smali Analysis](images/apktool_analysis.png)
+
 ## Key Features
 
 - **🛡️ Static Security Analysis**: Automatically scan Smali code for vulnerabilities, including root detection, emulator checks, hardcoded credentials, and insecure SQL/HTTP usage.
