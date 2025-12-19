@@ -11,7 +11,6 @@ public partial class App : Application
 {
     protected override void OnStartup(StartupEventArgs e)
     {
-        object value = Services.AnalysisRulesLoader.InitializeRules();
         base.OnStartup(e);
     }
 }

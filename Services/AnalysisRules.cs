@@ -30,9 +30,6 @@ namespace PulseAPK.Services
     public static class AnalysisRulesLoader
     {
         private const string RulesFileName = "smali_analysis_rules.json";
-        private static readonly object RulesLock = new();
-        private static AnalysisRuleSet? CachedRules;
-        private static FileSystemWatcher? RulesWatcher;
         private const string DefaultRulesJson = """
             {
               "library_paths": [
@@ -185,115 +182,35 @@ namespace PulseAPK.Services
             }
             """;
 
-        public static AnalysisRuleSet LoadRules()
+        /// <summary>
+        /// Loads rules from the file. If missing, it creates it with defaults.
+        /// If valid, returns loaded rules.
+        /// If invalid/error, returns default rules (without overwriting the file, to preserve user edits).
+        /// </summary>
+        public static object InitializeRules()
         {
             var filePath = EnsureRulesFileExists();
-
-            if (!File.Exists(filePath))
-            {
-                throw new FileNotFoundException($"Analysis rules file not found at '{filePath}'.");
-            }
 
             try
             {
-                var rules = LoadRulesFromFile(filePath);
-                lock (RulesLock)
+                var fileContents = File.ReadAllText(filePath);
+                var rules = JsonSerializer.Deserialize<AnalysisRuleSet>(fileContents, new JsonSerializerOptions
                 {
-                    CachedRules = rules;
-                    EnsureRulesWatcher(filePath);
-                }
+                    PropertyNameCaseInsensitive = true
+                });
 
-                return rules;
-            }
-            catch (JsonException ex)
-            {
-                throw new InvalidOperationException($"Invalid analysis rules format: {ex.Message}", ex);
-            }
-        }
-
-        public static AnalysisRuleSet GetRules()
-        {
-            lock (RulesLock)
-            {
-                if (CachedRules != null && File.Exists(EnsureRulesFileExists()))
+                if (rules != null)
                 {
-                    return CachedRules;
+                    return rules;
                 }
             }
-
-            return LoadRules();
-        }
-
-        private static AnalysisRuleSet LoadRulesFromFile(string filePath)
-        {
-            var fileContents = File.ReadAllText(filePath);
-            var rules = JsonSerializer.Deserialize<AnalysisRuleSet>(fileContents, new JsonSerializerOptions
+            catch (Exception)
             {
-                PropertyNameCaseInsensitive = true
-            });
-
-            if (rules == null)
-            {
-                throw new InvalidOperationException("Failed to parse analysis rules file.");
+                // Fallback to defaults.
+                // We intentionally do NOT overwrite the bad file here, so the user can fix their typo.
             }
 
-            return rules;
-        }
-
-        private static void EnsureRulesWatcher(string filePath)
-        {
-            if (RulesWatcher != null)
-            {
-                return;
-            }
-
-            var directory = Path.GetDirectoryName(filePath);
-            if (string.IsNullOrWhiteSpace(directory) || !Directory.Exists(directory))
-            {
-                return;
-            }
-
-            RulesWatcher = new FileSystemWatcher(directory, RulesFileName)
-            {
-                NotifyFilter = NotifyFilters.FileName | NotifyFilters.LastWrite | NotifyFilters.CreationTime
-            };
-
-            RulesWatcher.Deleted += (_, _) => ReloadRulesIfMissing();
-            RulesWatcher.Renamed += (_, _) => ReloadRulesIfMissing();
-            RulesWatcher.Created += (_, _) => ReloadRules();
-            RulesWatcher.Changed += (_, _) => ReloadRules();
-            RulesWatcher.EnableRaisingEvents = true;
-        }
-
-        private static void ReloadRulesIfMissing()
-        {
-            var filePath = EnsureRulesFileExists();
-            if (File.Exists(filePath))
-            {
-                ReloadRules();
-            }
-        }
-
-        private static void ReloadRules()
-        {
-            var filePath = EnsureRulesFileExists();
-            if (!File.Exists(filePath))
-            {
-                return;
-            }
-
-            try
-            {
-                var rules = LoadRulesFromFile(filePath);
-                lock (RulesLock)
-                {
-                    CachedRules = rules;
-                }
-            }
-            catch (JsonException)
-            {
-                // Ignore transient parse failures while the file is being edited.
-            }
+            return GetDefaultRuleSet();
         }
 
         private static string EnsureRulesFileExists()
@@ -306,49 +223,40 @@ namespace PulseAPK.Services
                 return directPath;
             }
 
-            // When running from the build output, walk up to the project root.
+            // When running from the build output, walk up to the project root for development convenience.
             var projectRootPath = Path.GetFullPath(Path.Combine(baseDirectory, "..", "..", "..", RulesFileName));
             if (File.Exists(projectRootPath))
             {
-                File.Copy(projectRootPath, directPath);
-                return directPath;
+                try
+                {
+                    File.Copy(projectRootPath, directPath);
+                    return directPath;
+                }
+                catch
+                {
+                    // Ignore copy errors, fall through to creation
+                }
             }
 
-            File.WriteAllText(directPath, DefaultRulesJson);
+            try
+            {
+                File.WriteAllText(directPath, DefaultRulesJson);
+            }
+            catch
+            {
+                // Ignore write errors (e.g. permissions), we will just return the path and fail to read later, falling back to defaults in memory.
+            }
+
             return directPath;
         }
 
-        internal static object InitializeRules()
+        private static AnalysisRuleSet GetDefaultRuleSet()
         {
-            try
+            return JsonSerializer.Deserialize<AnalysisRuleSet>(DefaultRulesJson, new JsonSerializerOptions
             {
-                return LoadRules();
-            }
-            catch (Exception ex) when (ex is JsonException or InvalidOperationException or IOException or UnauthorizedAccessException)
-            {
-                var fallbackRules = JsonSerializer.Deserialize<AnalysisRuleSet>(DefaultRulesJson, new JsonSerializerOptions
-                {
-                    PropertyNameCaseInsensitive = true
-                }) ?? new AnalysisRuleSet();
-
-                var filePath = EnsureRulesFileExists();
-                try
-                {
-                    File.WriteAllText(filePath, DefaultRulesJson);
-                }
-                catch (Exception writeEx) when (writeEx is IOException or UnauthorizedAccessException)
-                {
-                    // Ignore failures to persist fallback rules.
-                }
-
-                lock (RulesLock)
-                {
-                    CachedRules = fallbackRules;
-                    EnsureRulesWatcher(filePath);
-                }
-
-                return fallbackRules;
-            }
+                PropertyNameCaseInsensitive = true
+            }) ?? new AnalysisRuleSet();
         }
     }
 }
+
