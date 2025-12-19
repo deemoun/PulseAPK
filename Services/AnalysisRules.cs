@@ -30,6 +30,9 @@ namespace PulseAPK.Services
     public static class AnalysisRulesLoader
     {
         private const string RulesFileName = "smali_analysis_rules.json";
+        private static readonly object RulesLock = new();
+        private static AnalysisRuleSet? CachedRules;
+        private static FileSystemWatcher? RulesWatcher;
         private const string DefaultRulesJson = """
             {
               "library_paths": [
@@ -193,15 +196,11 @@ namespace PulseAPK.Services
 
             try
             {
-                var fileContents = File.ReadAllText(filePath);
-                var rules = JsonSerializer.Deserialize<AnalysisRuleSet>(fileContents, new JsonSerializerOptions
+                var rules = LoadRulesFromFile(filePath);
+                lock (RulesLock)
                 {
-                    PropertyNameCaseInsensitive = true
-                });
-
-                if (rules == null)
-                {
-                    throw new InvalidOperationException("Failed to parse analysis rules file.");
+                    CachedRules = rules;
+                    EnsureRulesWatcher(filePath);
                 }
 
                 return rules;
@@ -209,6 +208,91 @@ namespace PulseAPK.Services
             catch (JsonException ex)
             {
                 throw new InvalidOperationException($"Invalid analysis rules format: {ex.Message}", ex);
+            }
+        }
+
+        public static AnalysisRuleSet GetRules()
+        {
+            lock (RulesLock)
+            {
+                if (CachedRules != null && File.Exists(EnsureRulesFileExists()))
+                {
+                    return CachedRules;
+                }
+            }
+
+            return LoadRules();
+        }
+
+        private static AnalysisRuleSet LoadRulesFromFile(string filePath)
+        {
+            var fileContents = File.ReadAllText(filePath);
+            var rules = JsonSerializer.Deserialize<AnalysisRuleSet>(fileContents, new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            });
+
+            if (rules == null)
+            {
+                throw new InvalidOperationException("Failed to parse analysis rules file.");
+            }
+
+            return rules;
+        }
+
+        private static void EnsureRulesWatcher(string filePath)
+        {
+            if (RulesWatcher != null)
+            {
+                return;
+            }
+
+            var directory = Path.GetDirectoryName(filePath);
+            if (string.IsNullOrWhiteSpace(directory) || !Directory.Exists(directory))
+            {
+                return;
+            }
+
+            RulesWatcher = new FileSystemWatcher(directory, RulesFileName)
+            {
+                NotifyFilter = NotifyFilters.FileName | NotifyFilters.LastWrite | NotifyFilters.CreationTime
+            };
+
+            RulesWatcher.Deleted += (_, _) => ReloadRulesIfMissing();
+            RulesWatcher.Renamed += (_, _) => ReloadRulesIfMissing();
+            RulesWatcher.Created += (_, _) => ReloadRules();
+            RulesWatcher.Changed += (_, _) => ReloadRules();
+            RulesWatcher.EnableRaisingEvents = true;
+        }
+
+        private static void ReloadRulesIfMissing()
+        {
+            var filePath = EnsureRulesFileExists();
+            if (File.Exists(filePath))
+            {
+                ReloadRules();
+            }
+        }
+
+        private static void ReloadRules()
+        {
+            var filePath = EnsureRulesFileExists();
+            if (!File.Exists(filePath))
+            {
+                return;
+            }
+
+            try
+            {
+                var rules = LoadRulesFromFile(filePath);
+                lock (RulesLock)
+                {
+                    CachedRules = rules;
+                }
+            }
+            catch (JsonException)
+            {
+                // Ignore transient parse failures while the file is being edited.
             }
         }
 
