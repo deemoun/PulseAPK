@@ -224,33 +224,6 @@ namespace PulseAPK.Services
             return LoadRules();
         }
 
-        public static void InitializeRules()
-        {
-            var filePath = EnsureRulesFileExists();
-            if (!File.Exists(filePath))
-            {
-                return;
-            }
-
-            lock (RulesLock)
-            {
-                EnsureRulesWatcher(filePath);
-            }
-
-            try
-            {
-                var rules = LoadRulesFromFile(filePath);
-                lock (RulesLock)
-                {
-                    CachedRules = rules;
-                }
-            }
-            catch (JsonException)
-            {
-                // Ignore invalid JSON on startup; the user may be editing the file.
-            }
-        }
-
         private static AnalysisRuleSet LoadRulesFromFile(string filePath)
         {
             var fileContents = File.ReadAllText(filePath);
