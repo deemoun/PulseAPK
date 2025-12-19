@@ -2,13 +2,17 @@
 
 **PulseAPK** is a professional-grade GUI for Android reverse engineering and security analysis, built with WPF and .NET 8. It combines the raw power of `apktool` with advanced static analysis capabilities, wrapped in a high-performance, cyberpunk-inspired interface. PulseAPK streamlines the entire workflow from decompilation to analysis, rebuilding, and signing.
 
-![PulseAPK UI](images/pulse_apk_1_0_1.png)
-
 [Watch the demo on Youtube](https://youtu.be/yxqQjJZ4Obc)
+
+![PulseAPK UI](images/apktool_decompile.png)
 
 You can also perform the Smali code analysis. Just drag and drop the Smali folder into the Analysis tab.
 
 ![PulseAPK Smali Analysis](images/apktool_analysis.png)
+
+If you want to build (and sign, if necessary) the Smali folder - use the "Build APK" section.
+
+![PulseAPK Build APK](images/apktool_build_apk.png)
 
 ## Key Features
 
