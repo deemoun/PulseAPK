@@ -60,102 +60,137 @@ namespace PulseAPK.ViewModels
                 AppendLog("");
 
                 // Root Check Results
-                if (result.RootChecks.Any())
+                if (result.ActiveCategories.Contains("root_check"))
                 {
-                    AppendLog(Properties.Resources.RootCheckFound);
-                    AppendLog(Properties.Resources.FoundIn);
-                    foreach (var finding in result.RootChecks.Take(10)) // Limit to first 10 to avoid clutter
+                    if (result.RootChecks.Any())
                     {
-                        AppendLog($"  - {GetRelativePath(finding.FilePath, ProjectPath)} (Line {finding.LineNumber})");
+                        AppendLog(Properties.Resources.RootCheckFound);
+                        AppendLog(Properties.Resources.FoundIn);
+                        foreach (var finding in result.RootChecks.Take(10))
+                        {
+                            AppendLog($"  - {GetRelativePath(finding.FilePath, ProjectPath)} (Line {finding.LineNumber})");
+                        }
+                        if (result.RootChecks.Count > 10)
+                        {
+                            AppendLog($"  ... and {result.RootChecks.Count - 10} more");
+                        }
                     }
-                    if (result.RootChecks.Count > 10)
+                    else
                     {
-                        AppendLog($"  ... and {result.RootChecks.Count - 10} more");
+                        AppendLog(Properties.Resources.RootCheckNotFound);
                     }
                 }
                 else
                 {
-                    AppendLog(Properties.Resources.RootCheckNotFound);
+                    AppendLog("Root Check: N/A");
                 }
                 AppendLog("");
 
                 // Emulator Check Results
-                if (result.EmulatorChecks.Any())
+                if (result.ActiveCategories.Contains("emulator_check"))
                 {
-                    AppendLog(Properties.Resources.EmulatorCheckFound);
-                    AppendLog(Properties.Resources.FoundIn);
-                    foreach (var finding in result.EmulatorChecks.Take(10))
+                    if (result.EmulatorChecks.Any())
                     {
-                        AppendLog($"  - {GetRelativePath(finding.FilePath, ProjectPath)} (Line {finding.LineNumber})");
+                        AppendLog(Properties.Resources.EmulatorCheckFound);
+                        AppendLog(Properties.Resources.FoundIn);
+                        foreach (var finding in result.EmulatorChecks.Take(10))
+                        {
+                            AppendLog($"  - {GetRelativePath(finding.FilePath, ProjectPath)} (Line {finding.LineNumber})");
+                        }
+                        if (result.EmulatorChecks.Count > 10)
+                        {
+                            AppendLog($"  ... and {result.EmulatorChecks.Count - 10} more");
+                        }
                     }
-                    if (result.EmulatorChecks.Count > 10)
+                    else
                     {
-                        AppendLog($"  ... and {result.EmulatorChecks.Count - 10} more");
+                        AppendLog(Properties.Resources.EmulatorCheckNotFound);
                     }
                 }
                 else
                 {
-                    AppendLog(Properties.Resources.EmulatorCheckNotFound);
+                    AppendLog("Emulator Check: N/A");
                 }
                 AppendLog("");
 
                 // Hardcoded Credentials Results
-                if (result.HardcodedCredentials.Any())
+                if (result.ActiveCategories.Contains("hardcoded_creds"))
                 {
-                    AppendLog(Properties.Resources.CredentialsFound);
-                    AppendLog(Properties.Resources.FoundIn);
-                    foreach (var finding in result.HardcodedCredentials.Take(10))
+                    if (result.HardcodedCredentials.Any())
                     {
-                        AppendLog($"  - {GetRelativePath(finding.FilePath, ProjectPath)} (Line {finding.LineNumber})");
+                        AppendLog(Properties.Resources.CredentialsFound);
+                        AppendLog(Properties.Resources.FoundIn);
+                        foreach (var finding in result.HardcodedCredentials.Take(10))
+                        {
+                            AppendLog($"  - {GetRelativePath(finding.FilePath, ProjectPath)} (Line {finding.LineNumber})");
+                        }
+                        if (result.HardcodedCredentials.Count > 10)
+                        {
+                            AppendLog($"  ... and {result.HardcodedCredentials.Count - 10} more");
+                        }
                     }
-                    if (result.HardcodedCredentials.Count > 10)
+                    else
                     {
-                        AppendLog($"  ... and {result.HardcodedCredentials.Count - 10} more");
+                        AppendLog(Properties.Resources.CredentialsNotFound);
                     }
                 }
                 else
                 {
-                    AppendLog(Properties.Resources.CredentialsNotFound);
+                    AppendLog("Hardcoded Credentials: N/A");
                 }
                 AppendLog("");
 
                 // SQL Queries Results
-                if (result.SqlQueries.Any())
+                if (result.ActiveCategories.Contains("sql_query"))
                 {
-                    AppendLog(Properties.Resources.SqlQueriesFound);
-                    AppendLog(Properties.Resources.FoundIn);
-                    foreach (var finding in result.SqlQueries.Take(10))
+                    if (result.SqlQueries.Any())
                     {
-                        AppendLog($"  - {GetRelativePath(finding.FilePath, ProjectPath)} (Line {finding.LineNumber})");
+                        AppendLog(Properties.Resources.SqlQueriesFound);
+                        AppendLog(Properties.Resources.FoundIn);
+                        foreach (var finding in result.SqlQueries.Take(10))
+                        {
+                            AppendLog($"  - {GetRelativePath(finding.FilePath, ProjectPath)} (Line {finding.LineNumber})");
+                        }
+                        if (result.SqlQueries.Count > 10)
+                        {
+                            AppendLog($"  ... and {result.SqlQueries.Count - 10} more");
+                        }
                     }
-                    if (result.SqlQueries.Count > 10)
+                    else
                     {
-                        AppendLog($"  ... and {result.SqlQueries.Count - 10} more");
+                        AppendLog(Properties.Resources.SqlQueriesNotFound);
                     }
                 }
                 else
                 {
-                    AppendLog(Properties.Resources.SqlQueriesNotFound);
+                    AppendLog("SQL Queries: N/A");
                 }
                 AppendLog("");
 
                 // HTTP/HTTPS URLs Results
-                if (result.HttpUrls.Any())
+                if (result.ActiveCategories.Contains("http_url"))
                 {
-                    AppendLog(Properties.Resources.HttpUrlsFound);
-                    AppendLog(Properties.Resources.FoundIn);
-                    foreach (var finding in result.HttpUrls.Take(10))
+                    if (result.HttpUrls.Any())
                     {
-                        AppendLog($"  - {GetRelativePath(finding.FilePath, ProjectPath)} (Line {finding.LineNumber})");
+                        AppendLog(Properties.Resources.HttpUrlsFound);
+                        AppendLog(Properties.Resources.FoundIn);
+                        foreach (var finding in result.HttpUrls.Take(10))
+                        {
+                            AppendLog($"  - {GetRelativePath(finding.FilePath, ProjectPath)} (Line {finding.LineNumber})");
+                        }
+                        if (result.HttpUrls.Count > 10)
+                        {
+                            AppendLog($"  ... and {result.HttpUrls.Count - 10} more");
+                        }
                     }
-                    if (result.HttpUrls.Count > 10)
+                    else
                     {
-                        AppendLog($"  ... and {result.HttpUrls.Count - 10} more");
+                        AppendLog(Properties.Resources.HttpUrlsNotFound);
                     }
                 }
                 else
                 {
-                    AppendLog(Properties.Resources.HttpUrlsNotFound);
+                    AppendLog("HTTP/HTTPS URLs: N/A");
                 }
 
                 AppendLog("");

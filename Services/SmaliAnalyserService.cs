@@ -43,6 +43,10 @@ namespace PulseAPK.Services
             if (rules.Rules.Count > 0)
             {
                 logCallback?.Invoke($"Loaded {rules.Rules.Count} analysis categories.");
+                foreach(var rule in rules.Rules)
+                {
+                    result.ActiveCategories.Add(rule.Category);
+                }
             }
             logCallback?.Invoke("");
 
@@ -165,6 +169,7 @@ namespace PulseAPK.Services
 
     public class AnalysisResult
     {
+        public HashSet<string> ActiveCategories { get; set; } = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         public List<Finding> RootChecks { get; set; } = new List<Finding>();
         public List<Finding> EmulatorChecks { get; set; } = new List<Finding>();
         public List<Finding> HardcodedCredentials { get; set; } = new List<Finding>();
