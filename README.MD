@@ -21,7 +21,8 @@ Before running **PulseAPK**, ensure you have the following:
 
 1.  **Java Runtime Environment (JRE)**: `apktool` requires Java. Make sure `java` is added to your system `PATH`.
 2.  **Apktool**: Download the latest `apktool.jar` from [ibotpeaches.github.io](https://ibotpeaches.github.io/Apktool/).
-3.  **.NET 8.0 Runtime**: Required to run the application on Windows.
+3.  **Ubersign (Uber APK Signer)**: Required for signing rebuilt APKs. Download the latest `uber-apk-signer.jar` from the [GitHub releases](https://github.com/patrickfav/uber-apk-signer/releases).
+4.  **.NET 8.0 Runtime**: Required to run the application on Windows.
 
 ## Quick Start Guide
 
