@@ -2,7 +2,7 @@
 
 **PulseAPK** is a professional-grade GUI for Android reverse engineering and security analysis, built with WPF and .NET 8. It combines the raw power of `apktool` with advanced static analysis capabilities, wrapped in a high-performance, cyberpunk-inspired interface. PulseAPK streamlines the entire workflow from decompilation to analysis, rebuilding, and signing.
 
-[Watch the demo on Youtube](https://youtu.be/yxqQjJZ4Obc)
+[Watch the demo on YouTube](https://youtu.be/Mkdt0c-7Wwg)
 
 ![PulseAPK UI](images/apktool_decompile.png)
 
