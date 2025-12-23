@@ -43,7 +43,8 @@ PulseAPK includes a built-in static analyzer that scans decompiled code for comm
 
 1.  **Java Runtime Environment (JRE)**: Required for `apktool`. Ensure `java` is in your system `PATH`.
 2.  **Apktool**: Download `apktool.jar` from [ibotpeaches.github.io](https://ibotpeaches.github.io/Apktool/).
-3.  **.NET 8.0 Runtime**: Required to run PulseAPK on Windows.
+3.  **Ubersign (Uber APK Signer)**: Required for signing rebuilt APKs. Download the latest `uber-apk-signer.jar` from the [GitHub releases](https://github.com/patrickfav/uber-apk-signer/releases).
+4.  **.NET 8.0 Runtime**: Required to run PulseAPK on Windows.
 
 ## Quick Start Guide
 
