@@ -53,11 +53,30 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <TextBlock Text="Console log" Foreground="{StaticResource Brush.TextPrimary}" Margin="0,0,0,10"/>
+                
+                <!-- Console Header -->
+                <Grid Margin="0,0,0,10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Console log" Foreground="{StaticResource Brush.TextPrimary}" VerticalAlignment="Center"/>
+                </Grid>
+
                 <ScrollViewer Grid.Row="1">
                     <TextBox Text="{Binding ConsoleLog}" Foreground="{StaticResource Brush.TextSecondary}" FontFamily="Consolas" IsReadOnly="True" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" Background="Transparent" BorderThickness="0"/>
                 </ScrollViewer>
+                
+                <!-- Save Report Button -->
+                <Button Grid.Row="2" 
+                        Content="Save report" 
+                        Command="{Binding SaveReportCommand}"
+                        Style="{StaticResource CyberButtonStyle}" 
+                        HorizontalAlignment="Right" 
+                        Margin="0,10,0,0"
+                        Width="120" Height="40"/>
             </Grid>
         </Border>
     </Grid>

@@ -25,6 +25,7 @@ namespace PulseAPK.ViewModels
         private bool _isRunning;
 
         private readonly SmaliAnalyserService _analyserService;
+        private readonly ReportService _reportService;
 
         public bool IsHintVisible => string.IsNullOrEmpty(ProjectPath);
         public bool HasProject => !string.IsNullOrWhiteSpace(ProjectPath);
@@ -32,6 +33,7 @@ namespace PulseAPK.ViewModels
         public AnalyserViewModel()
         {
             _analyserService = new SmaliAnalyserService();
+            _reportService = new ReportService();
         }
 
         partial void OnProjectPathChanged(string value)
@@ -254,6 +256,33 @@ namespace PulseAPK.ViewModels
             catch
             {
                 return fullPath;
+            }
+        }
+
+        [RelayCommand]
+        private async Task SaveReport()
+        {
+            if (string.IsNullOrWhiteSpace(ConsoleLog) || ConsoleLog == Properties.Resources.WaitingForCommand)
+            {
+                MessageBoxUtils.ShowWarning("There is no report to save.", "Empty Report");
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(ProjectPath))
+            {
+                MessageBoxUtils.ShowWarning("No project loaded.", "Save Failed");
+                return;
+            }
+
+            try
+            {
+                string folderName = new DirectoryInfo(ProjectPath).Name;
+                string filePath = await _reportService.SaveReportAsync(ConsoleLog, folderName);
+                MessageBoxUtils.ShowInfo($"Report saved successfully to:\n{filePath}", "Report Saved");
+            }
+            catch (Exception ex)
+            {
+                MessageBoxUtils.ShowError($"Failed to save report: {ex.Message}");
             }
         }
     }
