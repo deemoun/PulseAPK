@@ -18,6 +18,7 @@ namespace PulseAPK.ViewModels
         private string _projectPath;
 
         [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(SaveReportCommand))]
         private string _consoleLog = Properties.Resources.WaitingForCommand;
 
         [ObservableProperty]
@@ -259,15 +260,9 @@ namespace PulseAPK.ViewModels
             }
         }
 
-        [RelayCommand]
+        [RelayCommand(CanExecute = nameof(CanSaveReport))]
         private async Task SaveReport()
         {
-            if (string.IsNullOrWhiteSpace(ConsoleLog) || ConsoleLog == Properties.Resources.WaitingForCommand)
-            {
-                MessageBoxUtils.ShowWarning("There is no report to save.", "Empty Report");
-                return;
-            }
-
             if (string.IsNullOrWhiteSpace(ProjectPath))
             {
                 MessageBoxUtils.ShowWarning("No project loaded.", "Save Failed");
@@ -284,6 +279,11 @@ namespace PulseAPK.ViewModels
             {
                 MessageBoxUtils.ShowError($"Failed to save report: {ex.Message}");
             }
+        }
+
+        private bool CanSaveReport()
+        {
+            return !string.IsNullOrWhiteSpace(ConsoleLog) && ConsoleLog != Properties.Resources.WaitingForCommand;
         }
     }
 }

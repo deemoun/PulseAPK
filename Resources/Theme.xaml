@@ -58,6 +58,14 @@
                         <Trigger Property="IsPressed" Value="True">
                             <Setter Property="Background" Value="#3300F0FF"/>
                         </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.4"/>
+                            <Setter Property="Effect">
+                                <Setter.Value>
+                                    <DropShadowEffect Color="{StaticResource Color.NeonCyan}" BlurRadius="0" ShadowDepth="0" Opacity="0"/>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
