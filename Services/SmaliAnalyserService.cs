@@ -50,6 +50,8 @@ namespace PulseAPK.Services
             }
             logCallback?.Invoke("");
 
+            var regexCache = BuildRegexCache(rules, logCallback);
+
             // Run all detection methods with progress reporting
             await Task.Run(() =>
             {
@@ -64,7 +66,7 @@ namespace PulseAPK.Services
                         var lines = File.ReadAllLines(file);
                         
                         // Run all detections on this file
-                        AnalyzeFile(file, lines, result, rules);
+                        AnalyzeFile(file, lines, result, rules, regexCache);
                         
                         processedFiles++;
                         
@@ -84,7 +86,7 @@ namespace PulseAPK.Services
             return result;
         }
 
-        private void AnalyzeFile(string filePath, string[] lines, AnalysisResult result, AnalysisRuleSet rules)
+        private void AnalyzeFile(string filePath, string[] lines, AnalysisResult result, AnalysisRuleSet rules, Dictionary<int, List<Regex>> regexCache)
         {
             // Skip library classes
             if (IsLibraryClass(filePath, rules.LibraryPaths))
@@ -96,9 +98,15 @@ namespace PulseAPK.Services
             {
                 var line = lines[i];
 
-                foreach (var rule in rules.Rules)
+                for (var ruleIndex = 0; ruleIndex < rules.Rules.Count; ruleIndex++)
                 {
-                    if (CheckPatterns(line, rule.RegexPatterns))
+                    var rule = rules.Rules[ruleIndex];
+                    if (!regexCache.TryGetValue(ruleIndex, out var cachedPatterns))
+                    {
+                        continue;
+                    }
+
+                    if (CheckPatterns(line, cachedPatterns))
                     {
                         var finding = new Finding
                         {
@@ -147,20 +155,40 @@ namespace PulseAPK.Services
             return false;
         }
 
-        private bool CheckPatterns(string line, List<string> patterns)
+        private Dictionary<int, List<Regex>> BuildRegexCache(AnalysisRuleSet rules, Action<string> logCallback)
+        {
+            var cache = new Dictionary<int, List<Regex>>();
+
+            for (var i = 0; i < rules.Rules.Count; i++)
+            {
+                var rule = rules.Rules[i];
+                var compiledPatterns = new List<Regex>();
+
+                foreach (var pattern in rule.RegexPatterns)
+                {
+                    try
+                    {
+                        compiledPatterns.Add(new Regex(pattern, RegexOptions.IgnoreCase | RegexOptions.Compiled));
+                    }
+                    catch (ArgumentException ex)
+                    {
+                        logCallback?.Invoke($"Warning: Skipping invalid regex pattern '{pattern}' in category '{rule.Category}': {ex.Message}");
+                    }
+                }
+
+                cache[i] = compiledPatterns;
+            }
+
+            return cache;
+        }
+
+        private bool CheckPatterns(string line, List<Regex> patterns)
         {
             foreach (var pattern in patterns)
             {
-                try
+                if (pattern.IsMatch(line))
                 {
-                    if (Regex.IsMatch(line, pattern, RegexOptions.IgnoreCase))
-                    {
-                        return true;
-                    }
-                }
-                catch
-                {
-                    // Skip invalid regex patterns silently
+                    return true;
                 }
             }
             return false;
