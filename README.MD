@@ -57,7 +57,7 @@ PulseAPK includes a built-in static analyzer that scans decompiled code for comm
 2.  **Setup**
     - Open **Settings**.
     - Link your `apktool.jar` path.
-    - PulseAPK will automatically detect your Java installation.
+    - PulseAPK will automatically detect your Java installation based on environment variables.
 
 3.  **Analyze an APK**
     - **Decompile** your target APK using the Decompile tab.
