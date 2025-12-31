@@ -1,0 +1,66 @@
+name: Bump patch version
+
+on:
+  workflow_dispatch:
+    inputs:
+      base-branch:
+        description: "Base branch to create the version bump PR against"
+        required: false
+        default: "main"
+
+jobs:
+  bump-version:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.base-branch || github.ref }}
+
+      - name: Calculate next patch version
+        id: version
+        shell: bash
+        run: |
+          current=$(grep -Po '(?<=<Version>)[^<]+' PulseAPK.csproj)
+          IFS='.' read -r major minor patch <<< "$current"
+          next_patch=$((patch + 1))
+          next_version="${major}.${minor}.${next_patch}"
+
+          echo "current=${current}" >> "$GITHUB_OUTPUT"
+          echo "next=${next_version}" >> "$GITHUB_OUTPUT"
+
+      - name: Update project version
+        shell: bash
+        run: |
+          next="${{ steps.version.outputs.next }}"
+          current="${{ steps.version.outputs.current }}"
+          sed -i "s#<Version>${current}</Version>#<Version>${next}</Version>#" PulseAPK.csproj
+
+      - name: Update About window fallback version
+        shell: python
+        run: |
+          from pathlib import Path
+
+          next_version = "${{ steps.version.outputs.next }}"
+          current_version = "${{ steps.version.outputs.current }}"
+
+          about_vm = Path("ViewModels/AboutViewModel.cs")
+          content = about_vm.read_text()
+          updated = content.replace(f'?? "{current_version}"', f'?? "{next_version}"')
+          if content == updated:
+            raise SystemExit("Failed to update AboutViewModel fallback version")
+          about_vm.write_text(updated)
+
+      - name: Create version bump pull request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "chore: bump version to ${{ steps.version.outputs.next }}"
+          title: "chore: bump version to ${{ steps.version.outputs.next }}"
+          body: |
+            Automated patch version bump.
+
+            * Previous version: ${{ steps.version.outputs.current }}
+            * New version: ${{ steps.version.outputs.next }}
+          branch: "chore/bump-version-${{ steps.version.outputs.next }}"
+          base: ${{ github.event.inputs.base-branch || github.ref_name }}
