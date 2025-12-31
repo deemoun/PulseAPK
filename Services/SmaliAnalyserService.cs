@@ -51,7 +51,7 @@ namespace PulseAPK.Services
 
             var regexCache = BuildRegexCache(rules, logCallback);
             var categoryOrder = BuildCategoryOrder(rules, regexCache);
-            var deduplicationSet = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            var normalizedProjectRoot = Path.GetFullPath(projectPath).Replace('\\', '/').TrimEnd('/') + "/";
 
             // Run all detection methods with progress reporting
             await Task.Run(() =>
@@ -65,7 +65,7 @@ namespace PulseAPK.Services
                     try
                     {
                         // Run all detections on this file
-                        AnalyzeFile(file, result, rules, regexCache, categoryOrder, deduplicationSet);
+                        AnalyzeFile(file, result, rules, regexCache, categoryOrder, normalizedProjectRoot);
                         
                         processedFiles++;
                         
@@ -91,21 +91,31 @@ namespace PulseAPK.Services
             AnalysisRuleSet rules,
             Dictionary<string, List<Regex>> regexCache,
             IReadOnlyList<string> categoryOrder,
-            HashSet<string> deduplicationSet)
+            string projectRoot)
         {
             // Skip library classes
-            if (IsLibraryClass(filePath, rules.LibraryPaths))
+            if (IsLibraryClass(filePath, projectRoot, rules.LibraryPaths))
             {
                 return;
             }
 
             var lineNumber = 0;
+            var deduplicationSet = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            var enableCategoryEarlyExit = false;
+            var detectedCategories = enableCategoryEarlyExit
+                ? new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+                : null;
             foreach (var line in File.ReadLines(filePath))
             {
                 lineNumber++;
 
                 foreach (var category in categoryOrder)
                 {
+                    if (detectedCategories != null && detectedCategories.Contains(category))
+                    {
+                        continue;
+                    }
+
                     if (!regexCache.TryGetValue(category, out var cachedPatterns))
                     {
                         continue;
@@ -114,23 +124,69 @@ namespace PulseAPK.Services
                     if (CheckPatterns(line, cachedPatterns))
                     {
                         AddFinding(category, filePath, lineNumber, line, result, deduplicationSet);
+
+                        if (detectedCategories != null)
+                        {
+                            detectedCategories.Add(category);
+                        }
                     }
                 }
             }
         }
 
-        private bool IsLibraryClass(string filePath, List<string> libraryPaths)
+        private bool IsLibraryClass(string filePath, string projectRoot, List<string> libraryPaths)
         {
             // Normalize path separators for comparison
-            var normalizedPath = filePath.Replace("/", "\\").ToLowerInvariant();
-            
+            var normalizedPath = Path.GetFullPath(filePath).Replace('\\', '/');
+            var normalizedRoot = projectRoot;
+            var relativePath = normalizedPath.StartsWith(normalizedRoot, StringComparison.OrdinalIgnoreCase)
+                ? normalizedPath.Substring(normalizedRoot.Length)
+                : normalizedPath;
+            var pathSegments = relativePath.Split('/', StringSplitOptions.RemoveEmptyEntries);
+
             foreach (var pattern in libraryPaths)
             {
-                if (normalizedPath.Contains(pattern.ToLowerInvariant()))
+                var normalizedPattern = pattern.Replace('\\', '/').Trim('/');
+                if (string.IsNullOrWhiteSpace(normalizedPattern))
+                {
+                    continue;
+                }
+
+                var patternSegments = normalizedPattern.Split('/', StringSplitOptions.RemoveEmptyEntries);
+                if (ContainsSegmentSequence(pathSegments, patternSegments))
                 {
                     return true;
                 }
             }
+
+            return false;
+        }
+
+        private bool ContainsSegmentSequence(IReadOnlyList<string> pathSegments, string[] patternSegments)
+        {
+            if (patternSegments.Length == 0)
+            {
+                return false;
+            }
+
+            for (var i = 0; i <= pathSegments.Count - patternSegments.Length; i++)
+            {
+                var match = true;
+                for (var j = 0; j < patternSegments.Length; j++)
+                {
+                    if (!string.Equals(pathSegments[i + j], patternSegments[j], StringComparison.OrdinalIgnoreCase))
+                    {
+                        match = false;
+                        break;
+                    }
+                }
+
+                if (match)
+                {
+                    return true;
+                }
+            }
+
             return false;
         }
 
