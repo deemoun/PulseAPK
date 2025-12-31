@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -28,7 +27,7 @@ namespace PulseAPK.Services
             catch (Exception ex)
             {
                 logCallback?.Invoke($"Warning: Failed to load custom rules: {ex.Message}. Using defaults.");
-                rules = (AnalysisRuleSet)AnalysisRulesLoader.InitializeRules(); // This might retry or just return safe defaults if designed so
+                rules = (AnalysisRuleSet)AnalysisRulesLoader.InitializeRules();
             }
 
             // Find all .smali files recursively
@@ -43,7 +42,7 @@ namespace PulseAPK.Services
             if (rules.Rules.Count > 0)
             {
                 logCallback?.Invoke($"Loaded {rules.Rules.Count} analysis categories.");
-                foreach(var rule in rules.Rules)
+                foreach (var rule in rules.Rules)
                 {
                     result.ActiveCategories.Add(rule.Category);
                 }
@@ -51,6 +50,8 @@ namespace PulseAPK.Services
             logCallback?.Invoke("");
 
             var regexCache = BuildRegexCache(rules, logCallback);
+            var categoryOrder = BuildCategoryOrder(rules, regexCache);
+            var deduplicationSet = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
             // Run all detection methods with progress reporting
             await Task.Run(() =>
@@ -63,10 +64,8 @@ namespace PulseAPK.Services
                 {
                     try
                     {
-                        var lines = File.ReadAllLines(file);
-                        
                         // Run all detections on this file
-                        AnalyzeFile(file, lines, result, rules, regexCache);
+                        AnalyzeFile(file, result, rules, regexCache, categoryOrder, deduplicationSet);
                         
                         processedFiles++;
                         
@@ -86,7 +85,13 @@ namespace PulseAPK.Services
             return result;
         }
 
-        private void AnalyzeFile(string filePath, string[] lines, AnalysisResult result, AnalysisRuleSet rules, Dictionary<int, List<Regex>> regexCache)
+        private void AnalyzeFile(
+            string filePath,
+            AnalysisResult result,
+            AnalysisRuleSet rules,
+            Dictionary<string, List<Regex>> regexCache,
+            IReadOnlyList<string> categoryOrder,
+            HashSet<string> deduplicationSet)
         {
             // Skip library classes
             if (IsLibraryClass(filePath, rules.LibraryPaths))
@@ -94,47 +99,21 @@ namespace PulseAPK.Services
                 return;
             }
 
-            for (int i = 0; i < lines.Length; i++)
+            var lineNumber = 0;
+            foreach (var line in File.ReadLines(filePath))
             {
-                var line = lines[i];
+                lineNumber++;
 
-                for (var ruleIndex = 0; ruleIndex < rules.Rules.Count; ruleIndex++)
+                foreach (var category in categoryOrder)
                 {
-                    var rule = rules.Rules[ruleIndex];
-                    if (!regexCache.TryGetValue(ruleIndex, out var cachedPatterns))
+                    if (!regexCache.TryGetValue(category, out var cachedPatterns))
                     {
                         continue;
                     }
 
                     if (CheckPatterns(line, cachedPatterns))
                     {
-                        var finding = new Finding
-                        {
-                            FilePath = filePath,
-                            LineNumber = i + 1,
-                            Context = line.Trim()
-                        };
-
-                        // Map known categories to the specific result lists
-                        switch (rule.Category.ToLowerInvariant())
-                        {
-                            case "root_check":
-                                result.RootChecks.Add(finding);
-                                break;
-                            case "emulator_check":
-                                result.EmulatorChecks.Add(finding);
-                                break;
-                            case "hardcoded_creds":
-                                result.HardcodedCredentials.Add(finding);
-                                break;
-                            case "sql_query":
-                                result.SqlQueries.Add(finding);
-                                break;
-                            case "http_url":
-                                result.HttpUrls.Add(finding);
-                                break;
-                            // Add other categories here if the UI supports them or use a generic list if available
-                        }
+                        AddFinding(category, filePath, lineNumber, line, result, deduplicationSet);
                     }
                 }
             }
@@ -155,14 +134,19 @@ namespace PulseAPK.Services
             return false;
         }
 
-        private Dictionary<int, List<Regex>> BuildRegexCache(AnalysisRuleSet rules, Action<string> logCallback)
+        private Dictionary<string, List<Regex>> BuildRegexCache(AnalysisRuleSet rules, Action<string> logCallback)
         {
-            var cache = new Dictionary<int, List<Regex>>();
+            var cache = new Dictionary<string, List<Regex>>(StringComparer.OrdinalIgnoreCase);
 
             for (var i = 0; i < rules.Rules.Count; i++)
             {
                 var rule = rules.Rules[i];
-                var compiledPatterns = new List<Regex>();
+                var category = rule.Category ?? string.Empty;
+                if (!cache.TryGetValue(category, out var compiledPatterns))
+                {
+                    compiledPatterns = new List<Regex>();
+                    cache[category] = compiledPatterns;
+                }
 
                 foreach (var pattern in rule.RegexPatterns)
                 {
@@ -175,11 +159,69 @@ namespace PulseAPK.Services
                         logCallback?.Invoke($"Warning: Skipping invalid regex pattern '{pattern}' in category '{rule.Category}': {ex.Message}");
                     }
                 }
-
-                cache[i] = compiledPatterns;
             }
 
             return cache;
+        }
+
+        private List<string> BuildCategoryOrder(AnalysisRuleSet rules, Dictionary<string, List<Regex>> regexCache)
+        {
+            var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            var orderedCategories = new List<string>();
+
+            foreach (var rule in rules.Rules)
+            {
+                var category = rule.Category ?? string.Empty;
+                if (regexCache.ContainsKey(category) && seen.Add(category))
+                {
+                    orderedCategories.Add(category);
+                }
+            }
+
+            return orderedCategories;
+        }
+
+        private void AddFinding(
+            string category,
+            string filePath,
+            int lineNumber,
+            string line,
+            AnalysisResult result,
+            HashSet<string> deduplicationSet)
+        {
+            var normalizedPath = Path.GetFullPath(filePath).Replace('\\', '/');
+            var deduplicationKey = $"{category}|{normalizedPath}|{lineNumber}";
+            if (!deduplicationSet.Add(deduplicationKey))
+            {
+                return;
+            }
+
+            var finding = new Finding
+            {
+                FilePath = filePath,
+                LineNumber = lineNumber,
+                Context = line.Trim()
+            };
+
+            switch (category.ToLowerInvariant())
+            {
+                case "root_check":
+                    result.RootChecks.Add(finding);
+                    break;
+                case "emulator_check":
+                    result.EmulatorChecks.Add(finding);
+                    break;
+                case "hardcoded_creds":
+                    result.HardcodedCredentials.Add(finding);
+                    break;
+                case "sql_query":
+                    result.SqlQueries.Add(finding);
+                    break;
+                case "http_url":
+                    result.HttpUrls.Add(finding);
+                    break;
+                // Add other categories here if the UI supports them or use a generic list if available
+            }
         }
 
         private bool CheckPatterns(string line, List<Regex> patterns)
