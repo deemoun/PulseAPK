@@ -17,7 +17,7 @@ If you want to build (and sign, if necessary) the Smali folder - use the "Build 
 ## Key Features
 
 - **🛡️ Static Security Analysis**: Automatically scan Smali code for vulnerabilities, including root detection, emulator checks, hardcoded credentials, and insecure SQL/HTTP usage.
-- **⚙️ Dynamic Rule Engine**: Fully customizable analysis rules via `smali_analysis_rules.json`. Modify detection patterns on the fly without restarting the application.
+- **⚙️ Dynamic Rule Engine**: Fully customizable analysis rules via `smali_analysis_rules.json`. Modify detection patterns on the fly without restarting the application. Uses caching for optimal performance.
 - **🚀 Modern UI/UX**: A responsive, dark-themed interface designed for efficiency, featuring drag-and-drop support and real-time console feedback.
 - **📦 Complete Workflow**: Decompile, Analyze, Edit, Recompile, and Sign APKs in one unified environment.
 - **⚡ Safe & Robust**: Includes intelligent validation and crash prevention mechanisms to protect your workspace and data.
