@@ -1,6 +1,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,6 +13,12 @@ namespace PulseAPK.ViewModels
 {
     public partial class AnalyserViewModel : ObservableObject
     {
+        private const int MaxLogCharacters = 200_000;
+        private readonly Queue<string> _logLines = new Queue<string>();
+        private readonly object _logLock = new object();
+        private int _logCharCount;
+        private bool _logFlushScheduled;
+
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(IsHintVisible))]
         [NotifyPropertyChangedFor(nameof(HasProject))]
@@ -201,29 +208,84 @@ namespace PulseAPK.ViewModels
         {
             if (Application.Current != null && !Application.Current.Dispatcher.CheckAccess())
             {
-                Application.Current.Dispatcher.Invoke(() => AppendLogInternal(message));
+                Application.Current.Dispatcher.BeginInvoke(new Action(() => AppendLogInternal(message)));
+                return;
             }
-            else
-            {
-                AppendLogInternal(message);
-            }
+
+            AppendLogInternal(message);
         }
 
         private void AppendLogInternal(string message)
         {
-            if (string.IsNullOrWhiteSpace(ConsoleLog) || ConsoleLog == Properties.Resources.WaitingForCommand)
+            lock (_logLock)
             {
-                ConsoleLog = message;
-            }
-            else
-            {
-                ConsoleLog += $"{Environment.NewLine}{message}";
+                var sanitized = message ?? string.Empty;
+                if (_logLines.Count == 0 && ConsoleLog == Properties.Resources.WaitingForCommand)
+                {
+                    _logLines.Clear();
+                    _logCharCount = 0;
+                }
+
+                _logLines.Enqueue(sanitized);
+                _logCharCount += sanitized.Length;
+
+                TrimLogIfNeeded();
+                ScheduleLogFlush();
             }
         }
 
         private void SetConsoleLog(string message)
         {
-            ConsoleLog = message;
+            lock (_logLock)
+            {
+                _logLines.Clear();
+                _logCharCount = 0;
+
+                var sanitized = message ?? string.Empty;
+                _logLines.Enqueue(sanitized);
+                _logCharCount = sanitized.Length;
+
+                ScheduleLogFlush();
+            }
+        }
+
+        private void ScheduleLogFlush()
+        {
+            if (_logFlushScheduled)
+            {
+                return;
+            }
+
+            _logFlushScheduled = true;
+            if (Application.Current == null)
+            {
+                FlushLog();
+                return;
+            }
+
+            Application.Current.Dispatcher.BeginInvoke(new Action(FlushLog));
+        }
+
+        private void FlushLog()
+        {
+            string logText;
+            lock (_logLock)
+            {
+                logText = string.Join(Environment.NewLine, _logLines);
+                _logFlushScheduled = false;
+            }
+
+            ConsoleLog = logText;
+        }
+
+        private void TrimLogIfNeeded()
+        {
+            var newlineLength = Environment.NewLine.Length;
+            while (_logLines.Count > 0 && _logCharCount + ((_logLines.Count - 1) * newlineLength) > MaxLogCharacters)
+            {
+                var removed = _logLines.Dequeue();
+                _logCharCount -= removed.Length;
+            }
         }
 
         private string GetRelativePath(string fullPath, string basePath)
