@@ -69,13 +69,9 @@ namespace PulseAPK.ViewModels
                     {
                         AppendLog(Properties.Resources.RootCheckFound);
                         AppendLog(Properties.Resources.FoundIn);
-                        foreach (var finding in result.RootChecks.Take(10))
+                        foreach (var finding in result.RootChecks)
                         {
                             AppendLog($"  - {GetRelativePath(finding.FilePath, ProjectPath)} (Line {finding.LineNumber}): {finding.Context}");
-                        }
-                        if (result.RootChecks.Count > 10)
-                        {
-                            AppendLog($"  ... and {result.RootChecks.Count - 10} more");
                         }
                     }
                     else
@@ -96,13 +92,9 @@ namespace PulseAPK.ViewModels
                     {
                         AppendLog(Properties.Resources.EmulatorCheckFound);
                         AppendLog(Properties.Resources.FoundIn);
-                        foreach (var finding in result.EmulatorChecks.Take(10))
+                        foreach (var finding in result.EmulatorChecks)
                         {
                             AppendLog($"  - {GetRelativePath(finding.FilePath, ProjectPath)} (Line {finding.LineNumber}): {finding.Context}");
-                        }
-                        if (result.EmulatorChecks.Count > 10)
-                        {
-                            AppendLog($"  ... and {result.EmulatorChecks.Count - 10} more");
                         }
                     }
                     else
@@ -123,13 +115,9 @@ namespace PulseAPK.ViewModels
                     {
                         AppendLog(Properties.Resources.CredentialsFound);
                         AppendLog(Properties.Resources.FoundIn);
-                        foreach (var finding in result.HardcodedCredentials.Take(10))
+                        foreach (var finding in result.HardcodedCredentials)
                         {
                             AppendLog($"  - {GetRelativePath(finding.FilePath, ProjectPath)} (Line {finding.LineNumber}): {finding.Context}");
-                        }
-                        if (result.HardcodedCredentials.Count > 10)
-                        {
-                            AppendLog($"  ... and {result.HardcodedCredentials.Count - 10} more");
                         }
                     }
                     else
@@ -150,13 +138,9 @@ namespace PulseAPK.ViewModels
                     {
                         AppendLog(Properties.Resources.SqlQueriesFound);
                         AppendLog(Properties.Resources.FoundIn);
-                        foreach (var finding in result.SqlQueries.Take(10))
+                        foreach (var finding in result.SqlQueries)
                         {
                             AppendLog($"  - {GetRelativePath(finding.FilePath, ProjectPath)} (Line {finding.LineNumber}): {finding.Context}");
-                        }
-                        if (result.SqlQueries.Count > 10)
-                        {
-                            AppendLog($"  ... and {result.SqlQueries.Count - 10} more");
                         }
                     }
                     else
@@ -177,13 +161,9 @@ namespace PulseAPK.ViewModels
                     {
                         AppendLog(Properties.Resources.HttpUrlsFound);
                         AppendLog(Properties.Resources.FoundIn);
-                        foreach (var finding in result.HttpUrls.Take(10))
+                        foreach (var finding in result.HttpUrls)
                         {
                             AppendLog($"  - {GetRelativePath(finding.FilePath, ProjectPath)} (Line {finding.LineNumber}): {finding.Context}");
-                        }
-                        if (result.HttpUrls.Count > 10)
-                        {
-                            AppendLog($"  ... and {result.HttpUrls.Count - 10} more");
                         }
                     }
                     else
