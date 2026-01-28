@@ -9,7 +9,7 @@ namespace PulseAPK.ViewModels
     {
         public string AppVersion => getAppVersion();
         public string DeveloperName { get; } = "Dmitry Yarygin";
-        public string Year { get; } = "2025";
+        public string Year { get; } = "2026";
 
         private string getAppVersion()
         {
@@ -33,7 +33,7 @@ namespace PulseAPK.ViewModels
             }
 
             var version = string.IsNullOrWhiteSpace(informationalVersion)
-                ? Assembly.GetExecutingAssembly().GetName().Version?.ToString(3) ?? "1.1.3"
+                ? Assembly.GetExecutingAssembly().GetName().Version?.ToString(3) ?? "1.1.4"
                 : informationalVersion;
 
             return string.Format(Properties.Resources.About_Version, version);
