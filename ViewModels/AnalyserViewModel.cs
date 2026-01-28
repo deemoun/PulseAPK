@@ -14,8 +14,8 @@ namespace PulseAPK.ViewModels
 {
     public partial class AnalyserViewModel : ObservableObject
     {
-        private const int MaxLogCharacters = 500_000;
-        private const int LogTrimTargetCharacters = 450_000;
+        private const int MaxLogCharacters = 900_000;
+        private const int LogTrimTargetCharacters = 850_000;
         private static readonly TimeSpan LogFlushInterval = TimeSpan.FromMilliseconds(150);
         private readonly Queue<string> _logLines = new Queue<string>();
         private readonly object _logLock = new object();
