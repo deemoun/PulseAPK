@@ -1,6 +1,8 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,6 +14,12 @@ namespace PulseAPK.ViewModels
 {
     public partial class DecompileViewModel : ObservableObject
     {
+        private readonly ObservableCollection<string> _consoleLines = new ObservableCollection<string>();
+        private readonly List<string> _pendingLogLines = new List<string>();
+        private readonly object _logLock = new object();
+        private readonly StringBuilder _fullLogBuilder = new StringBuilder();
+        private bool _logFlushScheduled;
+
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(IsHintVisible))]
         private string _apkPath;
@@ -29,9 +37,6 @@ namespace PulseAPK.ViewModels
         private string? _outputFolder;
 
         [ObservableProperty]
-        private string _consoleLog = Properties.Resources.WaitingForCommand;
-
-        [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(RunDecompileCommand))]
         private bool _isRunning;
 
@@ -42,6 +47,7 @@ namespace PulseAPK.ViewModels
         private readonly Services.ApktoolRunner _apktoolRunner;
 
         public bool IsHintVisible => string.IsNullOrEmpty(ApkPath);
+        public ObservableCollection<string> ConsoleLines => _consoleLines;
 
         public DecompileViewModel()
         {
@@ -209,22 +215,58 @@ namespace PulseAPK.ViewModels
 
         private void AppendLog(string message)
         {
-            _isConsolePreviewActive = false;
-
-            if (string.IsNullOrWhiteSpace(ConsoleLog) || ConsoleLog == "Waiting for command...")
+            if (Application.Current != null && !Application.Current.Dispatcher.CheckAccess())
             {
-                ConsoleLog = message;
+                Application.Current.Dispatcher.BeginInvoke(new Action(() => AppendLogInternal(message)));
+                return;
             }
-            else
+
+            AppendLogInternal(message);
+        }
+
+        private void AppendLogInternal(string message)
+        {
+            lock (_logLock)
             {
-                ConsoleLog += $"{Environment.NewLine}{message}";
+                if (_isConsolePreviewActive)
+                {
+                    _consoleLines.Clear();
+                    _pendingLogLines.Clear();
+                    _fullLogBuilder.Clear();
+                    _isConsolePreviewActive = false;
+                }
+
+                var sanitized = message ?? string.Empty;
+                AppendToFullLog(sanitized);
+                _pendingLogLines.Add(sanitized);
+                ScheduleLogFlush();
             }
         }
 
-        private void SetConsoleLog(string message)
+        private void SetConsoleLog(string message, bool isPreview = false)
         {
-            _isConsolePreviewActive = false;
-            ConsoleLog = message;
+            if (Application.Current != null && !Application.Current.Dispatcher.CheckAccess())
+            {
+                Application.Current.Dispatcher.BeginInvoke(new Action(() => SetConsoleLog(message, isPreview)));
+                return;
+            }
+
+            lock (_logLock)
+            {
+                var lines = SplitLines(message);
+                _pendingLogLines.Clear();
+                _fullLogBuilder.Clear();
+                _isConsolePreviewActive = isPreview;
+
+                _consoleLines.Clear();
+                foreach (var line in lines)
+                {
+                    _consoleLines.Add(line);
+                    AppendToFullLog(line);
+                }
+
+                _logFlushScheduled = false;
+            }
         }
 
         private void UpdateCommandPreview()
@@ -234,7 +276,61 @@ namespace PulseAPK.ViewModels
                 return;
             }
 
-            ConsoleLog = BuildCommandPreview();
+            SetConsoleLog(BuildCommandPreview(), isPreview: true);
+        }
+
+        private void ScheduleLogFlush()
+        {
+            if (_logFlushScheduled)
+            {
+                return;
+            }
+
+            _logFlushScheduled = true;
+            if (Application.Current == null)
+            {
+                FlushLog();
+                return;
+            }
+
+            Application.Current.Dispatcher.BeginInvoke(new Action(FlushLog));
+        }
+
+        private void FlushLog()
+        {
+            List<string> pendingLines;
+            lock (_logLock)
+            {
+                pendingLines = _pendingLogLines.Count == 0 ? null : new List<string>(_pendingLogLines);
+                _pendingLogLines.Clear();
+                _logFlushScheduled = false;
+            }
+
+            if (pendingLines == null)
+            {
+                return;
+            }
+
+            foreach (var line in pendingLines)
+            {
+                _consoleLines.Add(line);
+            }
+        }
+
+        private void AppendToFullLog(string message)
+        {
+            if (_fullLogBuilder.Length > 0)
+            {
+                _fullLogBuilder.AppendLine();
+            }
+
+            _fullLogBuilder.Append(message);
+        }
+
+        private static List<string> SplitLines(string message)
+        {
+            var normalized = (message ?? string.Empty).Replace("\r\n", "\n");
+            return new List<string>(normalized.Split('\n'));
         }
 
         private bool CanRunDecompile()

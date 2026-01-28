@@ -65,9 +65,21 @@
                     <TextBlock Text="Console log" Foreground="{StaticResource Brush.TextPrimary}" VerticalAlignment="Center"/>
                 </Grid>
 
-                <ScrollViewer Grid.Row="1">
-                    <TextBox Text="{Binding ConsoleLog}" Foreground="{StaticResource Brush.TextSecondary}" FontFamily="Consolas" IsReadOnly="True" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" Background="Transparent" BorderThickness="0"/>
-                </ScrollViewer>
+                <ListBox Grid.Row="1"
+                         ItemsSource="{Binding ConsoleLines}"
+                         Foreground="{StaticResource Brush.TextSecondary}"
+                         FontFamily="Consolas"
+                         Background="Transparent"
+                         BorderThickness="0"
+                         ScrollViewer.VerticalScrollBarVisibility="Auto"
+                         VirtualizingStackPanel.IsVirtualizing="True"
+                         VirtualizingStackPanel.VirtualizationMode="Recycling">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding}" TextWrapping="Wrap" Foreground="{StaticResource Brush.TextSecondary}"/>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
             </Grid>
         </Border>
 

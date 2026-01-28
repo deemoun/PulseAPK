@@ -2,8 +2,10 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using PulseAPK.Services;
@@ -13,20 +15,17 @@ namespace PulseAPK.ViewModels
 {
     public partial class AnalyserViewModel : ObservableObject
     {
-        private const int MaxLogCharacters = 200_000;
-        private readonly Queue<string> _logLines = new Queue<string>();
+        private readonly ObservableCollection<string> _consoleLines = new ObservableCollection<string>();
+        private readonly List<string> _pendingLogLines = new List<string>();
         private readonly object _logLock = new object();
-        private int _logCharCount;
         private bool _logFlushScheduled;
+        private readonly StringBuilder _fullLogBuilder = new StringBuilder();
+        private bool _isConsolePlaceholder = true;
 
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(IsHintVisible))]
         [NotifyPropertyChangedFor(nameof(HasProject))]
         private string _projectPath;
-
-        [ObservableProperty]
-        [NotifyCanExecuteChangedFor(nameof(SaveReportCommand))]
-        private string _consoleLog = Properties.Resources.WaitingForCommand;
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(RunAnalysisCommand))]
@@ -37,11 +36,13 @@ namespace PulseAPK.ViewModels
 
         public bool IsHintVisible => string.IsNullOrEmpty(ProjectPath);
         public bool HasProject => !string.IsNullOrWhiteSpace(ProjectPath);
+        public ObservableCollection<string> ConsoleLines => _consoleLines;
 
         public AnalyserViewModel()
         {
             _analyserService = new SmaliAnalyserService();
             _reportService = new ReportService();
+            SetConsoleLog(Properties.Resources.WaitingForCommand, isPlaceholder: true);
         }
 
         partial void OnProjectPathChanged(string value)
@@ -58,7 +59,7 @@ namespace PulseAPK.ViewModels
                 return;
             }
 
-            SetConsoleLog("");
+            SetConsoleLog(string.Empty);
             IsRunning = true;
 
             try
@@ -220,32 +221,44 @@ namespace PulseAPK.ViewModels
             lock (_logLock)
             {
                 var sanitized = message ?? string.Empty;
-                if (_logLines.Count == 0 && ConsoleLog == Properties.Resources.WaitingForCommand)
+                if (_isConsolePlaceholder)
                 {
-                    _logLines.Clear();
-                    _logCharCount = 0;
+                    _consoleLines.Clear();
+                    _pendingLogLines.Clear();
+                    _fullLogBuilder.Clear();
+                    _isConsolePlaceholder = false;
                 }
 
-                _logLines.Enqueue(sanitized);
-                _logCharCount += sanitized.Length;
+                AppendToFullLog(sanitized);
+                _pendingLogLines.Add(sanitized);
 
-                TrimLogIfNeeded();
                 ScheduleLogFlush();
             }
         }
 
-        private void SetConsoleLog(string message)
+        private void SetConsoleLog(string message, bool isPlaceholder = false)
         {
+            if (Application.Current != null && !Application.Current.Dispatcher.CheckAccess())
+            {
+                Application.Current.Dispatcher.BeginInvoke(new Action(() => SetConsoleLog(message, isPlaceholder)));
+                return;
+            }
+
             lock (_logLock)
             {
-                _logLines.Clear();
-                _logCharCount = 0;
+                var lines = SplitLines(message);
+                _pendingLogLines.Clear();
+                _fullLogBuilder.Clear();
+                _isConsolePlaceholder = isPlaceholder;
 
-                var sanitized = message ?? string.Empty;
-                _logLines.Enqueue(sanitized);
-                _logCharCount = sanitized.Length;
+                _consoleLines.Clear();
+                foreach (var line in lines)
+                {
+                    _consoleLines.Add(line);
+                    AppendToFullLog(line);
+                }
 
-                ScheduleLogFlush();
+                _logFlushScheduled = false;
             }
         }
 
@@ -268,24 +281,39 @@ namespace PulseAPK.ViewModels
 
         private void FlushLog()
         {
-            string logText;
+            List<string> pendingLines;
             lock (_logLock)
             {
-                logText = string.Join(Environment.NewLine, _logLines);
+                pendingLines = _pendingLogLines.Count == 0 ? null : new List<string>(_pendingLogLines);
+                _pendingLogLines.Clear();
                 _logFlushScheduled = false;
             }
 
-            ConsoleLog = logText;
+            if (pendingLines == null)
+            {
+                return;
+            }
+
+            foreach (var line in pendingLines)
+            {
+                _consoleLines.Add(line);
+            }
         }
 
-        private void TrimLogIfNeeded()
+        private void AppendToFullLog(string message)
         {
-            var newlineLength = Environment.NewLine.Length;
-            while (_logLines.Count > 0 && _logCharCount + ((_logLines.Count - 1) * newlineLength) > MaxLogCharacters)
+            if (_fullLogBuilder.Length > 0)
             {
-                var removed = _logLines.Dequeue();
-                _logCharCount -= removed.Length;
+                _fullLogBuilder.AppendLine();
             }
+
+            _fullLogBuilder.Append(message);
+        }
+
+        private static List<string> SplitLines(string message)
+        {
+            var normalized = (message ?? string.Empty).Replace("\r\n", "\n");
+            return new List<string>(normalized.Split('\n'));
         }
 
         private string GetRelativePath(string fullPath, string basePath)
@@ -314,7 +342,7 @@ namespace PulseAPK.ViewModels
             try
             {
                 string folderName = new DirectoryInfo(ProjectPath).Name;
-                string filePath = await _reportService.SaveReportAsync(ConsoleLog, folderName);
+                string filePath = await _reportService.SaveReportAsync(_fullLogBuilder.ToString(), folderName);
                 MessageBoxUtils.ShowInfo($"Report saved successfully to:\n{filePath}", "Report Saved");
             }
             catch (Exception ex)
@@ -325,7 +353,7 @@ namespace PulseAPK.ViewModels
 
         private bool CanSaveReport()
         {
-            return !string.IsNullOrWhiteSpace(ConsoleLog) && ConsoleLog != Properties.Resources.WaitingForCommand;
+            return _fullLogBuilder.Length > 0 && !_isConsolePlaceholder;
         }
     }
 }
