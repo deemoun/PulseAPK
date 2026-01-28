@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Threading;
 using PulseAPK.Services;
 using PulseAPK.Utils;
 
@@ -13,11 +14,15 @@ namespace PulseAPK.ViewModels
 {
     public partial class AnalyserViewModel : ObservableObject
     {
-        private const int MaxLogCharacters = 200_000;
+        private const int MaxLogCharacters = 500_000;
+        private const int LogTrimTargetCharacters = 450_000;
+        private static readonly TimeSpan LogFlushInterval = TimeSpan.FromMilliseconds(150);
         private readonly Queue<string> _logLines = new Queue<string>();
         private readonly object _logLock = new object();
         private int _logCharCount;
-        private bool _logFlushScheduled;
+        private bool _logFlushPending;
+        private bool _logFlushTimerInitializing;
+        private DispatcherTimer _logFlushTimer;
 
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(IsHintVisible))]
@@ -206,12 +211,6 @@ namespace PulseAPK.ViewModels
 
         private void AppendLog(string message)
         {
-            if (Application.Current != null && !Application.Current.Dispatcher.CheckAccess())
-            {
-                Application.Current.Dispatcher.BeginInvoke(new Action(() => AppendLogInternal(message)));
-                return;
-            }
-
             AppendLogInternal(message);
         }
 
@@ -251,19 +250,51 @@ namespace PulseAPK.ViewModels
 
         private void ScheduleLogFlush()
         {
-            if (_logFlushScheduled)
-            {
-                return;
-            }
-
-            _logFlushScheduled = true;
+            _logFlushPending = true;
             if (Application.Current == null)
             {
                 FlushLog();
                 return;
             }
 
-            Application.Current.Dispatcher.BeginInvoke(new Action(FlushLog));
+            EnsureLogFlushTimer();
+        }
+
+        private void EnsureLogFlushTimer()
+        {
+            if (_logFlushTimer != null || _logFlushTimerInitializing)
+            {
+                return;
+            }
+
+            _logFlushTimerInitializing = true;
+            Application.Current.Dispatcher.BeginInvoke(new Action(() =>
+            {
+                if (_logFlushTimer == null)
+                {
+                    _logFlushTimer = new DispatcherTimer(LogFlushInterval, DispatcherPriority.Background, (_, __) => FlushLogIfPending(), Application.Current.Dispatcher);
+                    _logFlushTimer.Start();
+                }
+
+                _logFlushTimerInitializing = false;
+            }));
+        }
+
+        private void FlushLogIfPending()
+        {
+            string logText;
+            lock (_logLock)
+            {
+                if (!_logFlushPending)
+                {
+                    return;
+                }
+
+                logText = string.Join(Environment.NewLine, _logLines);
+                _logFlushPending = false;
+            }
+
+            ConsoleLog = logText;
         }
 
         private void FlushLog()
@@ -272,7 +303,7 @@ namespace PulseAPK.ViewModels
             lock (_logLock)
             {
                 logText = string.Join(Environment.NewLine, _logLines);
-                _logFlushScheduled = false;
+                _logFlushPending = false;
             }
 
             ConsoleLog = logText;
@@ -281,10 +312,17 @@ namespace PulseAPK.ViewModels
         private void TrimLogIfNeeded()
         {
             var newlineLength = Environment.NewLine.Length;
-            while (_logLines.Count > 0 && _logCharCount + ((_logLines.Count - 1) * newlineLength) > MaxLogCharacters)
+            var totalCharacters = _logCharCount + ((_logLines.Count - 1) * newlineLength);
+            if (totalCharacters <= MaxLogCharacters)
+            {
+                return;
+            }
+
+            while (_logLines.Count > 0 && totalCharacters > LogTrimTargetCharacters)
             {
                 var removed = _logLines.Dequeue();
                 _logCharCount -= removed.Length;
+                totalCharacters = _logCharCount + ((_logLines.Count - 1) * newlineLength);
             }
         }
 
