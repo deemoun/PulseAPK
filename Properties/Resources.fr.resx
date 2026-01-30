@@ -1,51 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
-    <xsd:element name="root" msdata:IsDataSet="true">
-      <xsd:complexType>
-        <xsd:choice maxOccurs="unbounded">
-          <xsd:element name="metadata">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
-              </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="assembly">
-            <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="data">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
-              </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="resheader">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-              </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
-            </xsd:complexType>
-          </xsd:element>
-        </xsd:choice>
-      </xsd:complexType>
-    </xsd:element>
-  </xsd:schema>
   <resheader name="resmimetype">
     <value>text/microsoft-resx</value>
   </resheader>
@@ -58,241 +12,265 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+
   <data name="AppTitle" xml:space="preserve">
     <value>PulseAPK</value>
   </data>
+
   <data name="MenuDecompile" xml:space="preserve">
-    <value>Декомпиляция</value>
+    <value>Décompiler</value>
   </data>
   <data name="MenuSettings" xml:space="preserve">
-    <value>Настройки</value>
+    <value>Paramètres</value>
   </data>
   <data name="MenuAbout" xml:space="preserve">
-    <value>О программе</value>
+    <value>À propos</value>
   </data>
+
   <data name="DecompileHeader" xml:space="preserve">
-    <value>Декомпиляция</value>
+    <value>Décompilation</value>
   </data>
   <data name="SelectApk" xml:space="preserve">
-    <value>Выберите APK</value>
+    <value>Sélectionner l’APK</value>
   </data>
   <data name="OutputFolder" xml:space="preserve">
-    <value>Папка вывода</value>
+    <value>Dossier de sortie</value>
   </data>
   <data name="OutputApkLabel" xml:space="preserve">
-    <value>Путь выходного APK</value>
+    <value>Chemin de l’APK de sortie</value>
   </data>
   <data name="Browse" xml:space="preserve">
-    <value>Обзор</value>
+    <value>Parcourir</value>
   </data>
   <data name="Open" xml:space="preserve">
-    <value>Открыть</value>
+    <value>Ouvrir</value>
   </data>
   <data name="DragDropHint" xml:space="preserve">
-    <value>Перетащите файл сюда</value>
+    <value>Déposez le fichier ici</value>
   </data>
+
   <data name="DecodeResources" xml:space="preserve">
-    <value>Декодировать ресурсы</value>
+    <value>Décoder les ressources</value>
   </data>
   <data name="KeepOriginalManifest" xml:space="preserve">
-    <value>Оригинальный манифест</value>
+    <value>Manifeste d’origine</value>
   </data>
   <data name="ExtractToApkFolder" xml:space="preserve">
-    <value>Извлечь в папку APK</value>
+    <value>Extraire dans le dossier APK</value>
   </data>
   <data name="DecodeSources" xml:space="preserve">
-    <value>Декодировать исходники</value>
+    <value>Décoder les sources</value>
   </data>
   <data name="RunDecompile" xml:space="preserve">
-    <value>Запустить</value>
+    <value>Lancer</value>
   </data>
+
   <data name="WaitingForCommand" xml:space="preserve">
-    <value>Ожидание команды...</value>
+    <value>En attente d’une commande…</value>
   </data>
   <data name="StartingApktool" xml:space="preserve">
-    <value>Запуск apktool...</value>
+    <value>Démarrage d’apktool…</value>
   </data>
   <data name="DecompileFailed" xml:space="preserve">
-    <value>Ошибка декомпиляции</value>
+    <value>Erreur de décompilation</value>
   </data>
   <data name="DecompileSuccessful" xml:space="preserve">
-    <value>Декомпиляция успешна</value>
+    <value>Décompilation réussie</value>
   </data>
+
   <data name="Error_OutputFolderNotSet" xml:space="preserve">
-    <value>Папка вывода не задана.</value>
+    <value>Le dossier de sortie n’est pas défini.</value>
   </data>
   <data name="Error_FolderNotFound" xml:space="preserve">
-    <value>Папка '{0}' не существует.</value>
+    <value>Le dossier « {0} » n’existe pas.</value>
   </data>
   <data name="Error_CouldNotOpenFolder" xml:space="preserve">
-    <value>Не удалось открыть папку: {0}</value>
+    <value>Impossible d’ouvrir le dossier : {0}</value>
   </data>
   <data name="Error_MissingApktool" xml:space="preserve">
-    <value>Пожалуйста, настройте путь к apktool в настройках.</value>
+    <value>Veuillez configurer le chemin vers apktool dans les paramètres.</value>
   </data>
   <data name="Error_InvalidApktoolPath" xml:space="preserve">
-    <value>Путь к apktool '{0}' не существует.</value>
+    <value>Le chemin vers apktool « {0} » n’existe pas.</value>
   </data>
   <data name="Error_InvalidApkFile" xml:space="preserve">
-    <value>Неверный файл APK</value>
+    <value>Fichier APK invalide</value>
   </data>
   <data name="Error_InvalidJarFile" xml:space="preserve">
-    <value>Неверный файл Jar</value>
+    <value>Fichier JAR invalide</value>
   </data>
   <data name="Error_InvalidUbersignFile" xml:space="preserve">
-    <value>Неверный файл Ubersigner</value>
+    <value>Fichier Ubersigner invalide</value>
   </data>
   <data name="Error_InvalidProjectSelection" xml:space="preserve">
-    <value>Выберите папку проекта с apktool.yml и AndroidManifest.xml.</value>
+    <value>Choisissez un dossier de projet contenant apktool.yml et AndroidManifest.xml.</value>
   </data>
+
   <data name="FileFilter_Apk" xml:space="preserve">
-    <value>Файлы APK (*.apk)|*.apk|Все файлы (*.*)|*.*</value>
+    <value>Fichiers APK (*.apk)|*.apk|Tous les fichiers (*.*)|*.*</value>
   </data>
   <data name="FileFilter_Jar" xml:space="preserve">
-    <value>Файлы Jar (*.jar)|*.jar</value>
+    <value>Fichiers JAR (*.jar)|*.jar</value>
   </data>
   <data name="FileFilter_Ubersign" xml:space="preserve">
-    <value>Файлы Ubersigner (*.jar)|*.jar</value>
+    <value>Fichiers Ubersigner (*.jar)|*.jar</value>
   </data>
+
   <data name="SettingsHeader" xml:space="preserve">
-    <value>Настройки</value>
+    <value>Paramètres</value>
   </data>
   <data name="ApktoolPath" xml:space="preserve">
-    <value>Путь к Apktool</value>
+    <value>Chemin vers Apktool</value>
   </data>
   <data name="UbersignPath" xml:space="preserve">
-    <value>Путь к Ubersigner</value>
+    <value>Chemin vers Ubersigner</value>
   </data>
+
   <data name="JavaPathNotFound" xml:space="preserve">
-    <value>Путь к JAVA: Не найден</value>
+    <value>Chemin JAVA : introuvable</value>
   </data>
   <data name="JavaPathFound" xml:space="preserve">
-    <value>Путь к JAVA: {0}</value>
+    <value>Chemin JAVA : {0}</value>
   </data>
+
   <data name="About_DevelopedBy" xml:space="preserve">
-    <value>Разработано</value>
+    <value>Développé par</value>
   </data>
   <data name="About_ProjectPage" xml:space="preserve">
-    <value>Страница проекта</value>
+    <value>Page du projet</value>
   </data>
   <data name="About_DeveloperPage" xml:space="preserve">
-    <value>Страница разработчика</value>
+    <value>Page du développeur</value>
   </data>
   <data name="About_Version" xml:space="preserve">
-    <value>Версия: {0}</value>
+    <value>Version : {0}</value>
   </data>
+
   <data name="DownloadApktool" xml:space="preserve">
-    <value>Скачать Apktool: </value>
+    <value>Télécharger Apktool :</value>
   </data>
   <data name="DownloadJava" xml:space="preserve">
-    <value>Скачать JAVA: </value>
+    <value>Télécharger JAVA :</value>
   </data>
+
   <data name="MenuBuild" xml:space="preserve">
-    <value>Сборка APK</value>
+    <value>Construire l’APK</value>
   </data>
   <data name="BuildHeader" xml:space="preserve">
-    <value>Сборка APK</value>
+    <value>Construction de l’APK</value>
   </data>
   <data name="SelectProjectFolder" xml:space="preserve">
-    <value>Выберите папку проекта</value>
+    <value>Sélectionner le dossier du projet</value>
   </data>
   <data name="SignApk" xml:space="preserve">
-    <value>Подписать APK</value>
+    <value>Signer l’APK</value>
   </data>
   <data name="UseAapt2" xml:space="preserve">
-    <value>Использовать AAPT2</value>
+    <value>Utiliser AAPT2</value>
   </data>
   <data name="RunBuild" xml:space="preserve">
-    <value>Собрать</value>
+    <value>Construire</value>
   </data>
+
   <data name="BuildSuccessful" xml:space="preserve">
-    <value>Файл APK успешно создан.</value>
+    <value>Le fichier APK a été créé avec succès.</value>
   </data>
   <data name="BuildFailed" xml:space="preserve">
-    <value>Ошибка создания APK</value>
+    <value>Erreur lors de la création de l’APK</value>
   </data>
   <data name="Warning_InvalidProjectFolder" xml:space="preserve">
-    <value>Выбранная папка не является проектом apktool.</value>
+    <value>Le dossier sélectionné n’est pas un projet apktool.</value>
   </data>
+
   <data name="DragDropFolderHint" xml:space="preserve">
-    <value>Перетащите папку сюда</value>
+    <value>Déposez le dossier ici</value>
   </data>
+
   <data name="MenuAnalyser" xml:space="preserve">
-    <value>Анализ APK</value>
+    <value>Analyse de l’APK</value>
   </data>
   <data name="AnalyserHeader" xml:space="preserve">
-    <value>Анализ APK</value>
+    <value>Analyse de l’APK</value>
   </data>
   <data name="RunAnalysis" xml:space="preserve">
-    <value>Анализировать</value>
+    <value>Analyser</value>
   </data>
+
   <data name="AnalysisStarting" xml:space="preserve">
-    <value>Начало анализа...</value>
+    <value>Démarrage de l’analyse…</value>
   </data>
   <data name="AnalysisComplete" xml:space="preserve">
-    <value>Анализ завершен</value>
+    <value>Analyse terminée</value>
   </data>
   <data name="AnalysisFailed" xml:space="preserve">
-    <value>Анализ не удался</value>
+    <value>Échec de l’analyse</value>
   </data>
+
   <data name="RootCheckFound" xml:space="preserve">
-    <value>Root проверка: Обнаружено</value>
+    <value>Vérification root : détecté</value>
   </data>
   <data name="RootCheckNotFound" xml:space="preserve">
-    <value>Root проверка: Не обнаружено</value>
+    <value>Vérification root : non détecté</value>
   </data>
   <data name="EmulatorCheckFound" xml:space="preserve">
-    <value>Эмулятор: Обнаружено</value>
+    <value>Émulateur : détecté</value>
   </data>
   <data name="EmulatorCheckNotFound" xml:space="preserve">
-    <value>Эмулятор: Не обнаружено</value>
+    <value>Émulateur : non détecté</value>
   </data>
+
   <data name="CredentialsFound" xml:space="preserve">
-    <value>Жестко заданные пароли: Обнаружено</value>
+    <value>Mots de passe codés en dur : détectés</value>
   </data>
   <data name="CredentialsNotFound" xml:space="preserve">
-    <value>Жестко заданные пароли: Не обнаружено</value>
+    <value>Mots de passe codés en dur : non détectés</value>
   </data>
+
   <data name="SqlQueriesFound" xml:space="preserve">
-    <value>SQL запросы: Обнаружено</value>
+    <value>Requêtes SQL : détectées</value>
   </data>
   <data name="SqlQueriesNotFound" xml:space="preserve">
-    <value>SQL запросы: Не обнаружено</value>
+    <value>Requêtes SQL : non détectées</value>
   </data>
+
   <data name="HttpUrlsFound" xml:space="preserve">
-    <value>HTTP/HTTPS ссылки: Обнаружено</value>
+    <value>Liens HTTP/HTTPS : détectés</value>
   </data>
   <data name="HttpUrlsNotFound" xml:space="preserve">
-    <value>HTTP/HTTPS ссылки: Не обнаружено</value>
+    <value>Liens HTTP/HTTPS : non détectés</value>
   </data>
+
   <data name="FoundIn" xml:space="preserve">
-    <value>  Найдено в:</value>
+    <value>  Trouvé dans :</value>
   </data>
+
   <data name="Error_InvalidSmaliProject" xml:space="preserve">
-    <value>Выбранная папка не содержит Smali файлов.</value>
+    <value>Le dossier sélectionné ne contient pas de fichiers Smali.</value>
   </data>
+
   <data name="DownloadApktoolButton" xml:space="preserve">
-    <value>Скачать ApkTool</value>
+    <value>Télécharger Apktool</value>
   </data>
   <data name="DownloadJavaButton" xml:space="preserve">
-    <value>Скачать JAVA</value>
+    <value>Télécharger JAVA</value>
   </data>
   <data name="DownloadUbersignerButton" xml:space="preserve">
-    <value>Скачать Ubersigner</value>
+    <value>Télécharger Ubersigner</value>
   </data>
+
   <data name="LanguageLabel" xml:space="preserve">
-    <value>Язык</value>
+    <value>Langue</value>
   </data>
   <data name="SaveReport" xml:space="preserve">
-    <value>Сохранить отчет</value>
+    <value>Enregistrer le rapport</value>
   </data>
   <data name="Run" xml:space="preserve">
-    <value>Запустить</value>
+    <value>Exécuter</value>
   </data>
   <data name="ApkName" xml:space="preserve">
-    <value>Имя APK</value>
+    <value>Nom de l’APK</value>
   </data>
   <data name="ConsoleLog" xml:space="preserve">
-    <value>Лог консоли</value>
+    <value>Journal de la console</value>
   </data>
 </root>

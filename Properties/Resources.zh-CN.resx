@@ -1,51 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
-    <xsd:element name="root" msdata:IsDataSet="true">
-      <xsd:complexType>
-        <xsd:choice maxOccurs="unbounded">
-          <xsd:element name="metadata">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
-              </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="assembly">
-            <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="data">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
-              </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="resheader">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-              </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
-            </xsd:complexType>
-          </xsd:element>
-        </xsd:choice>
-      </xsd:complexType>
-    </xsd:element>
-  </xsd:schema>
   <resheader name="resmimetype">
     <value>text/microsoft-resx</value>
   </resheader>
@@ -58,241 +12,265 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+
   <data name="AppTitle" xml:space="preserve">
     <value>PulseAPK</value>
   </data>
+
   <data name="MenuDecompile" xml:space="preserve">
-    <value>Декомпиляция</value>
+    <value>反编译</value>
   </data>
   <data name="MenuSettings" xml:space="preserve">
-    <value>Настройки</value>
+    <value>设置</value>
   </data>
   <data name="MenuAbout" xml:space="preserve">
-    <value>О программе</value>
+    <value>关于</value>
   </data>
+
   <data name="DecompileHeader" xml:space="preserve">
-    <value>Декомпиляция</value>
+    <value>反编译</value>
   </data>
   <data name="SelectApk" xml:space="preserve">
-    <value>Выберите APK</value>
+    <value>选择 APK</value>
   </data>
   <data name="OutputFolder" xml:space="preserve">
-    <value>Папка вывода</value>
+    <value>输出文件夹</value>
   </data>
   <data name="OutputApkLabel" xml:space="preserve">
-    <value>Путь выходного APK</value>
+    <value>输出 APK 路径</value>
   </data>
   <data name="Browse" xml:space="preserve">
-    <value>Обзор</value>
+    <value>浏览</value>
   </data>
   <data name="Open" xml:space="preserve">
-    <value>Открыть</value>
+    <value>打开</value>
   </data>
   <data name="DragDropHint" xml:space="preserve">
-    <value>Перетащите файл сюда</value>
+    <value>将文件拖放到此处</value>
   </data>
+
   <data name="DecodeResources" xml:space="preserve">
-    <value>Декодировать ресурсы</value>
+    <value>解码资源</value>
   </data>
   <data name="KeepOriginalManifest" xml:space="preserve">
-    <value>Оригинальный манифест</value>
+    <value>保留原始 Manifest</value>
   </data>
   <data name="ExtractToApkFolder" xml:space="preserve">
-    <value>Извлечь в папку APK</value>
+    <value>解压到 APK 文件夹</value>
   </data>
   <data name="DecodeSources" xml:space="preserve">
-    <value>Декодировать исходники</value>
+    <value>解码源码</value>
   </data>
   <data name="RunDecompile" xml:space="preserve">
-    <value>Запустить</value>
+    <value>开始</value>
   </data>
+
   <data name="WaitingForCommand" xml:space="preserve">
-    <value>Ожидание команды...</value>
+    <value>等待命令…</value>
   </data>
   <data name="StartingApktool" xml:space="preserve">
-    <value>Запуск apktool...</value>
+    <value>正在启动 apktool…</value>
   </data>
   <data name="DecompileFailed" xml:space="preserve">
-    <value>Ошибка декомпиляции</value>
+    <value>反编译失败</value>
   </data>
   <data name="DecompileSuccessful" xml:space="preserve">
-    <value>Декомпиляция успешна</value>
+    <value>反编译成功</value>
   </data>
+
   <data name="Error_OutputFolderNotSet" xml:space="preserve">
-    <value>Папка вывода не задана.</value>
+    <value>未设置输出文件夹。</value>
   </data>
   <data name="Error_FolderNotFound" xml:space="preserve">
-    <value>Папка '{0}' не существует.</value>
+    <value>文件夹“{0}”不存在。</value>
   </data>
   <data name="Error_CouldNotOpenFolder" xml:space="preserve">
-    <value>Не удалось открыть папку: {0}</value>
+    <value>无法打开文件夹：{0}</value>
   </data>
   <data name="Error_MissingApktool" xml:space="preserve">
-    <value>Пожалуйста, настройте путь к apktool в настройках.</value>
+    <value>请在设置中配置 apktool 路径。</value>
   </data>
   <data name="Error_InvalidApktoolPath" xml:space="preserve">
-    <value>Путь к apktool '{0}' не существует.</value>
+    <value>apktool 路径“{0}”不存在。</value>
   </data>
   <data name="Error_InvalidApkFile" xml:space="preserve">
-    <value>Неверный файл APK</value>
+    <value>无效的 APK 文件</value>
   </data>
   <data name="Error_InvalidJarFile" xml:space="preserve">
-    <value>Неверный файл Jar</value>
+    <value>无效的 JAR 文件</value>
   </data>
   <data name="Error_InvalidUbersignFile" xml:space="preserve">
-    <value>Неверный файл Ubersigner</value>
+    <value>无效的 Ubersigner 文件</value>
   </data>
   <data name="Error_InvalidProjectSelection" xml:space="preserve">
-    <value>Выберите папку проекта с apktool.yml и AndroidManifest.xml.</value>
+    <value>请选择包含 apktool.yml 和 AndroidManifest.xml 的项目文件夹。</value>
   </data>
+
   <data name="FileFilter_Apk" xml:space="preserve">
-    <value>Файлы APK (*.apk)|*.apk|Все файлы (*.*)|*.*</value>
+    <value>APK 文件 (*.apk)|*.apk|所有文件 (*.*)|*.*</value>
   </data>
   <data name="FileFilter_Jar" xml:space="preserve">
-    <value>Файлы Jar (*.jar)|*.jar</value>
+    <value>JAR 文件 (*.jar)|*.jar</value>
   </data>
   <data name="FileFilter_Ubersign" xml:space="preserve">
-    <value>Файлы Ubersigner (*.jar)|*.jar</value>
+    <value>Ubersigner 文件 (*.jar)|*.jar</value>
   </data>
+
   <data name="SettingsHeader" xml:space="preserve">
-    <value>Настройки</value>
+    <value>设置</value>
   </data>
   <data name="ApktoolPath" xml:space="preserve">
-    <value>Путь к Apktool</value>
+    <value>Apktool 路径</value>
   </data>
   <data name="UbersignPath" xml:space="preserve">
-    <value>Путь к Ubersigner</value>
+    <value>Ubersigner 路径</value>
   </data>
+
   <data name="JavaPathNotFound" xml:space="preserve">
-    <value>Путь к JAVA: Не найден</value>
+    <value>JAVA 路径：未找到</value>
   </data>
   <data name="JavaPathFound" xml:space="preserve">
-    <value>Путь к JAVA: {0}</value>
+    <value>JAVA 路径：{0}</value>
   </data>
+
   <data name="About_DevelopedBy" xml:space="preserve">
-    <value>Разработано</value>
+    <value>开发者</value>
   </data>
   <data name="About_ProjectPage" xml:space="preserve">
-    <value>Страница проекта</value>
+    <value>项目页面</value>
   </data>
   <data name="About_DeveloperPage" xml:space="preserve">
-    <value>Страница разработчика</value>
+    <value>开发者主页</value>
   </data>
   <data name="About_Version" xml:space="preserve">
-    <value>Версия: {0}</value>
+    <value>版本：{0}</value>
   </data>
+
   <data name="DownloadApktool" xml:space="preserve">
-    <value>Скачать Apktool: </value>
+    <value>下载 Apktool：</value>
   </data>
   <data name="DownloadJava" xml:space="preserve">
-    <value>Скачать JAVA: </value>
+    <value>下载 JAVA：</value>
   </data>
+
   <data name="MenuBuild" xml:space="preserve">
-    <value>Сборка APK</value>
+    <value>构建 APK</value>
   </data>
   <data name="BuildHeader" xml:space="preserve">
-    <value>Сборка APK</value>
+    <value>构建 APK</value>
   </data>
   <data name="SelectProjectFolder" xml:space="preserve">
-    <value>Выберите папку проекта</value>
+    <value>选择项目文件夹</value>
   </data>
   <data name="SignApk" xml:space="preserve">
-    <value>Подписать APK</value>
+    <value>签名 APK</value>
   </data>
   <data name="UseAapt2" xml:space="preserve">
-    <value>Использовать AAPT2</value>
+    <value>使用 AAPT2</value>
   </data>
   <data name="RunBuild" xml:space="preserve">
-    <value>Собрать</value>
+    <value>构建</value>
   </data>
+
   <data name="BuildSuccessful" xml:space="preserve">
-    <value>Файл APK успешно создан.</value>
+    <value>APK 文件创建成功。</value>
   </data>
   <data name="BuildFailed" xml:space="preserve">
-    <value>Ошибка создания APK</value>
+    <value>APK 创建失败</value>
   </data>
   <data name="Warning_InvalidProjectFolder" xml:space="preserve">
-    <value>Выбранная папка не является проектом apktool.</value>
+    <value>所选文件夹不是 apktool 项目。</value>
   </data>
+
   <data name="DragDropFolderHint" xml:space="preserve">
-    <value>Перетащите папку сюда</value>
+    <value>将文件夹拖放到此处</value>
   </data>
+
   <data name="MenuAnalyser" xml:space="preserve">
-    <value>Анализ APK</value>
+    <value>APK 分析</value>
   </data>
   <data name="AnalyserHeader" xml:space="preserve">
-    <value>Анализ APK</value>
+    <value>APK 分析</value>
   </data>
   <data name="RunAnalysis" xml:space="preserve">
-    <value>Анализировать</value>
+    <value>开始分析</value>
   </data>
+
   <data name="AnalysisStarting" xml:space="preserve">
-    <value>Начало анализа...</value>
+    <value>分析开始…</value>
   </data>
   <data name="AnalysisComplete" xml:space="preserve">
-    <value>Анализ завершен</value>
+    <value>分析完成</value>
   </data>
   <data name="AnalysisFailed" xml:space="preserve">
-    <value>Анализ не удался</value>
+    <value>分析失败</value>
   </data>
+
   <data name="RootCheckFound" xml:space="preserve">
-    <value>Root проверка: Обнаружено</value>
+    <value>Root 检测：已发现</value>
   </data>
   <data name="RootCheckNotFound" xml:space="preserve">
-    <value>Root проверка: Не обнаружено</value>
+    <value>Root 检测：未发现</value>
   </data>
   <data name="EmulatorCheckFound" xml:space="preserve">
-    <value>Эмулятор: Обнаружено</value>
+    <value>模拟器：已发现</value>
   </data>
   <data name="EmulatorCheckNotFound" xml:space="preserve">
-    <value>Эмулятор: Не обнаружено</value>
+    <value>模拟器：未发现</value>
   </data>
+
   <data name="CredentialsFound" xml:space="preserve">
-    <value>Жестко заданные пароли: Обнаружено</value>
+    <value>硬编码凭据：已发现</value>
   </data>
   <data name="CredentialsNotFound" xml:space="preserve">
-    <value>Жестко заданные пароли: Не обнаружено</value>
+    <value>硬编码凭据：未发现</value>
   </data>
+
   <data name="SqlQueriesFound" xml:space="preserve">
-    <value>SQL запросы: Обнаружено</value>
+    <value>SQL 查询：已发现</value>
   </data>
   <data name="SqlQueriesNotFound" xml:space="preserve">
-    <value>SQL запросы: Не обнаружено</value>
+    <value>SQL 查询：未发现</value>
   </data>
+
   <data name="HttpUrlsFound" xml:space="preserve">
-    <value>HTTP/HTTPS ссылки: Обнаружено</value>
+    <value>HTTP/HTTPS 链接：已发现</value>
   </data>
   <data name="HttpUrlsNotFound" xml:space="preserve">
-    <value>HTTP/HTTPS ссылки: Не обнаружено</value>
+    <value>HTTP/HTTPS 链接：未发现</value>
   </data>
+
   <data name="FoundIn" xml:space="preserve">
-    <value>  Найдено в:</value>
+    <value>  发现于：</value>
   </data>
+
   <data name="Error_InvalidSmaliProject" xml:space="preserve">
-    <value>Выбранная папка не содержит Smali файлов.</value>
+    <value>所选文件夹不包含 Smali 文件。</value>
   </data>
+
   <data name="DownloadApktoolButton" xml:space="preserve">
-    <value>Скачать ApkTool</value>
+    <value>下载 Apktool</value>
   </data>
   <data name="DownloadJavaButton" xml:space="preserve">
-    <value>Скачать JAVA</value>
+    <value>下载 JAVA</value>
   </data>
   <data name="DownloadUbersignerButton" xml:space="preserve">
-    <value>Скачать Ubersigner</value>
+    <value>下载 Ubersigner</value>
   </data>
+
   <data name="LanguageLabel" xml:space="preserve">
-    <value>Язык</value>
+    <value>语言</value>
   </data>
   <data name="SaveReport" xml:space="preserve">
-    <value>Сохранить отчет</value>
+    <value>保存报告</value>
   </data>
   <data name="Run" xml:space="preserve">
-    <value>Запустить</value>
+    <value>运行</value>
   </data>
   <data name="ApkName" xml:space="preserve">
-    <value>Имя APK</value>
+    <value>APK 名称</value>
   </data>
   <data name="ConsoleLog" xml:space="preserve">
-    <value>Лог консоли</value>
+    <value>控制台日志</value>
   </data>
 </root>
