@@ -98,7 +98,7 @@
     <value>Оригінальний маніфест</value>
   </data>
   <data name="ExtractToApkFolder" xml:space="preserve">
-    <value>Витягти в папку APK</value>
+    <value>Зберегти у папку APK</value>
   </data>
   <data name="DecodeSources" xml:space="preserve">
     <value>Декодувати джерела</value>
