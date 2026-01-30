@@ -8,6 +8,7 @@
     <UseWPF>true</UseWPF>
     <Version>1.1.5</Version>
     <InformationalVersion>$(Version)</InformationalVersion>
+    <ApplicationIcon>Resources\CyberUnpack.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>

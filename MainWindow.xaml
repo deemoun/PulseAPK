@@ -9,7 +9,7 @@
         xmlns:properties="clr-namespace:PulseAPK.Properties"
         mc:Ignorable="d"
         Title="{Binding WindowTitle}" Height="650" Width="1000"
-        Icon="Resources/CyberUnpack.png"
+        Icon="Resources/CyberUnpack.ico"
         WindowStartupLocation="CenterScreen"
         Background="{StaticResource Brush.Background}">
 
