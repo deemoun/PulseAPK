@@ -59,7 +59,18 @@
                 <CheckBox Content="{x:Static properties:Resources.DecodeResources}" IsChecked="{Binding DecodeResources}" Style="{StaticResource CyberCheckBoxStyle}" Margin="0,0,20,10"/>
                 <CheckBox Content="{x:Static properties:Resources.DecodeSources}" IsChecked="{Binding DecodeSources}" Style="{StaticResource CyberCheckBoxStyle}" Margin="0,0,20,10"/>
                 <CheckBox Content="{x:Static properties:Resources.KeepOriginalManifest}" IsChecked="{Binding KeepOriginalManifest}" Style="{StaticResource CyberCheckBoxStyle}" Margin="0,0,20,10"/>
-                <CheckBox Content="{x:Static properties:Resources.ExtractToApkFolder}" IsChecked="{Binding ExtractToApkFolder}" Style="{StaticResource CyberCheckBoxStyle}"/>
+                <CheckBox Content="{x:Static properties:Resources.ExtractToApkFolder}" IsChecked="{Binding ExtractToApkFolder}" Style="{StaticResource CyberCheckBoxStyle}" Margin="0,0,20,6"/>
+                <CheckBox Content="{x:Static properties:Resources.CreateTimestampedFolder}" IsChecked="{Binding CreateTimestampedFolder}" Margin="20,0,20,10">
+                    <CheckBox.Style>
+                        <Style TargetType="CheckBox" BasedOn="{StaticResource CyberCheckBoxStyle}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ExtractToApkFolder}" Value="False">
+                                    <Setter Property="IsEnabled" Value="False"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </CheckBox.Style>
+                </CheckBox>
             </StackPanel>
 
             <StackPanel Grid.Column="1">

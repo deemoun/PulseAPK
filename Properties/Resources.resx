@@ -100,6 +100,9 @@
   <data name="ExtractToApkFolder" xml:space="preserve">
     <value>Extract to a folder where APK is located</value>
   </data>
+  <data name="CreateTimestampedFolder" xml:space="preserve">
+    <value>Create an extracted folder with timestamp</value>
+  </data>
   <data name="DecodeSources" xml:space="preserve">
     <value>Decode Sources</value>
   </data>

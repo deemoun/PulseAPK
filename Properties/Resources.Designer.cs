@@ -383,6 +383,15 @@ namespace PulseAPK.Properties {
                 return ResourceManager.GetString("ExtractToApkFolder", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Create an extracted folder with timestamp.
+        /// </summary>
+        public static string CreateTimestampedFolder {
+            get {
+                return ResourceManager.GetString("CreateTimestampedFolder", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   Looks up a localized string similar to About.

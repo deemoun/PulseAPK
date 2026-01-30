@@ -29,6 +29,9 @@ namespace PulseAPK.ViewModels
         private bool _extractToApkFolder;
 
         [ObservableProperty]
+        private bool _createTimestampedFolder;
+
+        [ObservableProperty]
         private string? _outputFolder;
 
         [ObservableProperty]
@@ -73,7 +76,17 @@ namespace PulseAPK.ViewModels
 
         partial void OnKeepOriginalManifestChanged(bool value) => UpdateCommandPreview();
 
-        partial void OnExtractToApkFolderChanged(bool value) => UpdateCommandPreview();
+        partial void OnExtractToApkFolderChanged(bool value)
+        {
+            if (!value && CreateTimestampedFolder)
+            {
+                CreateTimestampedFolder = false;
+            }
+
+            UpdateCommandPreview();
+        }
+
+        partial void OnCreateTimestampedFolderChanged(bool value) => UpdateCommandPreview();
 
         partial void OnOutputFolderChanged(string? value) => UpdateCommandPreview();
 
@@ -274,7 +287,9 @@ namespace PulseAPK.ViewModels
         {
             if (ExtractToApkFolder)
             {
-                return GetApkDerivedOutputFolder(ApkPath);
+                return CreateTimestampedFolder
+                    ? GetTimestampedApkOutputFolder(ApkPath, DateTime.Now)
+                    : GetApkDerivedOutputFolder(ApkPath);
             }
 
             return !string.IsNullOrWhiteSpace(OutputFolder)
@@ -286,9 +301,14 @@ namespace PulseAPK.ViewModels
         {
             if (ExtractToApkFolder)
             {
-                return !string.IsNullOrWhiteSpace(ApkPath)
-                    ? GetApkDerivedOutputFolder(ApkPath)
-                    : "<apk folder>";
+                if (string.IsNullOrWhiteSpace(ApkPath))
+                {
+                    return "<apk folder>";
+                }
+
+                return CreateTimestampedFolder
+                    ? GetTimestampedApkOutputFolderPreview(ApkPath)
+                    : GetApkDerivedOutputFolder(ApkPath);
             }
 
             return !string.IsNullOrWhiteSpace(OutputFolder)
@@ -306,6 +326,31 @@ namespace PulseAPK.ViewModels
             }
 
             return Path.Combine(Path.GetDirectoryName(apkPath)!, Path.GetFileNameWithoutExtension(apkPath));
+        }
+
+        private static string GetTimestampedApkOutputFolder(string? apkPath, DateTime timestamp)
+        {
+            if (string.IsNullOrWhiteSpace(apkPath))
+            {
+                return string.Empty;
+            }
+
+            var baseName = Path.GetFileNameWithoutExtension(apkPath);
+            var suffix = timestamp.ToString("yyyyMMdd_HHmmss");
+
+            return Path.Combine(Path.GetDirectoryName(apkPath)!, $"{baseName}_{suffix}");
+        }
+
+        private static string GetTimestampedApkOutputFolderPreview(string? apkPath)
+        {
+            if (string.IsNullOrWhiteSpace(apkPath))
+            {
+                return string.Empty;
+            }
+
+            var baseName = Path.GetFileNameWithoutExtension(apkPath);
+
+            return Path.Combine(Path.GetDirectoryName(apkPath)!, $"{baseName}_<timestamp>");
         }
 
         private static bool IsHighRiskOutputDirectory(string outputDir)
