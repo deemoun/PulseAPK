@@ -97,6 +97,9 @@
   <data name="KeepOriginalManifest" xml:space="preserve">
     <value>Keep Original Manifest</value>
   </data>
+  <data name="ExtractToApkFolder" xml:space="preserve">
+    <value>Extract to a folder where APK is located</value>
+  </data>
   <data name="DecodeSources" xml:space="preserve">
     <value>Decode Sources</value>
   </data>

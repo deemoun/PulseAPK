@@ -26,6 +26,9 @@ namespace PulseAPK.ViewModels
         private bool _keepOriginalManifest;
 
         [ObservableProperty]
+        private bool _extractToApkFolder;
+
+        [ObservableProperty]
         private string? _outputFolder;
 
         [ObservableProperty]
@@ -69,6 +72,8 @@ namespace PulseAPK.ViewModels
         partial void OnDecodeSourcesChanged(bool value) => UpdateCommandPreview();
 
         partial void OnKeepOriginalManifestChanged(bool value) => UpdateCommandPreview();
+
+        partial void OnExtractToApkFolderChanged(bool value) => UpdateCommandPreview();
 
         partial void OnOutputFolderChanged(string? value) => UpdateCommandPreview();
 
@@ -135,9 +140,7 @@ namespace PulseAPK.ViewModels
 
             SetConsoleLog(Properties.Resources.StartingApktool);
 
-            var outputDir = !string.IsNullOrWhiteSpace(OutputFolder)
-                ? OutputFolder
-                : Path.Combine(Path.GetDirectoryName(ApkPath)!, Path.GetFileNameWithoutExtension(ApkPath));
+            var outputDir = ResolveOutputDirectory();
 
             var normalizedOutputDir = Path.GetFullPath(outputDir);
 
@@ -255,11 +258,7 @@ namespace PulseAPK.ViewModels
                 ? "<select apk>"
                 : $"\"{ApkPath}\"";
 
-            var outputDir = !string.IsNullOrWhiteSpace(OutputFolder)
-                ? OutputFolder
-                : !string.IsNullOrWhiteSpace(ApkPath)
-                    ? Path.Combine(Path.GetDirectoryName(ApkPath)!, Path.GetFileNameWithoutExtension(ApkPath))
-                    : "<output folder>";
+            var outputDir = ResolveOutputDirectoryPreview();
 
             var builder = new StringBuilder();
             builder.Append($"java -jar {apktool} d {apkInput} -o \"{outputDir}\"");
@@ -269,6 +268,44 @@ namespace PulseAPK.ViewModels
             if (KeepOriginalManifest) builder.Append(" -m");
 
             return $"Command preview: {builder}";
+        }
+
+        private string ResolveOutputDirectory()
+        {
+            if (ExtractToApkFolder)
+            {
+                return GetApkDerivedOutputFolder(ApkPath);
+            }
+
+            return !string.IsNullOrWhiteSpace(OutputFolder)
+                ? OutputFolder
+                : GetApkDerivedOutputFolder(ApkPath);
+        }
+
+        private string ResolveOutputDirectoryPreview()
+        {
+            if (ExtractToApkFolder)
+            {
+                return !string.IsNullOrWhiteSpace(ApkPath)
+                    ? GetApkDerivedOutputFolder(ApkPath)
+                    : "<apk folder>";
+            }
+
+            return !string.IsNullOrWhiteSpace(OutputFolder)
+                ? OutputFolder
+                : !string.IsNullOrWhiteSpace(ApkPath)
+                    ? GetApkDerivedOutputFolder(ApkPath)
+                    : "<output folder>";
+        }
+
+        private static string GetApkDerivedOutputFolder(string? apkPath)
+        {
+            if (string.IsNullOrWhiteSpace(apkPath))
+            {
+                return string.Empty;
+            }
+
+            return Path.Combine(Path.GetDirectoryName(apkPath)!, Path.GetFileNameWithoutExtension(apkPath));
         }
 
         private static bool IsHighRiskOutputDirectory(string outputDir)
