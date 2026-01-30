@@ -36,6 +36,7 @@
 
   <ItemGroup>
     <Resource Include="Resources\CyberUnpack.png" />
+    <Resource Include="Resources\CyberUnpack.ico" />
   </ItemGroup>
 
   <ItemGroup>
