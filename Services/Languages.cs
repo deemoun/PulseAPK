@@ -6,11 +6,21 @@ namespace PulseAPK.Services
     {
         [Description("English")]
         English,
-        [Description("Russian")]
+        [Description("Русский")]
         Russian,
-        [Description("Ukrainian")]
+        [Description("Українська")]
         Ukrainian,
-        [Description("Spanish")]
-        Spanish
+        [Description("Español")]
+        Spanish,
+        [Description("中文")]
+        Chinese,
+        [Description("Deutsch")]
+        German,
+        [Description("Français")]
+        French,
+        [Description("Português")]
+        Portuguese,
+        [Description("العربية")]
+        Arabic
     }
 }

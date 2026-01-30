@@ -47,6 +47,11 @@ namespace PulseAPK.Services
                 Languages.Russian => "ru-RU",
                 Languages.Ukrainian => "uk-UA",
                 Languages.Spanish => "es-ES",
+                Languages.Chinese => "zh-CN",
+                Languages.German => "de-DE",
+                Languages.French => "fr-FR",
+                Languages.Portuguese => "pt-BR",
+                Languages.Arabic => "ar-SA",
                 _ => "en-US"
             };
 
