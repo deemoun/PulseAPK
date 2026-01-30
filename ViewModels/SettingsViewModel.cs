@@ -35,8 +35,27 @@ namespace PulseAPK.ViewModels
             ApktoolPath = _settingsService.Settings.ApktoolPath;
             UbersignPath = _settingsService.Settings.UbersignPath;
             JavaPathDisplay = GetJavaPathDisplay();
+            
+            _selectedLanguage = Services.LocalizationService.Instance.CurrentCulture.TwoLetterISOLanguageName switch
+            {
+                "ru" => Services.Languages.Russian,
+                "uk" => Services.Languages.Ukrainian,
+                "es" => Services.Languages.Spanish,
+                _ => Services.Languages.English
+            };
 
             _isInitialized = true;
+        }
+
+        public System.Collections.Generic.IEnumerable<Services.Languages> Languages => System.Enum.GetValues(typeof(Services.Languages)).Cast<Services.Languages>();
+
+        [ObservableProperty]
+        private Services.Languages _selectedLanguage;
+
+        partial void OnSelectedLanguageChanged(Services.Languages value)
+        {
+            if (!_isInitialized) return;
+            Services.LocalizationService.Instance.SetLanguage(value);
         }
 
         [RelayCommand]

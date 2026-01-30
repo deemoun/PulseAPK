@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:PulseAPK.Views"
+             xmlns:utils="clr-namespace:PulseAPK.Utils"
              xmlns:vm="clr-namespace:PulseAPK.ViewModels"
              xmlns:properties="clr-namespace:PulseAPK.Properties"
              mc:Ignorable="d" 
@@ -20,7 +21,7 @@
         </Grid.RowDefinitions>
 
         <!-- Header -->
-        <TextBlock Text="{x:Static properties:Resources.BuildHeader}" FontSize="28" FontWeight="SemiBold" Foreground="{StaticResource Brush.TextPrimary}" Margin="0,0,0,20">
+        <TextBlock Text="{utils:Localization BuildHeader}" FontSize="28" FontWeight="SemiBold" Foreground="{StaticResource Brush.TextPrimary}" Margin="0,0,0,20">
             <TextBlock.Effect>
                 <DropShadowEffect Color="{StaticResource Color.NeonCyan}" BlurRadius="10" ShadowDepth="0" Opacity="0.5"/>
             </TextBlock.Effect>
@@ -35,12 +36,26 @@
                 </Grid.ColumnDefinitions>
                 
                 <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="20">
-                    <TextBlock Text="{Binding ProjectPath, TargetNullValue={x:Static properties:Resources.SelectProjectFolder}}" Foreground="{StaticResource Brush.TextPrimary}" FontSize="24" HorizontalAlignment="Center" TextTrimming="CharacterEllipsis" MaxWidth="500"/>
-                    <TextBlock Text="{x:Static properties:Resources.DragDropFolderHint}" Foreground="{StaticResource Brush.TextSecondary}" FontSize="14" HorizontalAlignment="Center" Margin="0,5,0,0" Visibility="{Binding IsHintVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                    <TextBlock Foreground="{StaticResource Brush.TextPrimary}" FontSize="24" HorizontalAlignment="Center" TextTrimming="CharacterEllipsis" MaxWidth="500">
+                         <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Text" Value="{Binding ProjectPath}"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ProjectPath}" Value="{x:Null}">
+                                        <Setter Property="Text" Value="{utils:Localization SelectProjectFolder}"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding ProjectPath}" Value="">
+                                        <Setter Property="Text" Value="{utils:Localization SelectProjectFolder}"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                    <TextBlock Text="{utils:Localization DragDropFolderHint}" Foreground="{StaticResource Brush.TextSecondary}" FontSize="14" HorizontalAlignment="Center" Margin="0,5,0,0" Visibility="{Binding IsHintVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                 </StackPanel>
 
                 <Button Grid.Column="1"
-                        Content="{x:Static properties:Resources.RunBuild}"
+                        Content="{utils:Localization RunBuild}"
                         Style="{StaticResource RunButtonStyle}"
                         Command="{Binding RunBuildCommand}"
                         Width="140" Height="110" Margin="20"
@@ -56,14 +71,14 @@
             </Grid.ColumnDefinitions>
 
             <StackPanel Grid.Column="0" Margin="0,0,40,0">
-                <CheckBox Content="{x:Static properties:Resources.UseAapt2}" IsChecked="{Binding UseAapt2}" Style="{StaticResource CyberCheckBoxStyle}" Margin="0,0,20,10"/>
-                <CheckBox Content="{x:Static properties:Resources.SignApk}" IsChecked="{Binding SignApk}" Style="{StaticResource CyberCheckBoxStyle}" Margin="0,0,20,10"/>
+                <CheckBox Content="{utils:Localization UseAapt2}" IsChecked="{Binding UseAapt2}" Style="{StaticResource CyberCheckBoxStyle}" Margin="0,0,20,10"/>
+                <CheckBox Content="{utils:Localization SignApk}" IsChecked="{Binding SignApk}" Style="{StaticResource CyberCheckBoxStyle}" Margin="0,0,20,10"/>
             </StackPanel>
 
             <StackPanel Grid.Column="1">
                 <TextBox Text="{Binding OutputApkName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
                          Style="{StaticResource CyberTextBoxStyle}"
-                         Tag="APK Name"
+                         Tag="{utils:Localization ApkName}"
                          Height="30"
                          Margin="0,0,0,10"
                          VerticalContentAlignment="Center"
@@ -77,9 +92,11 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
-                    <TextBox Text="{Binding OutputFolderPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, TargetNullValue={x:Static properties:Resources.OutputApkLabel}}" Style="{StaticResource CyberTextBoxStyle}" Tag="{x:Static properties:Resources.OutputApkLabel}" Height="30" VerticalContentAlignment="Center" Background="{StaticResource Brush.Panel}" Foreground="{StaticResource Brush.TextPrimary}" BorderBrush="{StaticResource Brush.BorderGlow}"/>
+                    <TextBox Text="{Binding OutputFolderPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource CyberTextBoxStyle}" Tag="{utils:Localization OutputApkLabel}" Height="30" VerticalContentAlignment="Center" Background="{StaticResource Brush.Panel}" Foreground="{StaticResource Brush.TextPrimary}" BorderBrush="{StaticResource Brush.BorderGlow}">
+                        <!-- Removed TargetNullValue as it's static. Using Tag for watermark if style supports it, or it will be blank. -->
+                    </TextBox>
                     <StackPanel Grid.Column="1" Orientation="Vertical" Margin="10,0,0,0">
-                        <Button Content="{x:Static properties:Resources.Browse}" Style="{StaticResource CyberButtonStyle}" Height="30" Padding="16,0" MinWidth="90" Command="{Binding BrowseOutputApkCommand}" Margin="0,0,0,4"/>
+                        <Button Content="{utils:Localization Browse}" Style="{StaticResource CyberButtonStyle}" Height="30" Padding="16,0" MinWidth="90" Command="{Binding BrowseOutputApkCommand}" Margin="0,0,0,4"/>
                     </StackPanel>
                 </Grid>
             </StackPanel>
@@ -92,7 +109,7 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                <TextBlock Text="Console log" Foreground="{StaticResource Brush.TextPrimary}" Margin="0,0,0,10"/>
+                <TextBlock Text="{utils:Localization ConsoleLog}" Foreground="{StaticResource Brush.TextPrimary}" Margin="0,0,0,10"/>
                 <ScrollViewer Grid.Row="1">
                     <TextBox Text="{Binding ConsoleLog}" Foreground="{StaticResource Brush.TextSecondary}" FontFamily="Consolas" IsReadOnly="True" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" Background="Transparent" BorderThickness="0"/>
                 </ScrollViewer>

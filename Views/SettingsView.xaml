@@ -4,40 +4,44 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:properties="clr-namespace:PulseAPK.Properties"
+             xmlns:utils="clr-namespace:PulseAPK.Utils"
              mc:Ignorable="d"
              d:DesignHeight="600" d:DesignWidth="800">
     <Grid Margin="20">
         <StackPanel>
-            <TextBlock Text="{x:Static properties:Resources.SettingsHeader}" Foreground="{StaticResource Brush.TextPrimary}" FontSize="24" FontWeight="Bold" Margin="0,0,0,20"/>
+            <TextBlock Text="{utils:Localization SettingsHeader}" Foreground="{StaticResource Brush.TextPrimary}" FontSize="24" FontWeight="Bold" Margin="0,0,0,20"/>
 
-            <TextBlock Text="{x:Static properties:Resources.ApktoolPath}" Foreground="{StaticResource Brush.TextSecondary}" Margin="0,0,0,5"/>
+            <TextBlock Text="{utils:Localization LanguageLabel}" Foreground="{StaticResource Brush.TextSecondary}" Margin="0,0,0,5"/>
+            <ComboBox ItemsSource="{Binding Languages}" SelectedItem="{Binding SelectedLanguage}" Width="200" HorizontalAlignment="Left" Margin="0,0,0,10"/>
+
+            <TextBlock Text="{utils:Localization ApktoolPath}" Foreground="{StaticResource Brush.TextSecondary}" Margin="0,0,0,5"/>
             <DockPanel>
                 <TextBox Text="{Binding ApktoolPath, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource CyberTextBoxStyle}" Width="400"/>
-                <Button Content="{x:Static properties:Resources.Browse}" Command="{Binding BrowseApktoolCommand}" Style="{StaticResource CyberButtonStyle}" Margin="10,0,0,0" Padding="16,0" MinWidth="90"/>
+                <Button Content="{utils:Localization Browse}" Command="{Binding BrowseApktoolCommand}" Style="{StaticResource CyberButtonStyle}" Margin="10,0,0,0" Padding="16,0" MinWidth="90"/>
             </DockPanel>
-            <TextBlock Text="{x:Static properties:Resources.UbersignPath}" Foreground="{StaticResource Brush.TextSecondary}" Margin="0,10,0,5"/>
+            <TextBlock Text="{utils:Localization UbersignPath}" Foreground="{StaticResource Brush.TextSecondary}" Margin="0,10,0,5"/>
             <DockPanel>
                 <TextBox Text="{Binding UbersignPath, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource CyberTextBoxStyle}" Width="400"/>
-                <Button Content="{x:Static properties:Resources.Browse}" Command="{Binding BrowseUbersignCommand}" Style="{StaticResource CyberButtonStyle}" Margin="10,0,0,0" Padding="16,0" MinWidth="90"/>
+                <Button Content="{utils:Localization Browse}" Command="{Binding BrowseUbersignCommand}" Style="{StaticResource CyberButtonStyle}" Margin="10,0,0,0" Padding="16,0" MinWidth="90"/>
             </DockPanel>
             <TextBlock Text="{Binding JavaPathDisplay}" Foreground="{StaticResource Brush.TextSecondary}" Margin="0,5,0,0" TextWrapping="Wrap"/>
                 <StackPanel Margin="0,5,0,0">
                 <StackPanel Orientation="Horizontal" Margin="0,0,0,3">
-                    <Button Content="Download ApkTool"
+                    <Button Content="{utils:Localization DownloadApktoolButton}"
                             Style="{StaticResource CyberButtonStyle}"
                             CommandParameter="https://bitbucket.org/iBotPeaches/apktool/downloads/"
                             Click="LinkButton_Click"
                             Padding="20,6"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
-                    <Button Content="Download JAVA"
+                    <Button Content="{utils:Localization DownloadJavaButton}"
                             Style="{StaticResource CyberButtonStyle}"
                             CommandParameter="https://www.azul.com/downloads/?package=jdk#zulu"
                             Click="LinkButton_Click"
                             Padding="20,6"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="0,3,0,0">
-                    <Button Content="Download Ubersigner"
+                    <Button Content="{utils:Localization DownloadUbersignerButton}"
                             Style="{StaticResource CyberButtonStyle}"
                             CommandParameter="https://github.com/patrickfav/uber-apk-signer/releases"
                             Click="LinkButton_Click"

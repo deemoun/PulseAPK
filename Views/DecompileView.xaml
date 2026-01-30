@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:PulseAPK.Views"
+             xmlns:utils="clr-namespace:PulseAPK.Utils"
              xmlns:vm="clr-namespace:PulseAPK.ViewModels"
              xmlns:properties="clr-namespace:PulseAPK.Properties"
              mc:Ignorable="d" 
@@ -20,7 +21,7 @@
         </Grid.RowDefinitions>
 
         <!-- Header -->
-        <TextBlock Text="{x:Static properties:Resources.DecompileHeader}" FontSize="28" FontWeight="SemiBold" Foreground="{StaticResource Brush.TextPrimary}" Margin="0,0,0,20">
+        <TextBlock Text="{utils:Localization DecompileHeader}" FontSize="28" FontWeight="SemiBold" Foreground="{StaticResource Brush.TextPrimary}" Margin="0,0,0,20">
             <TextBlock.Effect>
                 <DropShadowEffect Color="{StaticResource Color.NeonCyan}" BlurRadius="10" ShadowDepth="0" Opacity="0.5"/>
             </TextBlock.Effect>
@@ -35,12 +36,26 @@
                 </Grid.ColumnDefinitions>
                 
                 <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="20">
-                    <TextBlock Text="{Binding ApkPath, TargetNullValue={x:Static properties:Resources.SelectApk}}" Foreground="{StaticResource Brush.TextPrimary}" FontSize="24" HorizontalAlignment="Center" TextTrimming="CharacterEllipsis" MaxWidth="500"/>
-                    <TextBlock Text="{x:Static properties:Resources.DragDropHint}" Foreground="{StaticResource Brush.TextSecondary}" FontSize="14" HorizontalAlignment="Center" Margin="0,5,0,0" Visibility="{Binding IsHintVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                    <TextBlock Foreground="{StaticResource Brush.TextPrimary}" FontSize="24" HorizontalAlignment="Center" TextTrimming="CharacterEllipsis" MaxWidth="500">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Text" Value="{Binding ApkPath}"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ApkPath}" Value="{x:Null}">
+                                        <Setter Property="Text" Value="{utils:Localization SelectApk}"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding ApkPath}" Value="">
+                                        <Setter Property="Text" Value="{utils:Localization SelectApk}"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                    <TextBlock Text="{utils:Localization DragDropHint}" Foreground="{StaticResource Brush.TextSecondary}" FontSize="14" HorizontalAlignment="Center" Margin="0,5,0,0" Visibility="{Binding IsHintVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                 </StackPanel>
 
                 <Button Grid.Column="1"
-                        Content="Run"
+                        Content="{utils:Localization Run}"
                         Style="{StaticResource RunButtonStyle}"
                         Command="{Binding RunDecompileCommand}"
                         Width="140" Height="110" Margin="20"
@@ -56,10 +71,10 @@
             </Grid.ColumnDefinitions>
 
             <StackPanel Grid.Column="0" Margin="0,0,40,0">
-                <CheckBox Content="{x:Static properties:Resources.DecodeResources}" IsChecked="{Binding DecodeResources}" Style="{StaticResource CyberCheckBoxStyle}" Margin="0,0,20,10"/>
-                <CheckBox Content="{x:Static properties:Resources.DecodeSources}" IsChecked="{Binding DecodeSources}" Style="{StaticResource CyberCheckBoxStyle}" Margin="0,0,20,10"/>
-                <CheckBox Content="{x:Static properties:Resources.KeepOriginalManifest}" IsChecked="{Binding KeepOriginalManifest}" Style="{StaticResource CyberCheckBoxStyle}" Margin="0,0,20,10"/>
-                <CheckBox Content="{x:Static properties:Resources.ExtractToApkFolder}" IsChecked="{Binding ExtractToApkFolder}" Style="{StaticResource CyberCheckBoxStyle}"/>
+                <CheckBox Content="{utils:Localization DecodeResources}" IsChecked="{Binding DecodeResources}" Style="{StaticResource CyberCheckBoxStyle}" Margin="0,0,20,10"/>
+                <CheckBox Content="{utils:Localization DecodeSources}" IsChecked="{Binding DecodeSources}" Style="{StaticResource CyberCheckBoxStyle}" Margin="0,0,20,10"/>
+                <CheckBox Content="{utils:Localization KeepOriginalManifest}" IsChecked="{Binding KeepOriginalManifest}" Style="{StaticResource CyberCheckBoxStyle}" Margin="0,0,20,10"/>
+                <CheckBox Content="{utils:Localization ExtractToApkFolder}" IsChecked="{Binding ExtractToApkFolder}" Style="{StaticResource CyberCheckBoxStyle}"/>
             </StackPanel>
 
             <StackPanel Grid.Column="1">
@@ -68,7 +83,8 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
-                    <TextBox Text="{Binding OutputFolder, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, TargetNullValue={x:Static properties:Resources.OutputFolder}}" Tag="{x:Static properties:Resources.OutputFolder}" Height="30" VerticalContentAlignment="Center" Background="{StaticResource Brush.Panel}" Foreground="{StaticResource Brush.TextPrimary}" BorderBrush="{StaticResource Brush.BorderGlow}">
+                    <TextBox Text="{Binding OutputFolder, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="30" VerticalContentAlignment="Center" Background="{StaticResource Brush.Panel}" Foreground="{StaticResource Brush.TextPrimary}" BorderBrush="{StaticResource Brush.BorderGlow}">
+                         <!-- Note: Tag for placeholder logic not easily localized if custom. Assuming standard behavior or ignored for now. -->
                         <TextBox.Style>
                             <Style TargetType="TextBox" BasedOn="{StaticResource CyberTextBoxStyle}">
                                 <Style.Triggers>
@@ -89,8 +105,8 @@
                                 </Style.Triggers>
                             </Style>
                         </StackPanel.Style>
-                        <Button Content="{x:Static properties:Resources.Browse}" Style="{StaticResource CyberButtonStyle}" Height="30" Padding="16,0" MinWidth="90" Command="{Binding BrowseOutputFolderCommand}" Margin="0,0,0,4"/>
-                        <Button Content="{x:Static properties:Resources.Open}" Style="{StaticResource CyberButtonStyle}" Height="30" Padding="16,0" MinWidth="90" Command="{Binding OpenOutputFolderCommand}" Margin="0,4,0,0"/>
+                        <Button Content="{utils:Localization Browse}" Style="{StaticResource CyberButtonStyle}" Height="30" Padding="16,0" MinWidth="90" Command="{Binding BrowseOutputFolderCommand}" Margin="0,0,0,4"/>
+                        <Button Content="{utils:Localization Open}" Style="{StaticResource CyberButtonStyle}" Height="30" Padding="16,0" MinWidth="90" Command="{Binding OpenOutputFolderCommand}" Margin="0,4,0,0"/>
                     </StackPanel>
                 </Grid>
             </StackPanel>
@@ -103,7 +119,7 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                <TextBlock Text="Console log" Foreground="{StaticResource Brush.TextPrimary}" Margin="0,0,0,10"/>
+                <TextBlock Text="{utils:Localization ConsoleLog}" Foreground="{StaticResource Brush.TextPrimary}" Margin="0,0,0,10"/>
                 <ScrollViewer Grid.Row="1">
                     <TextBox Text="{Binding ConsoleLog}" Foreground="{StaticResource Brush.TextSecondary}" FontFamily="Consolas" IsReadOnly="True" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" Background="Transparent" BorderThickness="0"/>
                 </ScrollViewer>
