@@ -58,7 +58,8 @@
             <StackPanel Grid.Column="0" Margin="0,0,40,0">
                 <CheckBox Content="{x:Static properties:Resources.DecodeResources}" IsChecked="{Binding DecodeResources}" Style="{StaticResource CyberCheckBoxStyle}" Margin="0,0,20,10"/>
                 <CheckBox Content="{x:Static properties:Resources.DecodeSources}" IsChecked="{Binding DecodeSources}" Style="{StaticResource CyberCheckBoxStyle}" Margin="0,0,20,10"/>
-                <CheckBox Content="{x:Static properties:Resources.KeepOriginalManifest}" IsChecked="{Binding KeepOriginalManifest}" Style="{StaticResource CyberCheckBoxStyle}"/>
+                <CheckBox Content="{x:Static properties:Resources.KeepOriginalManifest}" IsChecked="{Binding KeepOriginalManifest}" Style="{StaticResource CyberCheckBoxStyle}" Margin="0,0,20,10"/>
+                <CheckBox Content="{x:Static properties:Resources.ExtractToApkFolder}" IsChecked="{Binding ExtractToApkFolder}" Style="{StaticResource CyberCheckBoxStyle}"/>
             </StackPanel>
 
             <StackPanel Grid.Column="1">
@@ -67,8 +68,27 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
-                    <TextBox Text="{Binding OutputFolder, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, TargetNullValue={x:Static properties:Resources.OutputFolder}}" Style="{StaticResource CyberTextBoxStyle}" Tag="{x:Static properties:Resources.OutputFolder}" Height="30" VerticalContentAlignment="Center" Background="{StaticResource Brush.Panel}" Foreground="{StaticResource Brush.TextPrimary}" BorderBrush="{StaticResource Brush.BorderGlow}"/>
+                    <TextBox Text="{Binding OutputFolder, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, TargetNullValue={x:Static properties:Resources.OutputFolder}}" Tag="{x:Static properties:Resources.OutputFolder}" Height="30" VerticalContentAlignment="Center" Background="{StaticResource Brush.Panel}" Foreground="{StaticResource Brush.TextPrimary}" BorderBrush="{StaticResource Brush.BorderGlow}">
+                        <TextBox.Style>
+                            <Style TargetType="TextBox" BasedOn="{StaticResource CyberTextBoxStyle}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ExtractToApkFolder}" Value="True">
+                                        <Setter Property="IsEnabled" Value="False"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBox.Style>
+                    </TextBox>
                     <StackPanel Grid.Column="1" Orientation="Vertical" Margin="10,0,0,0">
+                        <StackPanel.Style>
+                            <Style TargetType="StackPanel">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ExtractToApkFolder}" Value="True">
+                                        <Setter Property="IsEnabled" Value="False"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </StackPanel.Style>
                         <Button Content="{x:Static properties:Resources.Browse}" Style="{StaticResource CyberButtonStyle}" Height="30" Padding="16,0" MinWidth="90" Command="{Binding BrowseOutputFolderCommand}" Margin="0,0,0,4"/>
                         <Button Content="{x:Static properties:Resources.Open}" Style="{StaticResource CyberButtonStyle}" Height="30" Padding="16,0" MinWidth="90" Command="{Binding OpenOutputFolderCommand}" Margin="0,4,0,0"/>
                     </StackPanel>

@@ -374,6 +374,15 @@ namespace PulseAPK.Properties {
                 return ResourceManager.GetString("KeepOriginalManifest", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Extract to a folder where APK is located.
+        /// </summary>
+        public static string ExtractToApkFolder {
+            get {
+                return ResourceManager.GetString("ExtractToApkFolder", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   Looks up a localized string similar to About.
