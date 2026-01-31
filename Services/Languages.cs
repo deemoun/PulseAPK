@@ -4,23 +4,23 @@ namespace PulseAPK.Services
 {
     public enum Languages
     {
-        [Description("English")]
+        [Description("English (English)")]
         English,
-        [Description("Русский")]
+        [Description("Russian (Русский)")]
         Russian,
-        [Description("Українська")]
+        [Description("Ukrainian (Українська)")]
         Ukrainian,
-        [Description("Español")]
+        [Description("Spanish (Español)")]
         Spanish,
-        [Description("中文")]
+        [Description("Chinese (中文)")]
         Chinese,
-        [Description("Deutsch")]
+        [Description("German (Deutsch)")]
         German,
-        [Description("Français")]
+        [Description("French (Français)")]
         French,
-        [Description("Português")]
+        [Description("Portuguese (Português)")]
         Portuguese,
-        [Description("العربية")]
+        [Description("Arabic (العربية)")]
         Arabic
     }
 }
