@@ -6,6 +6,7 @@
   <a href="README.de.md">Deutsch</a> |
   <a href="README.es.md">Español</a> |
   <a href="README.fr.md">Français</a> |
+  <a href="README.ar.md">العربية</a> |
   <a href="README.pt.md">Português</a> |
   <a href="README.ru.md">Русский</a> |
   <a href="README.uk.md">Українська</a> |
