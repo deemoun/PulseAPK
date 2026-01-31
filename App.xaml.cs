@@ -1,6 +1,5 @@
-﻿using System.Configuration;
-using System.Data;
-using System.Windows;
+﻿using System.Windows;
+using PulseAPK.Services;
 
 namespace PulseAPK;
 
@@ -11,6 +10,8 @@ public partial class App : Application
 {
     protected override void OnStartup(StartupEventArgs e)
     {
+        var settingsService = new SettingsService();
+        LocalizationService.Instance.Initialize(settingsService);
         base.OnStartup(e);
     }
 }

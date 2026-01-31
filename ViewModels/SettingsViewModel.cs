@@ -32,11 +32,39 @@ namespace PulseAPK.ViewModels
             _settingsService = settingsService;
             _filePickerService = filePickerService;
 
+            // Initialize LocalizationService with SettingsService
+            Services.LocalizationService.Instance.Initialize(_settingsService);
+
             ApktoolPath = _settingsService.Settings.ApktoolPath;
             UbersignPath = _settingsService.Settings.UbersignPath;
             JavaPathDisplay = GetJavaPathDisplay();
+            
+            // Detect current language from LocalizationService
+            _selectedLanguage = Services.LocalizationService.Instance.CurrentCulture.Name switch
+            {
+                "ru-RU" => Services.Languages.Russian,
+                "uk-UA" => Services.Languages.Ukrainian,
+                "es-ES" => Services.Languages.Spanish,
+                "zh-CN" => Services.Languages.Chinese,
+                "de-DE" => Services.Languages.German,
+                "fr-FR" => Services.Languages.French,
+                "pt-BR" => Services.Languages.Portuguese,
+                "ar-SA" => Services.Languages.Arabic,
+                _ => Services.Languages.English
+            };
 
             _isInitialized = true;
+        }
+
+        public System.Collections.Generic.IEnumerable<Services.Languages> Languages => System.Enum.GetValues(typeof(Services.Languages)).Cast<Services.Languages>();
+
+        [ObservableProperty]
+        private Services.Languages _selectedLanguage;
+
+        partial void OnSelectedLanguageChanged(Services.Languages value)
+        {
+            if (!_isInitialized) return;
+            Services.LocalizationService.Instance.SetLanguage(value);
         }
 
         [RelayCommand]

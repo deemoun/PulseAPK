@@ -62,237 +62,237 @@
     <value>PulseAPK</value>
   </data>
   <data name="MenuDecompile" xml:space="preserve">
-    <value>Decompile</value>
+    <value>Декомпіляція</value>
   </data>
   <data name="MenuSettings" xml:space="preserve">
-    <value>Settings</value>
+    <value>Налаштування</value>
   </data>
   <data name="MenuAbout" xml:space="preserve">
-    <value>About</value>
+    <value>Про програму</value>
   </data>
   <data name="DecompileHeader" xml:space="preserve">
-    <value>Decompilation</value>
+    <value>Декомпіляція</value>
   </data>
   <data name="SelectApk" xml:space="preserve">
-    <value>Select APK</value>
+    <value>Оберіть APK</value>
   </data>
   <data name="OutputFolder" xml:space="preserve">
-    <value>Output Folder</value>
+    <value>Папка виводу</value>
   </data>
   <data name="OutputApkLabel" xml:space="preserve">
-    <value>Output APK Path</value>
+    <value>Шлях вихідного APK</value>
   </data>
   <data name="Browse" xml:space="preserve">
-    <value>Browse</value>
+    <value>Огляд</value>
   </data>
   <data name="Open" xml:space="preserve">
-    <value>Open</value>
+    <value>Відкрити</value>
   </data>
   <data name="DragDropHint" xml:space="preserve">
-    <value>Drag and drop a file</value>
+    <value>Перетягніть файл сюди</value>
   </data>
   <data name="DecodeResources" xml:space="preserve">
-    <value>Decode Resources</value>
+    <value>Декодувати ресурси</value>
   </data>
   <data name="KeepOriginalManifest" xml:space="preserve">
-    <value>Keep Original Manifest</value>
+    <value>Оригінальний маніфест</value>
   </data>
   <data name="ExtractToApkFolder" xml:space="preserve">
-    <value>Extract to a folder where APK is located</value>
+    <value>Зберегти у папку APK</value>
   </data>
   <data name="DecodeSources" xml:space="preserve">
-    <value>Decode Sources</value>
+    <value>Декодувати джерела</value>
   </data>
   <data name="RunDecompile" xml:space="preserve">
-    <value>Run Decompile</value>
+    <value>Запустити</value>
   </data>
   <data name="WaitingForCommand" xml:space="preserve">
-    <value>Waiting for command...</value>
+    <value>Очікування команди...</value>
   </data>
   <data name="StartingApktool" xml:space="preserve">
-    <value>Starting apktool...</value>
+    <value>Запуск apktool...</value>
   </data>
   <data name="DecompileFailed" xml:space="preserve">
-    <value>Decompile failed</value>
+    <value>Помилка декомпіляції</value>
   </data>
   <data name="DecompileSuccessful" xml:space="preserve">
-    <value>Decompile successful</value>
+    <value>Декомпіляція успішна</value>
   </data>
   <data name="Error_OutputFolderNotSet" xml:space="preserve">
-    <value>Output folder is not set.</value>
+    <value>Папка виводу не задана.</value>
   </data>
   <data name="Error_FolderNotFound" xml:space="preserve">
-    <value>The folder '{0}' does not exist.</value>
+    <value>Папка '{0}' не існує.</value>
   </data>
   <data name="Error_CouldNotOpenFolder" xml:space="preserve">
-    <value>Could not open folder: {0}</value>
+    <value>Не вдалося відкрити папку: {0}</value>
   </data>
   <data name="Error_MissingApktool" xml:space="preserve">
-    <value>Please configure the apktool path in Settings before running a decompile.</value>
+    <value>Будь ласка, налаштуйте шлях до apktool у налаштуваннях.</value>
   </data>
   <data name="Error_InvalidApktoolPath" xml:space="preserve">
-    <value>The apktool path '{0}' does not exist. Please update it in Settings.</value>
+    <value>Шлях до apktool '{0}' не існує.</value>
   </data>
   <data name="Error_InvalidApkFile" xml:space="preserve">
-    <value>Invalid APK File</value>
+    <value>Невірний файл APK</value>
   </data>
   <data name="Error_InvalidJarFile" xml:space="preserve">
-    <value>Invalid Jar File</value>
+    <value>Невірний файл Jar</value>
   </data>
   <data name="Error_InvalidUbersignFile" xml:space="preserve">
-    <value>Invalid Ubersign File</value>
+    <value>Невірний файл Ubersigner</value>
   </data>
   <data name="Error_InvalidProjectSelection" xml:space="preserve">
-    <value>Drop a valid project folder that contains apktool.yml and AndroidManifest.xml.</value>
+    <value>Оберіть папку проекту з apktool.yml та AndroidManifest.xml.</value>
   </data>
   <data name="FileFilter_Apk" xml:space="preserve">
-    <value>APK Files (*.apk)|*.apk|All Files (*.*)|*.*</value>
+    <value>Файли APK (*.apk)|*.apk|Всі файли (*.*)|*.*</value>
   </data>
   <data name="FileFilter_Jar" xml:space="preserve">
-    <value>Jar Files (*.jar)|*.jar</value>
+    <value>Файли Jar (*.jar)|*.jar</value>
   </data>
-    <data name="FileFilter_Ubersign" xml:space="preserve">
-        <value>Ubersign Jar Files (*.jar)|*.jar</value>
-    </data>
+  <data name="FileFilter_Ubersign" xml:space="preserve">
+    <value>Файли Ubersigner (*.jar)|*.jar</value>
+  </data>
   <data name="SettingsHeader" xml:space="preserve">
-    <value>Settings</value>
+    <value>Налаштування</value>
   </data>
   <data name="ApktoolPath" xml:space="preserve">
-    <value>Apktool Path</value>
+    <value>Шлях до Apktool</value>
   </data>
   <data name="UbersignPath" xml:space="preserve">
-    <value>Ubersign Path</value>
+    <value>Шлях до Ubersigner</value>
   </data>
   <data name="JavaPathNotFound" xml:space="preserve">
-    <value>JAVA Path: Not Found</value>
+    <value>Шлях до JAVA: Не знайдено</value>
   </data>
   <data name="JavaPathFound" xml:space="preserve">
-    <value>JAVA Path: {0}</value>
+    <value>Шлях до JAVA: {0}</value>
   </data>
   <data name="About_DevelopedBy" xml:space="preserve">
-    <value>Developed by</value>
+    <value>Розроблено</value>
   </data>
   <data name="About_ProjectPage" xml:space="preserve">
-    <value>Project Page</value>
+    <value>Сторінка проекту</value>
   </data>
   <data name="About_DeveloperPage" xml:space="preserve">
-    <value>Developer Page</value>
+    <value>Сторінка розробника</value>
   </data>
   <data name="About_Version" xml:space="preserve">
-    <value>Version: {0}</value>
+    <value>Версія: {0}</value>
   </data>
   <data name="DownloadApktool" xml:space="preserve">
-    <value>Download Apktool: </value>
+    <value>Завантажити Apktool: </value>
   </data>
   <data name="DownloadJava" xml:space="preserve">
-    <value>Download JAVA: </value>
+    <value>Завантажити JAVA: </value>
   </data>
   <data name="MenuBuild" xml:space="preserve">
-    <value>Build APK</value>
+    <value>Збірка APK</value>
   </data>
   <data name="BuildHeader" xml:space="preserve">
-    <value>Build APK</value>
+    <value>Збірка APK</value>
   </data>
-    <data name="SelectProjectFolder" xml:space="preserve">
-    <value>Select Project Folder</value>
-    </data>
-    <data name="SignApk" xml:space="preserve">
-      <value>Sign APK</value>
-    </data>
-    <data name="UseAapt2" xml:space="preserve">
-      <value>Use AAPT2</value>
-    </data>
-    <data name="RunBuild" xml:space="preserve">
-      <value>Run Build</value>
-    </data>
+  <data name="SelectProjectFolder" xml:space="preserve">
+    <value>Оберіть папку проекту</value>
+  </data>
+  <data name="SignApk" xml:space="preserve">
+    <value>Підписати APK</value>
+  </data>
+  <data name="UseAapt2" xml:space="preserve">
+    <value>Використовувати AAPT2</value>
+  </data>
+  <data name="RunBuild" xml:space="preserve">
+    <value>Зібрати</value>
+  </data>
   <data name="BuildSuccessful" xml:space="preserve">
-    <value>APK file successfully created.</value>
+    <value>Файл APK успішно створено.</value>
   </data>
   <data name="BuildFailed" xml:space="preserve">
-    <value>APK file creation failed</value>
+    <value>Помилка створення APK</value>
   </data>
   <data name="Warning_InvalidProjectFolder" xml:space="preserve">
-    <value>The selected folder does not appear to be a valid apktool project (missing apktool.yml or AndroidManifest.xml).</value>
+    <value>Обрана папка не є проектом apktool.</value>
   </data>
   <data name="DragDropFolderHint" xml:space="preserve">
-    <value>Drag and drop a folder</value>
+    <value>Перетягніть папку сюди</value>
   </data>
   <data name="MenuAnalyser" xml:space="preserve">
-    <value>APK Analyser</value>
+    <value>Аналіз APK</value>
   </data>
   <data name="AnalyserHeader" xml:space="preserve">
-    <value>APK Analyser</value>
+    <value>Аналіз APK</value>
   </data>
   <data name="RunAnalysis" xml:space="preserve">
-    <value>Run Analysis</value>
+    <value>Аналізувати</value>
   </data>
   <data name="AnalysisStarting" xml:space="preserve">
-    <value>Starting analysis...</value>
+    <value>Початок аналізу...</value>
   </data>
   <data name="AnalysisComplete" xml:space="preserve">
-    <value>Analysis complete</value>
+    <value>Аналіз завершено</value>
   </data>
   <data name="AnalysisFailed" xml:space="preserve">
-    <value>Analysis failed</value>
+    <value>Аналіз не вдався</value>
   </data>
   <data name="RootCheckFound" xml:space="preserve">
-    <value>Root check: True</value>
+    <value>Root перевірка: Виявлено</value>
   </data>
   <data name="RootCheckNotFound" xml:space="preserve">
-    <value>Root check: False</value>
+    <value>Root перевірка: Не виявлено</value>
   </data>
   <data name="EmulatorCheckFound" xml:space="preserve">
-    <value>Emulator check: True</value>
+    <value>Емулятор: Виявлено</value>
   </data>
   <data name="EmulatorCheckNotFound" xml:space="preserve">
-    <value>Emulator check: False</value>
+    <value>Емулятор: Не виявлено</value>
   </data>
   <data name="CredentialsFound" xml:space="preserve">
-    <value>Hardcoded username/password: True</value>
+    <value>Жорстко задані паролі: Виявлено</value>
   </data>
   <data name="CredentialsNotFound" xml:space="preserve">
-    <value>Hardcoded username/password: False</value>
+    <value>Жорстко задані паролі: Не виявлено</value>
   </data>
   <data name="SqlQueriesFound" xml:space="preserve">
-    <value>SQL queries: True</value>
+    <value>SQL запити: Виявлено</value>
   </data>
   <data name="SqlQueriesNotFound" xml:space="preserve">
-    <value>SQL queries: False</value>
+    <value>SQL запити: Не виявлено</value>
   </data>
   <data name="HttpUrlsFound" xml:space="preserve">
-    <value>HTTP/HTTPS paths: True</value>
+    <value>HTTP/HTTPS посилання: Виявлено</value>
   </data>
   <data name="HttpUrlsNotFound" xml:space="preserve">
-    <value>HTTP/HTTPS paths: False</value>
+    <value>HTTP/HTTPS посилання: Не виявлено</value>
   </data>
   <data name="FoundIn" xml:space="preserve">
-    <value>  Found in:</value>
+    <value>  Знайдено в:</value>
   </data>
   <data name="Error_InvalidSmaliProject" xml:space="preserve">
-    <value>The selected folder does not contain Smali files.</value>
+    <value>Обрана папка не містить Smali файлів.</value>
   </data>
   <data name="DownloadApktoolButton" xml:space="preserve">
-    <value>Download ApkTool</value>
+    <value>Завантажити ApkTool</value>
   </data>
   <data name="DownloadJavaButton" xml:space="preserve">
-    <value>Download JAVA</value>
+    <value>Завантажити JAVA</value>
   </data>
   <data name="DownloadUbersignerButton" xml:space="preserve">
-    <value>Download Ubersigner</value>
+    <value>Завантажити Ubersigner</value>
   </data>
   <data name="LanguageLabel" xml:space="preserve">
-    <value>Language</value>
+    <value>Мова</value>
   </data>
   <data name="SaveReport" xml:space="preserve">
-    <value>Save Report</value>
+    <value>Зберегти звіт</value>
   </data>
   <data name="Run" xml:space="preserve">
-    <value>Run</value>
+    <value>Запустити</value>
   </data>
   <data name="ApkName" xml:space="preserve">
-    <value>APK Name</value>
+    <value>Ім'я APK</value>
   </data>
   <data name="ConsoleLog" xml:space="preserve">
-    <value>Console log</value>
+    <value>Лог консолі</value>
   </data>
 </root>
