@@ -23,6 +23,8 @@
   <a href="README.zh.md">中文</a>
 </p>
 
+> 💡 Looking for a cross-platform alternative? Download **PulseAPK Core** here: https://github.com/deemoun/PulseAPK-Core
+
 **PulseAPK** is a professional-grade GUI for Android reverse engineering and security analysis, built with WPF and .NET 8. It combines the raw power of `apktool` with advanced static analysis capabilities, wrapped in a high-performance, cyberpunk-inspired interface. PulseAPK streamlines the entire workflow from decompilation to analysis, rebuilding, and signing.
 
 [Watch the demo on YouTube](https://youtu.be/Mkdt0c-7Wwg)
