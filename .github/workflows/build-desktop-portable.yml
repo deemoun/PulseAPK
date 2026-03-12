@@ -1,7 +1,18 @@
-name: Build Portable Desktop Release
+name: Build Portable Desktop Draft Release
 
 on:
+  push:
+    tags:
+      - 'v*'
   workflow_dispatch:
+    inputs:
+      tag_name:
+        description: 'Release tag to create/update (e.g. v1.2.3). Defaults to v<project version>.'
+        required: false
+        type: string
+
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -10,6 +21,35 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Resolve release metadata
+        id: meta
+        shell: pwsh
+        env:
+          INPUT_TAG_NAME: ${{ github.event.inputs.tag_name }}
+        run: |
+          [xml]$proj = Get-Content -Path "PulseAPK.csproj"
+          $projectVersion = $proj.Project.PropertyGroup.Version
+
+          $tagName = if ($env:GITHUB_EVENT_NAME -eq "push") {
+            $env:GITHUB_REF_NAME
+          }
+          elseif ($env:INPUT_TAG_NAME) {
+            $env:INPUT_TAG_NAME
+          }
+          else {
+            "v$projectVersion"
+          }
+
+          if (-not $tagName.StartsWith("v")) {
+            $tagName = "v$tagName"
+          }
+
+          $version = $tagName.TrimStart("v")
+
+          "tag=$tagName" >> $env:GITHUB_OUTPUT
+          "version=$version" >> $env:GITHUB_OUTPUT
+          "asset=PulseAPK-windows-x64-portable-$version.zip" >> $env:GITHUB_OUTPUT
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
@@ -20,9 +60,9 @@ jobs:
         run: dotnet restore
 
       - name: Build
-        run: dotnet build --configuration Release --no-restore
+        run: dotnet build PulseAPK.csproj --configuration Release --no-restore
 
-      - name: Publish
+      - name: Publish portable win-x64 build
         run: >-
           dotnet publish PulseAPK.csproj
           --configuration Release
@@ -32,9 +72,23 @@ jobs:
           -p:IncludeNativeLibrariesForSelfExtract=true
           --output "${{ github.workspace }}\\publish"
 
-      - name: Upload artifacts
+      - name: Package release asset
+        shell: pwsh
+        run: |
+          Compress-Archive -Path "${{ github.workspace }}\\publish\\*" -DestinationPath "${{ github.workspace }}\\${{ steps.meta.outputs.asset }}" -Force
+
+      - name: Upload workflow artifact
         uses: actions/upload-artifact@v4
         with:
-          name: PulseAPK-windows-x64
-          path: publish
+          name: PulseAPK-windows-x64-portable
+          path: ${{ steps.meta.outputs.asset }}
           if-no-files-found: error
+
+      - name: Draft GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.meta.outputs.tag }}
+          name: PulseAPK ${{ steps.meta.outputs.version }}
+          draft: true
+          generate_release_notes: true
+          files: ${{ steps.meta.outputs.asset }}
