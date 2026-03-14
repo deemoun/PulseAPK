@@ -174,3 +174,6 @@
       of your accepting any such warranty or additional liability.
 
    END OF TERMS AND CONDITIONS
+
+   Copyright (c) Dmitry Yarygin
+
