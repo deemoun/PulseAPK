@@ -51,6 +51,12 @@ namespace PulseAPK.ViewModels
             OpenUrl("https://yarygintech.com/");
         }
 
+        [RelayCommand]
+        private void OpenCrossPlatformProjectPage()
+        {
+            OpenUrl("https://github.com/deemoun/PulseAPK-Core");
+        }
+
         private void OpenUrl(string url)
         {
             try
@@ -64,5 +70,4 @@ namespace PulseAPK.ViewModels
         }
     }
 }
-
 
