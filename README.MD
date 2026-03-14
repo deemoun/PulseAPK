@@ -106,6 +106,7 @@ PulseAPK utilizes a clean MVVM (Model-View-ViewModel) architecture:
 ## License
 
 This project is open-source and available under the [Apache License 2.0](LICENSE.md).
+Copyright (c) Dmitry Yarygin.
 
 ### ❤️ Support the project
 

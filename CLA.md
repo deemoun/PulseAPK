@@ -60,3 +60,11 @@ I, the undersigned, certify that I am authorized to sign this Agreement on behal
 *   **Email**: __________________________________________________
 *   **Date**: __________________________________________________
 *   **Signature**: __________________________________________________
+
+## 8. Attribution and Contribution Records
+
+Project attribution and maintainer details are maintained in `NOTICE`.
+
+Contributor attribution is tracked through Git commit history and pull request metadata.
+Contribution licensing and ownership terms are governed by this CLA and `LICENSE.md`.
+
