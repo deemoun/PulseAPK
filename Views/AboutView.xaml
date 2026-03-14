@@ -28,7 +28,8 @@
 
             <!-- Actions -->
             <Button Content="{utils:Localization About_ProjectPage}" Command="{Binding OpenProjectPageCommand}" Style="{StaticResource CyberButtonStyle}" Width="200" Height="40" Margin="0,0,0,15"/>
-            <Button Content="{utils:Localization About_DeveloperPage}" Command="{Binding OpenDeveloperPageCommand}" Style="{StaticResource CyberButtonStyle}" Width="200" Height="40"/>
+            <Button Content="{utils:Localization About_DeveloperPage}" Command="{Binding OpenDeveloperPageCommand}" Style="{StaticResource CyberButtonStyle}" Width="200" Height="40" Margin="0,0,0,15"/>
+            <Button Content="Cross-Platform PulseAPK" Command="{Binding OpenCrossPlatformProjectPageCommand}" Style="{StaticResource CyberButtonStyle}" Width="200" Height="40"/>
         </StackPanel>
     </Grid>
 </UserControl>
